@@ -1,8 +1,16 @@
 ---
-  - name: Administrative | Copy Ansible hourly cron
+# - name: Administrative | Copy Ansible hourly cron
+#   copy:
+#     src: ansible-hourly.cron
+#     dest: /etc/cron.hourly/ansible-hourly.cron
+#     owner: root
+#     group: root
+#     mode: 0775
+#
+  - name: Administrative | Copy ansible.cfg
     copy:
-      src: ansible-hourly.cron
-      dest: /etc/cron.hourly/ansible-hourly.cron
+      src: ansible.cfg
+      dest: /etc/ansible/ansible.cfg
       owner: root
       group: root
-      mode: 0775
+      mode: 0644

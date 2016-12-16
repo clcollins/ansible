@@ -2,6 +2,31 @@
   - name: Bootstrap | install python and deps for ansible modules
     raw: dnf install -y python2 python2-dnf libselinux-python
 
+  - name: Package Repos | Fedora DwarfFortress | for FUN!
+    copy:
+      src: dwarffortress.repo
+      dest: /etc/yum.repos.d/dwarffortress.repo
+
+  - name: Packages | dwarffortress
+    dnf:
+      name: dwarffortress
+      state: latest
+
+  - name: Packages | dwarftherapist
+    dnf:
+      name: dwarftherapist
+      state: latest
+
+  - name: Packages | docker
+    dnf:
+      name: docker
+      state: latest
+
+  - name: Packages | docker-compose
+    dnf:
+      name: docker-compose
+      state: latest
+
   - name: Packages | gcc-c++ | for various
     dnf:
       name: gcc-c++
@@ -90,3 +115,8 @@
       update: no
     become: chris
 
+  - name: Config Files | DF init.txt
+    copy:
+      src: dwarffortress_init.txt
+      dest: /home/chris/.dwarffortress/data/init/init.txt
+    become: chris
