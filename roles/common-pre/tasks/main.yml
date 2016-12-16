@@ -1,4 +1,19 @@
 ---
+  - name: Administrative | Ansible playbooks
+    git:
+      repo: git@github.com:clcollins/ansible.git
+      dest: /home/chris/.ansible
+      key_file: /home/chris/.ssh/id_ed25519
+      update: yes
+
+  - name: Administrative | Copy ansible.cfg
+    copy:
+      src: ansible.cfg
+      dest: /etc/ansible/ansible.cfg
+      owner: root
+      group: root
+      mode: 0644
+
 # - name: Administrative | Copy Ansible hourly cron
 #   copy:
 #     src: ansible-hourly.cron
@@ -7,10 +22,3 @@
 #     group: root
 #     mode: 0775
 #
-  - name: Administrative | Copy ansible.cfg
-    copy:
-      src: ansible.cfg
-      dest: /etc/ansible/ansible.cfg
-      owner: root
-      group: root
-      mode: 0644
