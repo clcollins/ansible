@@ -27,3 +27,22 @@
     authorized_key:
       user: chris
       key: https://github.com/clcollins.keys
+
+  - name: Git Config | user name
+    git_config:
+      name: user.name
+      scope: global
+      value: Christopher Collins
+
+  - name: Git Config | user email
+    git_config:
+      name: user.email
+      scope: global
+      value: collins.christopher@gmail.com
+
+  - name: Git Config | editor
+    git_config:
+      name: core.editor
+      scope: global
+      value: vim
+
