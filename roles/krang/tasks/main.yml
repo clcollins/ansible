@@ -4,9 +4,12 @@
       name:  krang.oit.duke.edu
 
   - name: Package Repos | Fedora DwarfFortress | for FUN!
-    copy:
-      src: dwarffortress.repo
-      dest: /etc/yum.repos.d/dwarffortress.repo
+    yum_repository:
+      name: dwarffortress
+      description: Dwarf Fortress for Fedora $releasever
+      baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
+      gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
+      enabled: yes
 
   - name: Packages | dwarffortress
     dnf:
@@ -16,6 +19,11 @@
   - name: Packages | dwarftherapist
     dnf:
       name: dwarftherapist
+      state: latest
+
+  - name: Packages | ansible
+    dnf:
+      name: ansible
       state: latest
 
   - name: Packages | docker

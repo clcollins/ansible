@@ -23,3 +23,7 @@
 #     group: root
 #     mode: 0775
 #
+  - name: Access | Authorized Keys
+    authorized_key:
+      user: chris
+      key: https://github.com/clcollins.keys

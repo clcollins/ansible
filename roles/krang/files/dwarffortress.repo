@@ -1,6 +1,0 @@
-[dwarffortress]
-name=Dwarf Fortress for Fedora $releasever
-baseurl=https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
-gpgkey=https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
-enabled=1
-
