@@ -1,6 +1,7 @@
 ---
-  - name: Bootstrap | install python and deps for ansible modules
-    raw: dnf install -y python2 python2-dnf libselinux-python
+  - name: Administrative | hostname
+    hostname:
+      name:  krang.oit.duke.edu
 
   - name: Package Repos | Fedora DwarfFortress | for FUN!
     copy:
