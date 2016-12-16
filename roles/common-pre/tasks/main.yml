@@ -4,6 +4,7 @@
       repo: git@github.com:clcollins/ansible.git
       dest: /home/chris/.ansible
       key_file: /home/chris/.ssh/id_ed25519
+      clone: yes
       update: yes
 
   - name: Administrative | Copy ansible.cfg
