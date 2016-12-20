@@ -41,6 +41,11 @@
       name: gcc-c++
       state: latest
 
+  - name: Packages | the_silver_searcher | for fast search
+    dnf:
+      name: the_silver_searcher
+      state: latest
+
   - name: Packages | redhat-rpm-config | for lolcommits
     dnf:
       name: redhat-rpm-config
