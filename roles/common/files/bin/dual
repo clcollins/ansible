@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xrandr --output LVDS-0 --off
+xrandr --output DP-2 --primary --mode 1920x1080 --rotate normal --right-of DP-1 --output DP-1 --auto --rotate left

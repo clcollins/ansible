@@ -1,0 +1,39 @@
+#!/bin/bash
+
+usage () {
+  cat << EOF
+Usage: dkrcmpz HOSTNAME
+       dkrcmpz HOSTNAME COMMAND [arg...]
+
+A wrapper around docker-compose to simplify using TLS connections
+
+EOF
+}
+
+main () {
+  local fqdn="${1}"
+  local cmd="${@:2}"
+
+  case $fqdn in
+    '--help')
+      usage
+      exit 0
+      ;;
+    *)
+      export DOCKER_HOST=${fqdn}:2376
+      export DOCKER_TLS_VERIFY=1
+      local dkr="docker-compose"
+  esac
+
+  if [[ -z ${cmd} ]]
+  then
+    exec docker-compose --help
+  else
+    exec ${dkr} ${cmd}
+  fi
+
+  exit 0
+
+}
+
+main "$@"

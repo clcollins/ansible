@@ -28,6 +28,18 @@
       user: chris
       key: https://github.com/clcollins.keys
 
+  - name: Users | copy bashrc 
+    copy:
+      src: bashrc-chris
+      dest: /home/chris/.bashrc
+    become: chris
+      
+  - name: Users | copy bash profile 
+    copy:
+      src: bash_profile-chris
+      dest: /home/chris/.bash_profile
+    become: chris
+
   - name: Git Config | user name
     git_config:
       name: user.name
@@ -46,3 +58,8 @@
       scope: global
       value: vim
 
+  - name: Bin Dir | Binfiles
+    copy:
+      src: bin/
+      dest: /home/chris/bin/
+    become: chris

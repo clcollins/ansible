@@ -1,0 +1,31 @@
+#!/bin/bash
+
+WANIF=eth0
+LANIF=eth1
+SIXRDTUNIF=6rdtun
+SIXRDTUNMTU=1280
+SIXRDTUNTTL=64
+WAN4IP=$(ip -4 addr show dev $WANIF | awk '/inet / {print $2}' | cut -d/ -f1)
+ISP6RDPREFIX='2001:55c'
+ISP6RDPREFIXLEN='32'
+ISP6RDBR=`dig +short 6rd.comcast.net`
+WAN4MASKLEN='0'
+LOCAL6PREFIX=$(printf "$ISP6RDPREFIX:%02x%02x:%02x%02x" $(echo $WAN4IP | tr . ' '))
+LOCAL6PREFIXLEN=64
+
+# Setup the tunnel interface
+ip tunnel add $SIXRDTUNIF mode sit local $WAN4IP ttl $SIXRDTUNTTL
+# This is the magic virtually undocumented 6rd sauce
+# This makes it a 6rd tunnel by specifiying the ISPs PREFIX 
+# rather than 2002::/16 the "generic" 6to4 prefix
+ip tunnel 6rd dev $SIXRDTUNIF 6rd-prefix $ISP6RDPREFIX::/$ISP6RDPREFIXLEN 
+# Set the MTU 
+ip link set $SIXRDTUNIF mtu $SIXRDTUNMTU
+# Bring up the tunnel interface
+ip link set $SIXRDTUNIF up
+# Set the tunnel interface IPv6 address
+ip -6 addr add $LOCAL6PREFIX:0::1/$ISP6RDPREFIXLEN dev $SIXRDTUNIF
+# Set the LAN interface IPv6 address
+#ip -6 addr add $LOCAL6PREFIX:1::1/$LOCAL6PREFIXLEN dev $LANIF
+# Set the default IPv6 route to the ISP's IPv4/IPv6 boarder router
+ip -6 route add 2000::/3 via ::$ISP6RDBR dev $SIXRDTUNIF

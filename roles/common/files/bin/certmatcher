@@ -1,0 +1,18 @@
+#!/bin/bash
+KEY=$1
+CRT=$2
+KEY_SUM=`openssl rsa -noout -modulus -in $KEY | openssl md5`
+CRT_SUM=`openssl x509 -noout -modulus -in $CRT | openssl md5`
+#CSR_SUM=`openssl req -noout -modulus -in CSR.csr | openssl md5`
+
+echo "Key MD5Sum: $KEY_SUM"
+echo "Crt MD5Sum: $CRT_SUM"
+
+if [ "$KEY_SUM" != "$CRT_SUM" ] ; then
+  echo -e "\e[91mERROR: Key and Certificate do not match"
+  tput sgr0
+  exit 1
+else
+  echo -e "\e[36mKey and Certificate match"
+  tput sgr0
+fi

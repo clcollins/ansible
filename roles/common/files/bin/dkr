@@ -1,0 +1,41 @@
+#!/bin/bash
+
+usage () {
+  cat << EOF
+Usage: dkr HOSTNAME
+       dkr HOSTNAME COMMAND [arg...]
+
+A wrapper around Docker to simplify using TLS connections
+
+In the first form, will watch the output of "docker ps" and "docker images" on the remote host.
+In the second form, will execute whichever Docker command is specified.
+
+EOF
+}
+
+main () {
+  local fqdn="${1}"
+  local cmd="${@:2}"
+
+  case $fqdn in
+    '--help')
+      usage
+      exit 0
+      ;;
+    *)
+      local dkr="docker -H ${fqdn}:2376"
+      export DOCKER_TLS_VERIFY=1
+  esac
+
+  if [[ -z ${cmd} ]]
+  then
+    exec watch "${dkr} ps ; ${dkr} images"
+  else
+    exec ${dkr} ${cmd}
+  fi
+
+  exit 0
+
+}
+
+main "$@"

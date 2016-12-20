@@ -98,18 +98,6 @@
       state: latest
     become: chris
 
-  - name: Users | copy bashrc 
-    copy:
-      src: bashrc-chris
-      dest: /home/chris/.bashrc
-    become: chris
-      
-  - name: Users | copy bash profile 
-    copy:
-      src: bash_profile-chris
-      dest: /home/chris/.bash_profile
-    become: chris
-      
   - name: Unpackaged Software | rbenv | for ruby
     git:
       repo: git://github.com/sstephenson/rbenv.git
