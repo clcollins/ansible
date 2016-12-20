@@ -62,7 +62,7 @@ alias very=git
 alias wow='git status'
 
 # Setup ssh stuffs
-007 () {
+agent_007 () {
   local key="${HOME}/.ssh/id_ed25519"
   ssh-agent \
   && ssh-add $key
