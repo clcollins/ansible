@@ -11,6 +11,11 @@
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
       enabled: yes
 
+  - name: Packages | patch all
+    dnf:
+      name: "*"
+      state: latest
+
   - name: Packages | dwarffortress
     dnf:
       name: dwarffortress
@@ -36,9 +41,14 @@
       name: docker-compose
       state: latest
 
-  - name: Packages | gcc-c++ | for various
+  - name: Packages | wine | for WoW
     dnf:
-      name: gcc-c++
+      name: wine
+      state: latest
+
+  - name: Packages | wine-devel | for WoW
+    dnf:
+      name: wine-devel
       state: latest
 
   - name: Packages | the_silver_searcher | for fast search
