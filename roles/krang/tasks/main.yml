@@ -132,3 +132,9 @@
       src: dwarffortress_init.txt
       dest: /home/chris/.dwarffortress/data/init/init.txt
     become: chris
+
+  - name: Config Files | Docker Storage Setup
+    copy:
+      src: docker-storage-setup
+      dest: /etc/sysconfig/docker-storage-setup
+    notify: restart docker

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ANSIBLE_DIR='/home/chris/.ansible'
+ANSIBLE_LOG="/var/log/ansible/ansible-hourly.log"
+
+ansible-playbook ${ANSIBLE_DIR}/site.yml >> $ANSIBLE_LOG 2>&1
