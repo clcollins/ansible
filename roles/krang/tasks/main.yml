@@ -11,6 +11,28 @@
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
       enabled: yes
 
+  - name: Package Repos | RPMFusion | for mplayer, others
+    yum_repository:
+      name: rpmfusion-free
+      description: RPM Fusion for Fedora $releasever - Free
+      baseurl: http://download1.rpmfusion.org/free/fedora/releases/$releasever/Everything/$basearch/os/
+      mirrorlist: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-$releasever&arch=$basearch
+      gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-25
+      #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+      gpgcheck: yes
+      enabled: yes
+
+  - name: Package Repos | RPMFusion | for mplayer, others
+    yum_repository:
+      name: rpmfusion-free-updates
+      description: RPM Fusion for Fedora $releasever - Free - Updates
+      baseurl: http://download1.rpmfusion.org/free/fedora/updates/$releasever/$basearch/
+      mirrorlist: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-$releasever&arch=$basearch
+      gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-25
+      #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+      gpgcheck: yes
+      enabled: yes
+
   - name: Packages | patch all
     dnf:
       name: "*"
@@ -61,9 +83,9 @@
       name: redhat-rpm-config
       state: latest
 
-  - name: Packages | kmplayer | for lolcommits
+  - name: Packages | mplayer | for lolcommits
     dnf:
-      name: kmplayer
+      name: mplayer
       state: latest
 
   - name: Packages | ImageMagick | for lolcommits
@@ -138,3 +160,12 @@
       src: docker-storage-setup
       dest: /etc/sysconfig/docker-storage-setup
     notify: restart docker
+
+  - name: Config Files | .docker Directory
+    file:
+      path: /home/chris/.docker
+      state: directory
+      mode: 0755
+      owner: chris
+      group: chris
+  
