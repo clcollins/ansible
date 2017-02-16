@@ -36,10 +36,10 @@ genpw () {
 
 # Check for tmux; make sure we're not in screen, 
 # and then replace the bash shell with tmux
-if command -v tmux>/dev/null
-then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
+#if command -v tmux>/dev/null
+#then
+#  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+#fi
 
 # Some fun git aliases
 git () {
