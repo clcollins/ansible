@@ -50,6 +50,9 @@ git-rm-secret () {
       --prune-empty \
       --tag-name-filter cat -- \
       --all
+
+  echo "Don't forget to run: `git push origin --force --all`"
+  echo '...and perhaps we should add the sensitive file to our .gitignore, shouldn\'lt we?'
 }
 
 git () {
