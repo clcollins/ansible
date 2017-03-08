@@ -52,7 +52,7 @@ git-rm-secret () {
       --all
 
   echo "Don't forget to run: `git push origin --force --all`"
-  echo '...and perhaps we should add the sensitive file to our .gitignore, shouldn\'lt we?'
+  echo '...and perhaps we should add the sensitive file to our .gitignore, should we not?'
 }
 
 git () {
