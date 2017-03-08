@@ -42,6 +42,16 @@ genpw () {
 #fi
 
 # Some fun git aliases
+git-rm-secret () {
+  local secret_file="${1}"
+  git filter-branch \
+      --force \
+      --index-filter "git rm --cached --ignore-unmatch ${secret_file}" \
+      --prune-empty \
+      --tag-name-filter cat -- \
+      --all
+}
+
 git () {
   if [[ $@ == "init" ]] && lolcommits -v
   then
