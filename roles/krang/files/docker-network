@@ -1,0 +1,2 @@
+DOCKER_NETWORK_OPTIONS=-H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376 --tlsverify --tlscacert=/etc/pki/tls/certs/ca.crt --tlscert=/etc/pki/tls/certs/localhost.crt --tlskey=/etc/pki/tls/private/localhost.key
+

@@ -161,6 +161,12 @@
       dest: /etc/sysconfig/docker-storage-setup
     notify: restart docker
 
+  - name: Config Files | Docker Network Setup
+    copy:
+      src: docker-network
+      dest: /etc/sysconfig/docker-storage-setup
+    notify: restart docker
+
   - name: Config Files | .docker Directory
     file:
       path: /home/chris/.docker

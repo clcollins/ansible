@@ -34,6 +34,22 @@ genpw () {
   fi
 }
 
+taglast () {
+  local repo='stevedore-repo.oit.duke.edu'
+
+  if [[ -z ${1:-} ]]
+  then
+    echo "No image name specified"
+    return 1
+  else
+    local image="${1}"
+  fi
+
+  sudo docker tag $(sudo docker images -q | head -n 1) ${repo}/${image}
+
+  return $?
+}
+
 # Check for tmux; make sure we're not in screen, 
 # and then replace the bash shell with tmux
 #if command -v tmux>/dev/null
