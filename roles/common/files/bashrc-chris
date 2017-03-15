@@ -44,11 +44,13 @@ runhook () {
     return 1
   fi
 
-  local hookbin="${toplevel}/.git/hooks/${hook}"
+  local hookbin=".git/hooks/${hook}"
 
   if [[ -f ${hookbin} ]]
   then
+     pushd ${toplevel} > /dev/null
      bash ${hookbin}
+     popd > /dev/null
   fi
   
   return $?
