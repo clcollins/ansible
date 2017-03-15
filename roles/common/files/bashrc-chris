@@ -46,7 +46,7 @@ runhook () {
 
   local hookbin=".git/hooks/${hook}"
 
-  if [[ -f ${hookbin} ]]
+  if [[ -f ${toplevel}/${hookbin} ]]
   then
      pushd ${toplevel} > /dev/null
      bash ${hookbin}
