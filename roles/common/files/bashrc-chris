@@ -34,6 +34,26 @@ genpw () {
   fi
 }
 
+runhook () {
+  local hook="${1:-}"
+  local toplevel="$(git rev-parse --show-toplevel)"
+
+  if [[ -z "${hook}" ]]
+  then
+    echo "No hook provided"
+    return 1
+  fi
+
+  local hookbin="${toplevel}/.git/hooks/${hook}"
+
+  if [[ -f ${hookbin} ]]
+  then
+     bash ${hookbin}
+  fi
+  
+  return $?
+}
+
 taglast () {
   local repo='stevedore-repo.oit.duke.edu'
 
