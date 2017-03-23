@@ -63,6 +63,26 @@
       name: docker-compose
       state: latest
 
+  - name: Packages | python3-docker-py
+    dnf:
+      name: python3-docker-py
+      state: latest
+
+  - name: Packages | python3-dockerfile-parse
+    dnf:
+      name: python3-dockerfile-parse
+      state: latest
+
+  - name: Packages | python3-docker-sqaush
+    dnf:
+      name: python3-docker-squash
+      state: latest
+
+  - name: Packages | python3-dockerpty
+    dnf:
+      name: python3-dockerpty
+      state: latest
+
   - name: Packages | wine | for WoW
     dnf:
       name: wine
