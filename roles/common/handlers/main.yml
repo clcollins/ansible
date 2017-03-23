@@ -1,15 +1,15 @@
 ---
-  - name: restart docker
-    service:
+  - name: reload docker
+    systemd:
       name: docker
-      state: restarted
+      state: reloaded
 
-  - name: restart lvm2-lvmetad
-    service:
+  - name: reload lvm2-lvmetad
+    systemd:
       name: lvm2-lvmetad
-      state: restarted
+      state: reloaded
 
-  - name: restart systemd-journald
-    service:
+  - name: reload systemd-journald
+    systemd:
       name: systemd-journald
-      state: restarted
+      state: reloaded

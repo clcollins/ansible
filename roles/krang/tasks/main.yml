@@ -159,13 +159,13 @@
     copy:
       src: docker-storage-setup
       dest: /etc/sysconfig/docker-storage-setup
-    notify: restart docker
+    notify: reload docker
 
   - name: Config Files | Docker Network Setup
     copy:
       src: docker-network
       dest: /etc/sysconfig/docker-storage-setup
-    notify: restart docker
+    notify: reload docker
 
   - name: Config Files | .docker Directory
     file:
