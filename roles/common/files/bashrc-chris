@@ -34,6 +34,29 @@ genpw () {
   fi
 }
 
+
+hike () {
+  # Run Ansible playbook
+  if [[ -z ${1} ]]
+  then
+    echo "Usage: hike [PLAYBOOK.YML]"
+    return 1
+  fi
+
+  local playbook="${1}.yml"
+  local ans_dir='/home/chris/.ansible'
+
+  pushd ${ans_dir} > /dev/null
+
+  sudo ansible-playbook ${playbook}
+  local retval=${?}
+
+  popd > /dev/null
+
+  return ${retval}
+}
+  
+
 runhook () {
   local hook="${1:-}"
   local toplevel="$(git rev-parse --show-toplevel)"
@@ -50,10 +73,11 @@ runhook () {
   then
      pushd ${toplevel} > /dev/null
      bash ${hookbin}
+     local retval=${?}
      popd > /dev/null
   fi
   
-  return $?
+  return ${retval}
 }
 
 
