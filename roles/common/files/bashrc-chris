@@ -56,6 +56,13 @@ runhook () {
   return $?
 }
 
+
+testbuild () {
+
+  sudo docker-compose run --rm --entrypoint bash test
+
+}
+
 taglast () {
   local repo='stevedore-repo.oit.duke.edu'
 
