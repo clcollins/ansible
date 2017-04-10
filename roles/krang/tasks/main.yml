@@ -48,6 +48,21 @@
       name: dwarftherapist
       state: latest
 
+  - name: Packages | qt5-qtbase-devel | qmake, for compiling DT
+    dnf:
+      name: qt5-qtbase-devel qt5-qtdeclarative-devel
+      state: latest
+
+  - name: Packages | qt5-qtdeclarative-devel | qmake, for compiling DT
+    dnf:
+      name: qt5-qtdeclarative-devel
+      state: latest
+
+  - name: Packages | texlive-latex-bin | for pdflatex, for compiling DT
+    dnf:
+      name: texlive-latex-bin
+      state: latest
+
   - name: Packages | ansible
     dnf:
       name: ansible
@@ -96,6 +111,16 @@
   - name: Packages | the_silver_searcher | for fast search
     dnf:
       name: the_silver_searcher
+      state: latest
+
+  - name: Packages | pidgin | for chat
+    dnf:
+      name: pidgin
+      state: latest
+
+  - name: Packages | pidgin-otr | off the record/encrypted plugin for pidgin
+    dnf:
+      name: pidgin-otr
       state: latest
 
   - name: Packages | redhat-rpm-config | for lolcommits
