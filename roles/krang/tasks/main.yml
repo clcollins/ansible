@@ -50,7 +50,7 @@
 
   - name: Packages | qt5-qtbase-devel | qmake, for compiling DT
     dnf:
-      name: qt5-qtbase-devel qt5-qtdeclarative-devel
+      name: qt5-qtbase-devel
       state: latest
 
   - name: Packages | qt5-qtdeclarative-devel | qmake, for compiling DT
