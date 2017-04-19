@@ -1,0 +1,51 @@
+---
+  - name: Package Repos | Fedora DwarfFortress | for FUN!
+    yum_repository:
+      name: dwarffortress
+      description: Dwarf Fortress for Fedora $releasever
+      baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
+      gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
+      enabled: yes
+
+  - name: Package Repos | RPMFusion | for mplayer, others
+    yum_repository:
+      name: rpmfusion-free
+      description: RPM Fusion for Fedora $releasever - Free
+      baseurl: http://download1.rpmfusion.org/free/fedora/releases/$releasever/Everything/$basearch/os/
+      mirrorlist: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-$releasever&arch=$basearch
+      gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-25
+      #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+      gpgcheck: yes
+      enabled: yes
+
+  - name: Package Repos | RPMFusion | for mplayer, others
+    yum_repository:
+      name: rpmfusion-free-updates
+      description: RPM Fusion for Fedora $releasever - Free - Updates
+      baseurl: http://download1.rpmfusion.org/free/fedora/updates/$releasever/$basearch/
+      mirrorlist: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-$releasever&arch=$basearch
+      gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-25
+      #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+      gpgcheck: yes
+      enabled: yes
+
+  - name: Basic Packages | ansible
+    dnf:
+      name: ansible
+      state: latest
+
+  - name: Basic Packages | vim-enhanced
+    dnf:
+      name: vim-enhanced
+      state: latest
+
+  - name: Basic Packages | pidgin | for chat
+    dnf:
+      name: pidgin
+      state: latest
+
+  - name: Basic Packages | pidgin-otr | off the record/encrypted plugin for pidgin
+    dnf:
+      name: pidgin-otr
+      state: latest
+

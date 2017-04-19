@@ -31,7 +31,6 @@
       owner: root
       group: root
 
-
   - name: Administrative | Copy Ansible hourly cron
     copy:
       src: ansible-hourly.cron

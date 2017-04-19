@@ -3,5 +3,6 @@
     roles: 
       - bootstrap-fedora
       - common
+      - fedora
       - krang
 
