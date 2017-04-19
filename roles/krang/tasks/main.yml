@@ -160,6 +160,12 @@
       dest: /home/chris/.dwarffortress/data/init/init.txt
     become: chris
 
+  - name: Config Files | Docker Sysconfig
+    copy:
+      src: docker_sysconfig
+      dest: /etc/sysconfig/docker
+    notify: reload docker
+
   - name: Config Files | Docker Storage Setup
     copy:
       src: docker-storage-setup
@@ -169,7 +175,7 @@
   - name: Config Files | Docker Network Setup
     copy:
       src: docker-network
-      dest: /etc/sysconfig/docker-storage-setup
+      dest: /etc/sysconfig/docker-network
     notify: reload docker
 
   - name: Config Files | .docker Directory
