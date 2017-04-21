@@ -1,2 +1,4 @@
 ---
   - include: krang.yml
+  - include: haster.yml
+  - include: rhogog.yml

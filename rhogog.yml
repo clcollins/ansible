@@ -1,0 +1,8 @@
+---
+  - hosts: rhogog
+    roles: 
+      - bootstrap-fedora
+      - common
+      # - rpie
+      - rhogog
+

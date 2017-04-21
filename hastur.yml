@@ -1,0 +1,8 @@
+---
+  - hosts: hastur
+    roles: 
+      - bootstrap-fedora
+      - common
+      - fedora
+      - hastur
+
