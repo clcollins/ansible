@@ -56,6 +56,12 @@
       dest: /home/chris/.bash_profile
     become: chris
 
+  - name: Users | copy toprc 
+    copy:
+      src: toprc-chris
+      dest: /home/chris/.toprc
+    become: chris
+      
   - name: Git Config | user name
     git_config:
       name: user.name

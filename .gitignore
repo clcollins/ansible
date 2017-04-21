@@ -3,4 +3,3 @@
 *.pem
 *.retry
 *.swp
-ansible-hosts

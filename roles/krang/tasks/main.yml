@@ -28,6 +28,11 @@
       name: texlive-latex-bin
       state: latest
 
+  - name: Packages | texlive-latex | for pdflatex, for compiling DT
+    dnf:
+      name: texlive-latex
+      state: latest
+
   - name: Packages | wine | for WoW
     dnf:
       name: wine
@@ -64,3 +69,11 @@
       src: dwarffortress_init.txt
       dest: /home/chris/.dwarffortress/data/init/init.txt
     become: chris
+
+  # From http://www.bay12forums.com/smf/index.php?topic=158914.0
+  - name: Config Files | DF tile
+    copy:
+      src: hack_square_64x64.png
+      dest: /home/chris/.dwarffortress/data/art/hack_square_64x64.png
+    become: chris
+
