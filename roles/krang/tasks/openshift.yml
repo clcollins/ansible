@@ -1,0 +1,22 @@
+---
+  - name: Packages | pyOpenSSL | For OpenShift Ansible
+    dnf:
+      name: pyOpenSSL
+      state: latest
+      
+  - name: Packages | python-cryptography | For OpenShift Ansible
+    dnf:
+      name: python-cryptography 
+      state: latest
+      
+  - name: Packages | python-lxml | For OpenShift Ansible
+    dnf:
+      name: python-lxml 
+      state: latest
+      
+  - name: OpenShift Ansible
+    git:
+      repo: 'https://github.com/openshift/openshift-ansible.git'
+      dest: /home/chris/Projects/openshift
+      version: release-1.5
+    become: chris
