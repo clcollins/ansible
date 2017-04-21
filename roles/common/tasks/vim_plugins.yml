@@ -35,3 +35,8 @@
       dest: /home/chris/.vim/bundle/vim-markdown
     become: chris
 
+  - name: Vim Plugins | Ansible Vim
+    git:
+      repo: 'https://github.com/pearofducks/ansible-vim.git'
+      dest: /home/chris/.vim/bundle/ansible-vim
+    become: chris
