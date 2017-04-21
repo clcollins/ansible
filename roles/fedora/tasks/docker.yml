@@ -1,0 +1,57 @@
+---
+  - name: Packages | docker
+    dnf:
+      name: docker
+      state: latest
+
+  - name: Packages | docker-compose
+    dnf:
+      name: docker-compose
+      state: latest
+
+  - name: Packages | python3-docker-py
+    dnf:
+      name: python3-docker-py
+      state: latest
+
+  - name: Packages | python3-dockerfile-parse
+    dnf:
+      name: python3-dockerfile-parse
+      state: latest
+
+  - name: Packages | python3-docker-sqaush
+    dnf:
+      name: python3-docker-squash
+      state: latest
+
+  - name: Packages | python3-dockerpty
+    dnf:
+      name: python3-dockerpty
+      state: latest
+
+  - name: Config Files | Docker Sysconfig
+    copy:
+      src: docker_sysconfig
+      dest: /etc/sysconfig/docker
+    notify: reload docker
+
+  - name: Config Files | Docker Storage Setup
+    copy:
+      src: docker-storage-setup
+      dest: /etc/sysconfig/docker-storage-setup
+    notify: reload docker
+
+  - name: Config Files | Docker Network Setup
+    copy:
+      src: docker-network
+      dest: /etc/sysconfig/docker-network
+    notify: reload docker
+
+  - name: Config Files | .docker Directory
+    file:
+      path: /home/chris/.docker
+      state: directory
+      mode: 0755
+      owner: chris
+      group: chris
+

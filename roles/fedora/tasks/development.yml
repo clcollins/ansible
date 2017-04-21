@@ -1,0 +1,61 @@
+---
+  - name: Packages | 'Development tools' group
+    dnf:
+      name: '@Development tools'
+      state: present
+
+  - name: Packages | redhat-rpm-config | for lolcommits
+    dnf:
+      name: redhat-rpm-config
+      state: latest
+
+  - name: Packages | ruby-devel | for ruby
+    dnf:
+      name: ruby-devel
+      state: latest
+
+  - name: Packages | rubygems | for ruby
+    dnf:
+      name: rubygems
+      state: latest
+
+  - name: Packages | openssl-devel | for ruby
+    dnf:
+      name: openssl-devel
+      state: latest
+
+  - name: Packages | mariadb-devel | for ruby
+    dnf:
+      name: mariadb-devel
+      state: latest
+
+  - name: Packages | readline-devel | for ruby
+    dnf:
+      name: readline-devel
+      state: latest
+
+  - name: Packages | rubypick | for ruby
+    dnf:
+      name: rubypick
+      state: latest
+
+  - name: Gems | rails | for ruby
+    gem:
+      name: rails
+      state: latest
+    become: chris
+
+  - name: Unpackaged Software | rbenv | for ruby
+    git:
+      repo: git://github.com/sstephenson/rbenv.git
+      dest: /home/chris/.rbenv
+      update: no
+    become: chris
+
+  - name: Unpackaged Software | ruby-build | for ruby
+    git:
+      repo: git://github.com/sstephenson/ruby-build.git
+      dest: /home/chris/.rbenv/plugins/ruby-build
+      update: no
+    become: chris
+
