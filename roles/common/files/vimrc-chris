@@ -1,0 +1,11 @@
+" Pathogen load
+filetype off
+
+call pathogen#infect()
+call pathogen#helptags()
+syntax on
+filetype plugin indent on
+set pastetoggle=<F2>
+autocmd Filetype yaml setlocal ts=2 sw=2 expandtab
+autocmd FileType shell setlocal sw=2 sts=2 expandtab
+

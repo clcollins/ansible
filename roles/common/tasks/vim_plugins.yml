@@ -1,0 +1,37 @@
+---
+  - name: Vim Plugins | Dockerfile Vim
+    git:
+      repo: 'https://github.com/ekalinin/Dockerfile.vim.git'
+      dest: /home/chris/.vim/bundle/Dockerfile
+    become: chris
+
+  - name: Vim Plugins | Vim Puppet
+    git:
+      repo: 'https://github.com/rodjek/vim-puppet.git'
+      dest: /home/chris/.vim/bundle/vim-puppet
+    become: chris
+
+  - name: Vim Plugins | Syntastic
+    git:
+      repo: 'https://github.com/scrooloose/syntastic.git'
+      dest: /home/chris/.vim/bundle/syntastic
+    become: chris
+
+  - name: Vim Plugins | Tabular
+    git:
+      repo: 'https://github.com/godlygeek/tabular.git'
+      dest: /home/chris/.vim/bundle/tabular
+    become: chris
+
+  - name: Vim Plugins | Vim Go
+    git:
+      repo: 'https://github.com/fatih/vim-go'
+      dest: /home/chris/.vim/bundle/vim-go
+    become: chris
+
+  - name: Vim Plugins | Vim Markdown
+    git:
+      repo: 'https://github.com/plasticboy/vim-markdown.git'
+      dest: /home/chris/.vim/bundle/vim-markdown
+    become: chris
+
