@@ -124,10 +124,12 @@ git-rm-secret () {
   echo '...and perhaps we should add the sensitive file to our .gitignore, should we not?'
 }
 
+LOLCOMMITS_ENABLE="lolcommits --enable --animate 2 --delay 1 --fork --stealth"
+
 git () {
   if [[ $@ == "init" ]] && lolcommits --version > /dev/null
   then
-    command git init && lolcommits --enable --animate 2 --delay 1 --fork --stealth
+    command git init && ${LOLCOMMITS_ENABLE}
   elif [[ $@ == "init" ]] && ! lolcommits -v > /dev/null
   then
     echo "lolcommits not found"
@@ -141,6 +143,19 @@ git () {
   else
     command git "$@"
   fi
+}
+
+lolcommits_enable () {
+  if ! lolcommits --version > /dev/null
+  then
+    echo "lolcommits not found"
+    return 1
+  else
+    command ${LOLCOMMITS_ENABLE}
+  fi
+}
+
+
 }
 
 DOGE="
