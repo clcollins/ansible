@@ -125,7 +125,7 @@ git-rm-secret () {
 }
 
 git () {
-  if [[ $@ == "init" ]] && lolcommits -v > /dev/null
+  if [[ $@ == "init" ]] && lolcommits --version > /dev/null
   then
     command git init && lolcommits --enable --animate 2 --delay 1 --fork --stealth
   elif [[ $@ == "init" ]] && ! lolcommits -v > /dev/null
