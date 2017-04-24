@@ -1,4 +1,8 @@
 ---
+  - include: aws.yml
+  - include: terraform.yml
+  - include: openshift.yml
+
   - name: Administrative | hostname
     hostname:
       name:  krang.oit.duke.edu
