@@ -14,6 +14,11 @@
       name: mplayer
       state: latest
 
+  - name: Packages | ffmpeg | for lolcommits
+    dnf:
+      name: ffmpeg
+      state: latest
+
   - name: Packages | ImageMagick | for lolcommits
     dnf:
       name: ImageMagick
