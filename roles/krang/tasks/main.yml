@@ -47,27 +47,6 @@
       name: wine-devel
       state: latest
 
-  - name: Packages | mplayer | for lolcommits
-    dnf:
-      name: mplayer
-      state: latest
-
-  - name: Packages | ImageMagick | for lolcommits
-    dnf:
-      name: ImageMagick
-      state: latest
-
-  - name: Packages | ImageMagick-devel | for lolcommits
-    dnf:
-      name: ImageMagick-devel
-      state: latest
-
-  - name: Gems | lolcommits | for fun
-    gem:
-      name: lolcommits
-      state: latest
-    become: chris
-
   - name: Config Files | DF init.txt
     copy:
       src: dwarffortress_init.txt
