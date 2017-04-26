@@ -1,0 +1,14 @@
+---
+# Basic vars for personalization
+user: chris
+
+homedir: /home/{{ user }}
+projectsdir: "{{ homedir }}/Projects"
+logdir: /var/log
+
+ansible_dir: "{{ homedir }}/.ansible"
+ansible_log: "{{ logdir }}/ansible.log"
+
+git_ssh_key: "{{ homedir }}/.ssh/id_ed25519"
+git_config_user_name: Christopher Collins
+git_config_user_email: collins.christopher@gmail.com

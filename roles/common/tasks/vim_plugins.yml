@@ -2,41 +2,48 @@
   - name: Vim Plugins | Dockerfile Vim
     git:
       repo: 'https://github.com/ekalinin/Dockerfile.vim.git'
-      dest: /home/chris/.vim/bundle/Dockerfile
-    become: chris
+      version: master
+      dest: "{{ homedir }}/.vim/bundle/Dockerfile"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Vim Puppet
     git:
       repo: 'https://github.com/rodjek/vim-puppet.git'
-      dest: /home/chris/.vim/bundle/vim-puppet
-    become: chris
+      version: master
+      dest: "{{ homedir }}/.vim/bundle/vim-puppet"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Syntastic
     git:
       repo: 'https://github.com/scrooloose/syntastic.git'
-      dest: /home/chris/.vim/bundle/syntastic
-    become: chris
+      version: 3.8.0
+      dest: "{{ homedir }}/.vim/bundle/syntastic"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Tabular
     git:
       repo: 'https://github.com/godlygeek/tabular.git'
-      dest: /home/chris/.vim/bundle/tabular
-    become: chris
+      version: 1.0.0
+      dest: "{{ homedir }}/.vim/bundle/tabular"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Vim Go
     git:
       repo: 'https://github.com/fatih/vim-go'
-      dest: /home/chris/.vim/bundle/vim-go
-    become: chris
+      version: v1.12
+      dest: "{{ homedir }}/.vim/bundle/vim-go"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Vim Markdown
     git:
       repo: 'https://github.com/plasticboy/vim-markdown.git'
-      dest: /home/chris/.vim/bundle/vim-markdown
-    become: chris
+      version: 1.0.0
+      dest: "{{ homedir }}/.vim/bundle/vim-markdown"
+    become: "{{ user }}"
 
   - name: Vim Plugins | Ansible Vim
     git:
       repo: 'https://github.com/pearofducks/ansible-vim.git'
-      dest: /home/chris/.vim/bundle/ansible-vim
-    become: chris
+      version: 1.0
+      dest: "{{ homedir }}/.vim/bundle/ansible-vim"
+    become: "{{ user }}"

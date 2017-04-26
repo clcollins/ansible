@@ -1,5 +1,0 @@
-#!/bin/bash
-
-ANSIBLE_DIR='/home/chris/.ansible'
-
-ansible-playbook ${ANSIBLE_DIR}/site.yml

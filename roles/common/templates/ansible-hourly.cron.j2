@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ANSIBLE_DIR='{{ ansible_dir }}'
+
+if [[ ! -f {{ ansible_log }} ]]
+then
+  touch {{ ansible_log }}
+fi
+
+ansible-playbook ${ANSIBLE_DIR}/{{ inventory_hostname_short }}.yml >> {{ ansible_log }} 2>&1

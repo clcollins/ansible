@@ -2,5 +2,5 @@
   - name: Packages | graphviz | for Terraform
     dnf:
       name: graphviz
-      state: latest
+      state: present
 

@@ -1,0 +1,2 @@
+---
+update_cmd: dnf update -y

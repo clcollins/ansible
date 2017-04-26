@@ -2,10 +2,10 @@
   - name: Packages | python-boto | for AWS
     dnf:
       name: python-boto
-      state: latest
+      state: present
 
   - name: Python Libs | awscli | for AWS
     pip:
       name: awscli
       executable: pip3
-      state: latest
+      state: present

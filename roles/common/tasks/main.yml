@@ -1,78 +1,77 @@
 ---
-# - name: Administrative | Ansible playbooks
-#   git:
-#     repo: git@github.com:clcollins/ansible.git
-#     dest: /home/chris/.ansible
-#     key_file: /home/chris/.ssh/id_ed25519
-#     clone: yes
-#     update: yes
+  - name: Administrative | Ansible playbooks
+    git:
+      repo: git@github.com:clcollins/ansible.git
+      version: master
+      dest: "{{ homedir }}/.ansible"
+      key_file: "{{ git_ssh_key }}"
+      clone: yes
+      update: no
+
+  - name: Administrative | Git repo pre-commit with linter
+    copy:
+      src: pre-commit
+      dest: "{{ ansible_dir }}/.git/hooks/pre-commit"
+    become: "{{ user }}"
 
   - name: Administrative | Copy ansible.cfg
-    copy:
-      src: ansible.cfg
-      dest: /etc/ansible/ansible.cfg
+    template:
+      src: ansible.cfg.j2
+      dest: "{{ ansible_dir }}/ansible.cfg"
       owner: root
       group: root
       mode: 0644
 
-  - name: Administrative | Add Ansible logdir
-    file:
-      path: /var/log/ansible
-      state: directory
-      mode: 0755
-      owner: root
-      group: root
-
-  - name: Administrative | Add Ansible hourly logfile
-    file:
-      path: /var/log/ansible/ansible-hourly.log
-      state: touch
-      mode: 0755
-      owner: root
-      group: root
-
   - name: Administrative | Copy Ansible hourly cron
-    copy:
-      src: ansible-hourly.cron
+    template:
+      src: ansible-hourly.cron.j2
       dest: /etc/cron.hourly/ansible-hourly.cron
+      owner: root
+      group: root
+      mode: 0775
+
+  - name: Administrative | Copy patchmonkey daily cron
+    template:
+      src: patchmonkey-daily.cron.j2
+      dest: /etc/cron.daily/patchmonkey-daily.cron
       owner: root
       group: root
       mode: 0775
 
   - name: Access | Authorized Keys
     authorized_key:
-      user: chris
+      user: "{{ user }}"
       key: https://github.com/clcollins.keys
 
-  - name: Users | copy bashrc 
+  - name: Users | copy bashrc
     copy:
-      src: bashrc-chris
-      dest: /home/chris/.bashrc
-    become: chris
-      
-  - name: Users | copy bash profile 
-    copy:
-      src: bash_profile-chris
-      dest: /home/chris/.bash_profile
-    become: chris
+      src: "bashrc-{{ user }}"
+      dest: "{{ homedir }}/.bashrc"
+    become: "{{ user }}"
 
-  - name: Users | copy toprc 
+  - name: Users | copy bash profile
     copy:
-      src: toprc-chris
-      dest: /home/chris/.toprc
-    become: chris
-      
+      src: "bash_profile-{{ user }}"
+      dest: "{{ homedir }}/.bash_profile"
+    become: "{{ user }}"
+
+  - name: Users | copy toprc
+    copy:
+      src: "toprc-{{ user }}"
+      dest: "{{ homedir }}/.toprc"
+    become: "{{ user }}"
+
   - name: Git Config | user name
     git_config:
       name: user.name
       scope: global
-      value: Christopher Collins
+      value: "{{ git_config_user_name }}"
 
   - name: Git Config | user email
     git_config:
       name: user.email
       scope: global
-      value: collins.christopher@gmail.com
+      value: "{{ git_config_user_email }}"
 
   - name: Git Config | editor
     git_config:
@@ -83,32 +82,32 @@
   - name: Bin Dir | Binfiles
     copy:
       src: bin/
-      dest: /home/chris/bin/
+      dest: "{{ homedir }}/bin/"
       mode: 0755
-    become: chris
+    become: "{{ user }}"
 
-  - name: Vim Config | Copy .vimrc 
+  - name: Vim Config | Copy .vimrc
     copy:
-      src: vimrc-chris
-      dest: /home/chris/.vimrc
-    become: chris
+      src: "vimrc-{{ user }}"
+      dest: "{{ homedir }}/.vimrc"
+    become: "{{ user }}"
 
   - name: Vim Config | Pathogen prep
     file:
-      path: /home/chris/.vim/autoload
+      path: "{{ homedir }}/.vim/autoload"
       state: directory
       mode: 0755
 
   - name: Vim Config | Pathogen prep
     file:
-      path: /home/chris/.vim/bundle
+      path: "{{ homedir }}/.vim/bundle"
       state: directory
       mode: 0755
 
   - name: Vim Config | Pathogen
     get_url:
       url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-      dest: /home/chris/.vim/autoload/pathogen.vim
+      dest: "{{ homedir }}/.vim/autoload/pathogen.vim"
       checksum: sha256:b05ef1d37eaf81a93ee07f52e443e0b53ea24eaef752e918763d2eff7758d70e
 
   - include: vim_plugins.yml

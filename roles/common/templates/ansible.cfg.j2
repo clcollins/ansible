@@ -11,7 +11,7 @@
 
 # some basic default values...
 
-#inventory      = /etc/ansible/hosts
+inventory      = ./ansible-hosts
 #library        = /usr/share/my_modules/
 #remote_tmp     = $HOME/.ansible/tmp
 #local_tmp      = $HOME/.ansible/tmp
@@ -49,7 +49,7 @@
 # with a maximum timeout of 10 seconds. This
 # option lets you increase or decrease that
 # timeout to something more suitable for the
-# environment. 
+# environment.
 # gather_timeout = 10
 
 # additional paths to search for roles in, colon separated
@@ -89,7 +89,7 @@
 
 # logging is off by default unless this path is defined
 # if so defined, consider logrotate
-#log_path = /var/log/ansible.log
+log_path = /var/log/ansible.log
 
 # default module name for /usr/bin/ansible
 #module_name = command

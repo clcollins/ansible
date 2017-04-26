@@ -31,7 +31,7 @@
 # Ex 3: A collection of database servers in the 'dbservers' group
 
 ## [dbservers]
-## 
+##
 ## db01.intranet.mydomain.net
 ## db02.intranet.mydomain.net
 ## 10.25.1.56
@@ -41,17 +41,6 @@
 # leading 0s:
 
 ## db-[99:101]-node.example.com
-[cthulhu]
-cthulhu
-
-[rhogog]
-rhogog
-
-[hastur]
-hastur
-
-[krang]
-krang ansible_connection=local
 
 [laptops]
 krang
@@ -61,5 +50,11 @@ cthulhu
 [rpies]
 rhogog
 
-[localhosts]
+[fedora]
+krang
+hastur
+cthulhu
+rhogog
+
+[localhost]
 krang

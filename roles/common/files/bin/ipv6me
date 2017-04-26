@@ -16,10 +16,10 @@ LOCAL6PREFIXLEN=64
 # Setup the tunnel interface
 ip tunnel add $SIXRDTUNIF mode sit local $WAN4IP ttl $SIXRDTUNTTL
 # This is the magic virtually undocumented 6rd sauce
-# This makes it a 6rd tunnel by specifiying the ISPs PREFIX 
+# This makes it a 6rd tunnel by specifiying the ISPs PREFIX
 # rather than 2002::/16 the "generic" 6to4 prefix
-ip tunnel 6rd dev $SIXRDTUNIF 6rd-prefix $ISP6RDPREFIX::/$ISP6RDPREFIXLEN 
-# Set the MTU 
+ip tunnel 6rd dev $SIXRDTUNIF 6rd-prefix $ISP6RDPREFIX::/$ISP6RDPREFIXLEN
+# Set the MTU
 ip link set $SIXRDTUNIF mtu $SIXRDTUNMTU
 # Bring up the tunnel interface
 ip link set $SIXRDTUNIF up

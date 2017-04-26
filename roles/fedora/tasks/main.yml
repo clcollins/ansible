@@ -1,40 +1,40 @@
 ---
-  - include: tasks/repos.yml
-  - include: tasks/docker.yml
-  - include: tasks/development.yml
-
-  - name: Packages | patch all
-    dnf:
-      name: "*"
-      state: latest
+  - include: repos.yml
+  - include: docker.yml
+  - include: development.yml
+  - include: sshd.yml
 
   - name: Basic Packages | ansible
     dnf:
       name: ansible
-      state: latest
+      state: present
 
   - name: Basic Packages | tmux
     dnf:
       name: tmux
-      state: latest
+      state: present
 
   - name: Basic Packages | the_silver_searcher
     dnf:
       name: the_silver_searcher
-      state: latest
+      state: present
 
   - name: Basic Packages | vim-enhanced
     dnf:
       name: vim-enhanced
-      state: latest
+      state: present
 
   - name: Basic Packages | pidgin | for chat
     dnf:
       name: pidgin
-      state: latest
+      state: present
 
   - name: Basic Packages | pidgin-otr | off the record/encrypted plugin for pidgin
     dnf:
       name: pidgin-otr
-      state: latest
+      state: present
 
+  - name: Linters | ansible-lint
+    pip:
+      name: ansible-lint
+      state: present
