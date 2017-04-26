@@ -79,6 +79,7 @@
       version: v1.1.0
       dest: "{{ homedir }}/.rbenv"
       update: no
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -88,6 +89,7 @@
       version: v20170405
       dest: "{{ homedir }}/.rbenv/plugins/ruby-build"
       update: no
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 

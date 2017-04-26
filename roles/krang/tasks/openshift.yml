@@ -19,5 +19,6 @@
       repo: 'https://github.com/openshift/openshift-ansible.git'
       dest: "{{ projectsdir }}/openshift"
       version: release-1.5
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
