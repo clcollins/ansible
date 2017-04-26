@@ -7,4 +7,7 @@ then
   touch {{ ansible_log }}
 fi
 
+chown {{ user }} {{ ansible_log }}
+chmod 0600 {{ ansible_log }}
+
 ansible-playbook ${ANSIBLE_DIR}/{{ inventory_hostname_short }}.yml >> {{ ansible_log }} 2>&1
