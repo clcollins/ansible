@@ -35,6 +35,17 @@
       group: root
       mode: 0644
 
+  - name: Administrative | Check Ansible log exists
+    stat:
+      path: "{{ ansible_log }}"
+    register: ansible_log_file
+
+  - name: Administrative | Create Ansible log
+    file:
+      path: "{{ ansible_log }}"
+      state: touch
+    when: ansible_log_file.stat.exists == False
+
   - name: Administrative | Ansible Log
     file:
       path: "{{ ansible_log }}"
