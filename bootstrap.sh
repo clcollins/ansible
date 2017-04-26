@@ -10,8 +10,15 @@
 #
 # Currently only Fedora support
 
+set -e
+
 ANSIBLE_REPO="https://github.com/clcollins/ansible.git"
 CHECKOUT_DIR="/tmp/ansible-bootstrap"
 
 # Bootstrap for Ansible 
-dnf install -y ansible && ansible-pull -d ${CHECKOUT_DIR} -U ${ANSIBLE_REPO}
+if ! ansible --version
+then
+  dnf install -y ansible
+fi
+
+ansible-pull --verify-commit -d ${CHECKOUT_DIR} -U ${ANSIBLE_REPO}

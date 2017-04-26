@@ -23,7 +23,7 @@
     template:
       src: ansible.cfg.j2
       dest: "{{ ansible_dir }}/ansible.cfg"
-      owner: root
+      owner: "{{ user }}"
       group: root
       mode: 0644
 
