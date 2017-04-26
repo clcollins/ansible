@@ -1,4 +1,8 @@
 ---
+  - name: Administrative | hostname
+    hostname:
+      name: "{{ ansible_nodename }}"
+
   - name: Administrative | Ansible playbooks
     git:
       repo: git@github.com:clcollins/ansible.git
@@ -12,7 +16,8 @@
     copy:
       src: pre-commit
       dest: "{{ ansible_dir }}/.git/hooks/pre-commit"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Administrative | Copy ansible.cfg
     template:
@@ -53,52 +58,46 @@
 
   - name: Users | copy bashrc
     copy:
-      src: "bashrc-{{ user }}"
+      src: bashrc
       dest: "{{ homedir }}/.bashrc"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Users | copy bash profile
     copy:
-      src: "bash_profile-{{ user }}"
+      src: bash_profile
       dest: "{{ homedir }}/.bash_profile"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Users | copy toprc
     copy:
-      src: "toprc-{{ user }}"
+      src: toprc
       dest: "{{ homedir }}/.toprc"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
-  - name: Git Config | user name
-    git_config:
-      name: user.name
-      scope: global
-      value: "{{ git_config_user_name }}"
-
-  - name: Git Config | user email
-    git_config:
-      name: user.email
-      scope: global
-      value: "{{ git_config_user_email }}"
-
-  - name: Git Config | editor
-    git_config:
-      name: core.editor
-      scope: global
-      value: vim
+  - name: Users | copy git config
+    template:
+      src: git_config.j2
+      dest: "{{ homedir }}/.gitconfig"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Bin Dir | Binfiles
     copy:
       src: bin/
       dest: "{{ homedir }}/bin/"
       mode: 0755
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Config | Copy .vimrc
     copy:
-      src: "vimrc-{{ user }}"
+      src: vimrc
       dest: "{{ homedir }}/.vimrc"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Config | Pathogen prep
     file:

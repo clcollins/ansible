@@ -19,4 +19,5 @@
       repo: 'https://github.com/openshift/openshift-ansible.git'
       dest: "{{ projectsdir }}/openshift"
       version: release-1.5
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"

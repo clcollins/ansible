@@ -3,10 +3,6 @@
   - include: terraform.yml
   - include: openshift.yml
 
-  - name: Administrative | hostname
-    hostname:
-      name:  krang.oit.duke.edu
-
   - name: Packages | dwarffortress
     dnf:
       name: dwarffortress
@@ -51,12 +47,14 @@
     copy:
       src: dwarffortress_init.txt
       dest: "{{ homedir }}/.dwarffortress/data/init/init.txt"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   # From http://www.bay12forums.com/smf/index.php?topic=158914.0
   - name: Config Files | DF tile
     copy:
       src: hack_square_64x64.png
       dest: "{{ homedir }}/.dwarffortress/data/art/hack_square_64x64.png"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 

@@ -4,46 +4,53 @@
       repo: 'https://github.com/ekalinin/Dockerfile.vim.git'
       version: master
       dest: "{{ homedir }}/.vim/bundle/Dockerfile"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Puppet
     git:
       repo: 'https://github.com/rodjek/vim-puppet.git'
       version: master
       dest: "{{ homedir }}/.vim/bundle/vim-puppet"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Syntastic
     git:
       repo: 'https://github.com/scrooloose/syntastic.git'
       version: 3.8.0
       dest: "{{ homedir }}/.vim/bundle/syntastic"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Tabular
     git:
       repo: 'https://github.com/godlygeek/tabular.git'
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/tabular"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Go
     git:
       repo: 'https://github.com/fatih/vim-go'
       version: v1.12
       dest: "{{ homedir }}/.vim/bundle/vim-go"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Markdown
     git:
       repo: 'https://github.com/plasticboy/vim-markdown.git'
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/vim-markdown"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"
 
   - name: Vim Plugins | Ansible Vim
     git:
       repo: 'https://github.com/pearofducks/ansible-vim.git'
       version: 1.0
       dest: "{{ homedir }}/.vim/bundle/ansible-vim"
-    become: "{{ user }}"
+    become: true
+    become_user: "{{ user }}"

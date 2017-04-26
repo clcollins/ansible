@@ -34,7 +34,8 @@
       name: pidgin-otr
       state: present
 
-  - name: Linters | ansible-lint
+  - name: Packages | ansible-lint | validate Ansible role syntax
     pip:
       name: ansible-lint
+      executable: pip2
       state: present
