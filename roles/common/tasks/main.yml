@@ -13,6 +13,13 @@
       clone: yes
       update: no
 
+  - name: Administrative | Set up signing
+    git_config:
+      name: commit.gpgsign
+      repo: "{{ homedir }}/.ansible"
+      scope: local
+      value: true
+
   - name: Administrative | Git repo pre-commit with linter
     copy:
       src: pre-commit
