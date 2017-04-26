@@ -22,6 +22,14 @@
       group: root
       mode: 0644
 
+  - name: Administrative | Ansible Log
+    file:
+      path: "{{ ansible_log }}"
+      owner: "{{ user }}"
+      group: root
+      mode: 0664
+      state: file
+
   - name: Administrative | Copy Ansible hourly cron
     template:
       src: ansible-hourly.cron.j2
