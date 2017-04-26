@@ -21,4 +21,4 @@ then
   dnf install -y ansible
 fi
 
-ansible-pull --verify-commit -d ${CHECKOUT_DIR} -U ${ANSIBLE_REPO}
+ansible-pull --verify-commit --clean -d ${CHECKOUT_DIR} -U ${ANSIBLE_REPO}

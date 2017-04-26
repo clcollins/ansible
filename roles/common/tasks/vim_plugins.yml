@@ -4,6 +4,7 @@
       repo: 'https://github.com/ekalinin/Dockerfile.vim.git'
       version: master
       dest: "{{ homedir }}/.vim/bundle/Dockerfile"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -12,6 +13,7 @@
       repo: 'https://github.com/rodjek/vim-puppet.git'
       version: master
       dest: "{{ homedir }}/.vim/bundle/vim-puppet"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -20,6 +22,7 @@
       repo: 'https://github.com/scrooloose/syntastic.git'
       version: 3.8.0
       dest: "{{ homedir }}/.vim/bundle/syntastic"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -28,6 +31,7 @@
       repo: 'https://github.com/godlygeek/tabular.git'
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/tabular"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -36,6 +40,7 @@
       repo: 'https://github.com/fatih/vim-go'
       version: v1.12
       dest: "{{ homedir }}/.vim/bundle/vim-go"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -44,6 +49,7 @@
       repo: 'https://github.com/plasticboy/vim-markdown.git'
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/vim-markdown"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"
 
@@ -52,5 +58,6 @@
       repo: 'https://github.com/pearofducks/ansible-vim.git'
       version: 1.0
       dest: "{{ homedir }}/.vim/bundle/ansible-vim"
+      accept_hostkey: yes
     become: true
     become_user: "{{ user }}"

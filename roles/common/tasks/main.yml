@@ -9,6 +9,7 @@
       version: master
       dest: "{{ homedir }}/.ansible"
       key_file: "{{ git_ssh_key }}"
+      accept_hostkey: yes
       clone: yes
       update: no
 
