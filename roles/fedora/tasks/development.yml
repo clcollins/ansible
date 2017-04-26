@@ -4,6 +4,11 @@
       name: '@Development tools'
       state: present
 
+  - name: Packages | gcc-c++ | for development
+    dnf:
+      name: gcc-c++
+      state: present
+
   - name: Packages | redhat-rpm-config | for lolcommits
     dnf:
       name: redhat-rpm-config
