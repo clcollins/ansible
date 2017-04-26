@@ -7,7 +7,7 @@
 # Or, a short URL for the above: https://git.io/v9O46
 #
 # Eg: curl -sSL https://git.io/v9O46 -o /tmp/bootstrap.sh
-
+#
 # Currently only Fedora support
 
 ANSIBLE_REPO="https://github.com/clcollins/ansible.git"
