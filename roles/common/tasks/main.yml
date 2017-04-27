@@ -63,6 +63,11 @@
       #      group: root
       #      mode: 0775
 
+  - name: Temp | Remove cron
+    file:
+      path: /etc/cron.hourly/ansible-hourly.cron
+      state: absent
+
   - name: Administrative | Copy patchmonkey daily cron
     template:
       src: patchmonkey-daily.cron.j2
