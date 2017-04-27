@@ -1,6 +1,9 @@
 #!/bin/bash
 
+ANSIBLE_REPO="https://github.com/clcollins/ansible.git"
+CHECKOUT_DIR="/tmp/ansible-bootstrap"
 ANSIBLE_DIR='{{ ansible_dir }}'
+ANSIBLE_RUN_METHOD='pull'
 
 if [[ ! -f {{ ansible_log }} ]]
 then
@@ -10,4 +13,16 @@ fi
 chown {{ user }} {{ ansible_log }}
 chmod 0600 {{ ansible_log }}
 
-ansible-playbook ${ANSIBLE_DIR}/{{ inventory_hostname_short }}.yml >> {{ ansible_log }} 2>&1
+if [[ ${ANSIBLE_RUN_METHOD} == 'pull' ]]
+then
+  su {{ user }} -c "ansible-pull \
+                      --verify-commit \
+                      --clean \
+                      -d ${CHECKOUT_DIR} \
+                      -U ${ANSIBLE_REPO}  \
+                      >> {{ ansible_log }} 2>&1"
+else
+  su {{ user }} -c "ansible-playbook \
+                      ${ANSIBLE_DIR}/{{ inventory_hostname_short }}.yml \
+                      >> {{ ansible_log }} 2>&1"
+fi
