@@ -1,38 +1,22 @@
 ---
-  - name: Packages | 'Development tools' group
+  - name: Packages | Development stuff | for development
     dnf:
-      name: '@Development tools'
+      name: "{{ item }}"
       state: present
+    with_items:
+      - '@Development tools'
+      - gcc-c++
+      - redhat-rpm-config
 
-  - name: Packages | gcc-c++ | for development
+  - name: Packages | for lolcommits
     dnf:
-      name: gcc-c++
+      name: "{{ item }}"
       state: present
-
-  - name: Packages | redhat-rpm-config | for lolcommits
-    dnf:
-      name: redhat-rpm-config
-      state: present
-
-  - name: Packages | mplayer | for lolcommits
-    dnf:
-      name: mplayer
-      state: present
-
-  - name: Packages | ffmpeg | for lolcommits
-    dnf:
-      name: ffmpeg
-      state: present
-
-  - name: Packages | ImageMagick | for lolcommits
-    dnf:
-      name: ImageMagick
-      state: present
-
-  - name: Packages | ImageMagick-devel | for lolcommits
-    dnf:
-      name: ImageMagick-devel
-      state: present
+    with_items:
+      - mplayer
+      - ffmpeg
+      - ImageMagick
+      - ImageMagick-devel
 
   - name: Gems | lolcommits | for fun
     gem:
@@ -41,35 +25,17 @@
     become: true
     become_user: "{{ user }}"
 
-  - name: Packages | ruby-devel | for ruby
+  - name: Packages | for ruby
     dnf:
-      name: ruby-devel
+      name: "{{ item }}"
       state: present
-
-  - name: Packages | rubygems | for ruby
-    dnf:
-      name: rubygems
-      state: present
-
-  - name: Packages | openssl-devel | for ruby
-    dnf:
-      name: openssl-devel
-      state: present
-
-  - name: Packages | mariadb-devel | for ruby
-    dnf:
-      name: mariadb-devel
-      state: present
-
-  - name: Packages | readline-devel | for ruby
-    dnf:
-      name: readline-devel
-      state: present
-
-  - name: Packages | rubypick | for ruby
-    dnf:
-      name: rubypick
-      state: present
+    with_items:
+      - ruby-devel
+      - rubygems
+      - openssl-devel
+      - mariadb-devel
+      - readline-devel
+      - rubypick
 
   - name: Gems | rails | for ruby
     gem:
@@ -98,3 +64,17 @@
     become: true
     become_user: "{{ user }}"
 
+  - name: Packages | container deps | for Buildah/containers
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - make
+      - golang
+      - bats
+      - btrfs-progs-devel
+      - device-mapper-devel
+      - gpgme-devel
+      - libassuan-devel
+      - git
+      - bzip2
