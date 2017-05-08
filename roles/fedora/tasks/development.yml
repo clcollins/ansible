@@ -78,3 +78,4 @@
       - libassuan-devel
       - git
       - bzip2
+      - golang-github-cpuguy83-go-md2man
