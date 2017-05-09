@@ -3,20 +3,39 @@
     file:
       path: "{{ homedir }}/.config/conky"
       state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}" 
       mode: 0775
-    become_user: "{{ user }}"
+
+  - name: Conky | Link dotfile dir
+    file:
+      src: "{{ homedir }}/.config/conky"
+      dest: "{{ homedir }}/.conky"
+      owner: "{{ user }}"
+      group: "{{ user }}" 
+      state: link
 
   - name: Conky | Config File
     copy:
       src: conky.conf
       dest: "{{ homedir }}/.config/conky/conky.conf"
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}" 
     
+      #  - name: Conky | Link Config File
+      #    file:
+      #      src: "{{ homedir }}/.conky/Conky_Revisited_2/Conky_Square_Vertical/start_conky_General_VERTICAL" 
+      #      dest: "{{ homedir }}/.config/conky/conky.conf"
+      #      owner: "{{ user }}"
+      #      group: "{{ user }}" 
+      #      state: link
+
   - name: Conky | Systemd Unit File
     copy:
       src: conky.service
       dest: "{{ homedir }}/.config/systemd/user/conky.service"
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}" 
     
   - name: Conky | Enable Service
     systemd:
@@ -26,4 +45,22 @@
       enabled: yes
     become_user: "{{ user }}"
     
+  - name: Conky | Conky Revisited
+    git:
+      repo: 'https://github.com/xexpanderx/Conky-Revisited-2.git'
+      version: master
+      dest: "{{ homedir }}/.config/conky/Conky-Revisited-2_workaround"
+      accept_hostkey: yes
+    become: true
+    become_user: "{{ user }}"
+
+  # Gotta make this dumb symlink because the above keeps a subdir
+  # in the repo
+  - name : Conky | Fix Conky Revisited
+    file:
+      src: "{{ homedir }}/.config/conky/Conky-Revisited-2_workaround/Conky_Revisited_2/"
+      dest: "{{ homedir }}/.config/conky/Conky_Revisited_2"
+      owner: "{{ user }}"
+      group: "{{ user }}" 
+      state: link
 
