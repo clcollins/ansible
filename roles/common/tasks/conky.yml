@@ -1,0 +1,29 @@
+---
+  - name: Conky | Config Dir
+    file:
+      path: "{{ homedir }}/.config/conky"
+      state: directory
+      mode: 0775
+    become_user: "{{ user }}"
+
+  - name: Conky | Config File
+    copy:
+      src: conky.conf
+      dest: "{{ homedir }}/.config/conky/conky.conf"
+    become_user: "{{ user }}"
+    
+  - name: Conky | Systemd Unit File
+    copy:
+      src: conky.service
+      dest: "{{ homedir }}/.config/systemd/user/conky.service"
+    become_user: "{{ user }}"
+    
+  - name: Conky | Enable Service
+    systemd:
+      name: conky.service
+      user: yes
+      no_block: yes
+      enabled: yes
+    become_user: "{{ user }}"
+    
+

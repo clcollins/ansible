@@ -1,4 +1,6 @@
 ---
+  - include: tasks/conky.yml
+
   - name: Administrative | hostname
     hostname:
       name: "{{ ansible_nodename }}"
@@ -12,6 +14,12 @@
       accept_hostkey: yes
       clone: yes
       update: no
+
+  - name: Administrative | Systemd User Dir
+    file:
+      path: "{{ homedir }}/.config/systemd/user"
+      state: directory
+      mode: 0755
 
   - name: Administrative | Set up signing
     git_config:
