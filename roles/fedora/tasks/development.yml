@@ -6,6 +6,7 @@
     with_items:
       - skopeo
       - atomic
+      - origin-clients
 
   - name: Packages | Development stuff | for development
     dnf:
