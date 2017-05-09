@@ -4,37 +4,20 @@
   - include: development.yml
   - include: sshd.yml
 
-  - name: Basic Packages | ansible
+  - name: Basic Packages
     dnf:
-      name: ansible
+      name: "{{ item }}"
       state: present
+    with_items:
+      - ansible
+      - tmux
+      - the_silver_searcher
+      - vim-enhanced
+      - pidgin
+      - pidgin-otr
+      - conky
 
-  - name: Basic Packages | tmux
-    dnf:
-      name: tmux
-      state: present
-
-  - name: Basic Packages | the_silver_searcher
-    dnf:
-      name: the_silver_searcher
-      state: present
-
-  - name: Basic Packages | vim-enhanced
-    dnf:
-      name: vim-enhanced
-      state: present
-
-  - name: Basic Packages | pidgin | for chat
-    dnf:
-      name: pidgin
-      state: present
-
-  - name: Basic Packages | pidgin-otr | off the record/encrypted plugin for pidgin
-    dnf:
-      name: pidgin-otr
-      state: present
-
-  - name: Packages | ansible-lint | validate Ansible role syntax
+  - name: Pip Packages | ansible-lint | validate Ansible role syntax
     pip:
       name: ansible-lint
       executable: pip2

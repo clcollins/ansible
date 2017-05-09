@@ -1,4 +1,12 @@
 ---
+  - name: Packages | For container development
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - skopeo
+      - atomic
+
   - name: Packages | Development stuff | for development
     dnf:
       name: "{{ item }}"

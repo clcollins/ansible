@@ -1,33 +1,15 @@
 ---
-  - name: Packages | docker
+  - name: Packages | for Docker
     dnf:
-      name: docker
+      name: "{{ item }}"
       state: present
-
-  - name: Packages | docker-compose
-    dnf:
-      name: docker-compose
-      state: present
-
-  - name: Packages | python3-docker-py
-    dnf:
-      name: python3-docker-py
-      state: present
-
-  - name: Packages | python3-dockerfile-parse
-    dnf:
-      name: python3-dockerfile-parse
-      state: present
-
-  - name: Packages | python3-docker-sqaush
-    dnf:
-      name: python3-docker-squash
-      state: present
-
-  - name: Packages | python3-dockerpty
-    dnf:
-      name: python3-dockerpty
-      state: present
+    with_items:
+      - docker
+      - docker-compose
+      - python3-docker-py
+      - python3-dockerfile-parse
+      - python3-docker-squash
+      - python3-dockerpty
 
   - name: Config Files | Docker Sysconfig
     copy:
