@@ -88,3 +88,10 @@
       - git
       - bzip2
       - golang-github-cpuguy83-go-md2man
+
+  - name: Packages | python modules
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - python3-jinja2
