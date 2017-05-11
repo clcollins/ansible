@@ -62,20 +62,6 @@
       mode: 0664
       state: file
 
-      # Commenting out until I figure out the permissions issue
-      #  - name: Administrative | Copy Ansible hourly cron
-      #    template:
-      #      src: ansible-hourly.cron.j2
-      #      dest: /etc/cron.hourly/ansible-hourly.cron
-      #      owner: root
-      #      group: root
-      #      mode: 0775
-
-  - name: Temp | Remove cron
-    file:
-      path: /etc/cron.hourly/ansible-hourly.cron
-      state: absent
-
   - name: Administrative | Copy patchmonkey daily cron
     template:
       src: patchmonkey-daily.cron.j2
