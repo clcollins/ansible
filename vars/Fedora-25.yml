@@ -1,0 +1,88 @@
+---
+  ansible_paskages:
+    - ansible
+
+  ansible_pip_packages:
+    - ansible-lint
+
+  pip_executable: pip2
+
+  conky_packages:
+    - conky
+
+  vim_packages:
+    - vim-enhanced
+
+  basic_packages:
+    - the_silver_searcher
+    - tmux
+
+  pidgin_packages:
+    - pidgin
+    - pidgin-otr
+
+  gcc_packages:
+    - gcc-c++
+
+  container_devel_packages:
+    - skopeo
+    - atomic
+    - origin-clients
+
+  buildah_deps_packages:
+    - make
+    - golang
+    - bats
+    - btrfs-progs-devel
+    - device-mapper-devel
+    - gpgme-devel
+    - libassuan-devel
+    - git
+    - bzip2
+    - golang-github-cpuguy83-go-md2man
+
+  sshd: openssh-server
+
+  development_packages:
+    - '@Development tools'
+    - redhat-rpm-config
+
+  python_modules:
+    - python3-jinja2
+
+  ruby_devel_packages:
+    - ruby-devel
+    - rubygems
+    - openssl-devel
+    - mariadb-devel
+    - readline-devel
+    - rubypick
+
+  docker_packages:
+    - docker
+    - docker-compose
+    - python3-docker-py
+    - python3-dockerfile-parse
+    - python3-docker-squash
+    - python3-dockerpty
+
+  lolcommits_deps_packages:
+    - mplayer
+    - ffmpeg
+    - ImageMagick
+    - ImageMagick-devel
+
+  dwarffortress_packages:
+    - dwarffortress
+    - dwarftherapist
+
+  dwarftherapist_deps_packages:
+    - qt5-qtbase-devel
+    - qt5-qtdeclarative-devel
+    - texlive-latex-bin
+    - texlive-latex
+
+  wine_packages:
+    - wine
+    - wine-devel
+

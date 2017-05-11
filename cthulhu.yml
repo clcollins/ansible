@@ -1,10 +1,9 @@
 ---
-  - hosts: hastur
+  - hosts: cthulhu
+
     roles:
       - common
       - repos
       - basic
       - conky
       - sshd
-      - containers
-      - development

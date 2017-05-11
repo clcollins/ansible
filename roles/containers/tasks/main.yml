@@ -1,0 +1,53 @@
+---
+  - name: Containers | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: Containers | Install Packages | For container development
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ container_devel_packages }}"
+    become: true
+
+  - name: Containers | Install Docker Packages | For Docker
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ docker_packages }}"
+    become: true
+
+  - name: Containers | Install Buildah dependencies | for Buildah/containers
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ buildah_deps_packages }}"
+    become: true
+
+  - name: Containers | Config Files | Docker Sysconfig
+    copy:
+      src: docker_sysconfig
+      dest: /etc/sysconfig/docker
+    notify: reload docker
+
+  - name: Containers | Config Files | Docker Storage Setup
+    copy:
+      src: docker-storage-setup
+      dest: /etc/sysconfig/docker-storage-setup
+    notify: reload docker
+
+  - name: Containers | Config Files | Docker Network Setup
+    copy:
+      src: docker-network
+      dest: /etc/sysconfig/docker-network
+    notify: reload docker
+
+  - name: Containers | Config Files | .docker Directory
+    file:
+      path: "{{ homedir }}/.docker"
+      state: directory
+      mode: 0755
+      owner: "{{ user }}"
+      group: "{{ user }}"
+

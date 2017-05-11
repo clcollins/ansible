@@ -1,12 +1,60 @@
 ---
+  - name: Basic | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: Basic | Install Packages
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ basic_packages }}"
+    become: true
+
+  - name: Basic | Install Pidgin Packages
+    package:
+      name: "{{ item }}"
+      state: present
+    when: not skip_pidgin
+    with_items: "{{ pidgin_packages }}"
+    become: true
+
+  - name: Vim | Install
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ vim_packages }}"
+    become: true
+
+  - name: Vim Config | Copy .vimrc
+    copy:
+      src: vimrc
+      dest: "{{ homedir }}/.vimrc"
+
+  - name: Vim Config | Pathogen prep
+    file:
+      path: "{{ homedir }}/.vim/autoload"
+      state: directory
+      mode: 0755
+
+  - name: Vim Config | Pathogen prep
+    file:
+      path: "{{ homedir }}/.vim/bundle"
+      state: directory
+      mode: 0755
+
+  - name: Vim Config | Pathogen
+    get_url:
+      url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+      dest: "{{ homedir }}/.vim/autoload/pathogen.vim"
+      checksum: sha256:b05ef1d37eaf81a93ee07f52e443e0b53ea24eaef752e918763d2eff7758d70e
+
   - name: Vim Plugins | Dockerfile Vim
     git:
       repo: 'https://github.com/ekalinin/Dockerfile.vim.git'
       version: master
       dest: "{{ homedir }}/.vim/bundle/Dockerfile"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Puppet
     git:
@@ -14,8 +62,6 @@
       version: master
       dest: "{{ homedir }}/.vim/bundle/vim-puppet"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Syntastic
     git:
@@ -23,8 +69,6 @@
       version: 3.8.0
       dest: "{{ homedir }}/.vim/bundle/syntastic"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Tabular
     git:
@@ -32,8 +76,6 @@
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/tabular"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Go
     git:
@@ -41,8 +83,6 @@
       version: v1.12
       dest: "{{ homedir }}/.vim/bundle/vim-go"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Vim Markdown
     git:
@@ -50,8 +90,6 @@
       version: 1.0.0
       dest: "{{ homedir }}/.vim/bundle/vim-markdown"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   - name: Vim Plugins | Ansible Vim
     git:
@@ -59,5 +97,3 @@
       version: 1.0
       dest: "{{ homedir }}/.vim/bundle/ansible-vim"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"

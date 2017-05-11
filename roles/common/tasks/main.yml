@@ -1,139 +1,80 @@
 ---
-  - include: tasks/conky.yml
+  - name: Common | Gather | Gather vars 
+    include_role:
+      name: common
+      tasks_from: gather
 
-  - name: Administrative | hostname
+  - name: Common | Admin | hostname
     hostname:
       name: "{{ ansible_nodename }}"
-
-  - name: Administrative | Ansible playbooks
-    git:
-      repo: git@github.com:clcollins/ansible.git
-      version: master
-      dest: "{{ homedir }}/.ansible"
-      key_file: "{{ git_ssh_key }}"
-      accept_hostkey: yes
-      clone: yes
-      update: no
-
-  - name: Administrative | Systemd User Dir
-    file:
-      path: "{{ homedir }}/.config/systemd/user"
-      state: directory
-      mode: 0755
-
-  - name: Administrative | Set up signing
-    git_config:
-      name: commit.gpgsign
-      repo: "{{ homedir }}/.ansible"
-      scope: local
-      value: true
-
-  - name: Administrative | Git repo pre-commit with linter
-    copy:
-      src: pre-commit
-      dest: "{{ ansible_dir }}/.git/hooks/pre-commit"
     become: true
-    become_user: "{{ user }}"
 
-  - name: Administrative | Copy ansible.cfg
-    template:
-      src: ansible.cfg.j2
-      dest: "{{ ansible_dir }}/ansible.cfg"
-      owner: "{{ user }}"
-      group: root
-      mode: 0644
-
-  - name: Administrative | Check Ansible log exists
-    stat:
-      path: "{{ ansible_log }}"
-    register: ansible_log_file
-
-  - name: Administrative | Create Ansible log
-    file:
-      path: "{{ ansible_log }}"
-      state: touch
-    when: ansible_log_file.stat.exists == False
-
-  - name: Administrative | Ansible Log
-    file:
-      path: "{{ ansible_log }}"
-      owner: "{{ user }}"
-      group: root
-      mode: 0664
-      state: file
-
-  - name: Administrative | Copy patchmonkey daily cron
+  - name: Common | Patching | Copy daily cron
     template:
       src: patchmonkey-daily.cron.j2
       dest: /etc/cron.daily/patchmonkey-daily.cron
       owner: root
       group: root
       mode: 0775
+    become: true
 
-  - name: Access | Authorized Keys
-    authorized_key:
-      user: "{{ user }}"
-      key: https://github.com/clcollins.keys
+  - name: Common | Users | Systemd User Dir
+    file:
+      path: "{{ homedir }}/.config/systemd/user"
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0755
+    when: ansible_service_mgr == "systemd"
 
-  - name: Users | copy bashrc
+  - name: Common | Users | copy bashrc
     copy:
       src: bashrc
       dest: "{{ homedir }}/.bashrc"
-    become: true
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
 
-  - name: Users | copy bash profile
+  - name: Common | Users | copy bash profile
     copy:
       src: bash_profile
       dest: "{{ homedir }}/.bash_profile"
-    become: true
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
 
-  - name: Users | copy toprc
+  - name: Common | Users | copy toprc
     copy:
       src: toprc
       dest: "{{ homedir }}/.toprc"
-    become: true
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
 
-  - name: Users | copy git config
+  - name: Common | Users | copy git config
     template:
       src: git_config.j2
       dest: "{{ homedir }}/.gitconfig"
-    become: true
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
+
+  - name: Common | Users | setup git signing
+    git_config:
+      name: commit.gpgsign
+      repo: "{{ homedir }}/.ansible"
+      scope: local
+      value: true
+
+  - name: Common | Access | Authorized Keys
+    authorized_key:
+      user: "{{ user }}"
+      key: "{{ auth_key_url }}"
 
   - name: Bin Dir | Binfiles
     copy:
       src: bin/
       dest: "{{ homedir }}/bin/"
+      owner: "{{ user }}"
+      group: "{{ user }}"
       mode: 0755
-    become: true
-    become_user: "{{ user }}"
-
-  - name: Vim Config | Copy .vimrc
-    copy:
-      src: vimrc
-      dest: "{{ homedir }}/.vimrc"
-    become: true
-    become_user: "{{ user }}"
-
-  - name: Vim Config | Pathogen prep
-    file:
-      path: "{{ homedir }}/.vim/autoload"
-      state: directory
-      mode: 0755
-
-  - name: Vim Config | Pathogen prep
-    file:
-      path: "{{ homedir }}/.vim/bundle"
-      state: directory
-      mode: 0755
-
-  - name: Vim Config | Pathogen
-    get_url:
-      url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-      dest: "{{ homedir }}/.vim/autoload/pathogen.vim"
-      checksum: sha256:b05ef1d37eaf81a93ee07f52e443e0b53ea24eaef752e918763d2eff7758d70e
-
-  - include: vim_plugins.yml

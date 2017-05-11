@@ -1,6 +1,0 @@
----
-  - name: Basic Packages | openssh-server
-    dnf:
-      name: openssh-server
-      state: present
-

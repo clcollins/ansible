@@ -1,8 +1,7 @@
 ---
   - hosts: rhogog
+
     roles:
       - common
-      # - rpie
-      - rhogog
-    become: true
-
+      - sshd
+      - rpie

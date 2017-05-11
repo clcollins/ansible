@@ -1,4 +1,16 @@
 ---
+  - name: Common | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: Conky | Install
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ conky_packages }}"
+    become: true
+
   - name: Conky | Config Dir
     file:
       path: "{{ homedir }}/.config/conky"
@@ -43,7 +55,6 @@
       user: yes
       no_block: yes
       enabled: yes
-    become_user: "{{ user }}"
     
   - name: Conky | Conky Revisited
     git:
@@ -51,8 +62,6 @@
       version: master
       dest: "{{ homedir }}/.config/conky/Conky-Revisited-2_workaround"
       accept_hostkey: yes
-    become: true
-    become_user: "{{ user }}"
 
   # Gotta make this dumb symlink because the above keeps a subdir
   # in the repo

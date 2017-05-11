@@ -15,10 +15,13 @@ set -e
 ANSIBLE_REPO="https://github.com/clcollins/ansible.git"
 CHECKOUT_DIR="/tmp/ansible-bootstrap"
 
+PACKAGE_MANAGER_CMD="dnf install -y"
+ANSIBLE_PACKAGE="ansible"
+
 # Bootstrap for Ansible 
 if ! ansible --version
 then
-  dnf install -y ansible
+  $PACKAGE_MANAGER_CMD $ANSIBLE_PACKAGE
 fi
 
 ansible-pull --verify-commit --clean -d ${CHECKOUT_DIR} -U ${ANSIBLE_REPO}

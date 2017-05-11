@@ -1,0 +1,25 @@
+---
+  ansible_paskages:
+    - ansible
+
+  ansible_pip_packages:
+    - ansible-lint
+
+  conky_packages:
+    - conky
+
+  vim_packages:
+    - vim-enhanced
+
+  basic_packages:
+    - the_silver_searcher
+    - tmux
+
+  pidgin_packages:
+    - pidgin
+    - pidgin-otr
+
+  gcc_packages:
+    - gcc-c++
+
+  sshd: openssh-server

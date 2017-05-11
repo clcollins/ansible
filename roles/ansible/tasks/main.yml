@@ -1,0 +1,69 @@
+---
+  - name: Ansible | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: Ansible | Install
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ ansible_packages }}"
+    when: ansible_packages is defined
+
+  - name: Ansible | Linter Install
+    pip:
+      name: "{{ item }}"
+      state: present
+      executable: "{{ pip_executable }}"
+    with_items: "{{ ansible_pip_packages }}"
+    when: ansible_pip_packages is defined
+
+  - name: Ansible | Clone Playbooks
+    git:
+      repo: git@github.com:clcollins/ansible.git
+      version: master
+      dest: "{{ homedir }}/.ansible"
+      key_file: "{{ git_ssh_key }}"
+      accept_hostkey: yes
+      clone: yes
+      update: no
+    become: "{{ user }}"
+
+  - name: Ansible | Git repo pre-commit with linter
+    copy:
+      src: pre-commit
+      dest: "{{ ansible_dir }}/.git/hooks/pre-commit"
+    become: true
+    become_user: "{{ user }}"
+
+  - name: Ansible | Copy ansible.cfg
+    template:
+      src: ansible.cfg.j2
+      dest: "{{ ansible_dir }}/ansible.cfg"
+      owner: "{{ user }}"
+      group: root
+      mode: 0644
+
+  - name: Ansible | Check log exists
+    stat:
+      path: "{{ ansible_log }}"
+    register: ansible_log_file
+
+  # this is required because the Ansible file module
+  # won't just create a file if it doesn't exist with
+  # the whole path to it
+  - name: Ansible | Create Ansible log
+    file:
+      path: "{{ ansible_log }}"
+      state: touch
+    when: ansible_log_file.stat.exists == False
+
+  - name: Ansible | Ansible Log Attributes
+    file:
+      path: "{{ ansible_log }}"
+      owner: "{{ user }}"
+      group: root
+      mode: 0664
+      state: file
+

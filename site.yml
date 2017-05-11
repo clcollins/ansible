@@ -1,5 +1,5 @@
 ---
   - include: krang.yml
-    become: true
-  #- include: hastur.yml
-  #  - include: rhogog.yml
+  - include: hastur.yml
+# - include: cthulhu.yml
+# - include: rhogog.yml

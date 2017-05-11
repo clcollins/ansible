@@ -1,0 +1,7 @@
+---
+  - name: SSHD | Install SSHD
+    package:
+      name: "{{ sshd }}"
+      state: present
+    become: true
+

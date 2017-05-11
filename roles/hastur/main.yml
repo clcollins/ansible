@@ -1,4 +1,0 @@
----
-  - name: Administrative | hostname
-    hostname:
-      name:  hastur.oit.duke.edu

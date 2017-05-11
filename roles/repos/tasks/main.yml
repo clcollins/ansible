@@ -6,6 +6,7 @@
       baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
       enabled: yes
+    when: ansible_distribution == "Fedora"
 
   - name: Package Repos | RPMFusion | for mplayer, others
     yum_repository:
@@ -17,8 +18,9 @@
       #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
       enabled: yes
+    when: ansible_distribution == "Fedora"
 
-  - name: Package Repos | RPMFusion | for mplayer, others
+  - name: Package Repos | RPMFusion Updates | for mplayer, others
     yum_repository:
       name: rpmfusion-free-updates
       description: RPM Fusion for Fedora $releasever - Free - Updates
@@ -28,4 +30,5 @@
       #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
       enabled: yes
+    when: ansible_distribution == "Fedora"
 

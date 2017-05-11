@@ -1,0 +1,66 @@
+---
+  - name: Development | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: Development | Install Packages 
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ development_packages }}"
+    become: true
+
+  - name: Development | Install GCC-C++
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ gcc_packages }}"
+    become: true
+
+  - name: Development | Install Lolcommits deps
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ lolcommits_deps_packages }}"
+    become: true
+
+  - name: Development | Gems | lolcommits
+    gem:
+      name: lolcommits
+      state: present
+
+  - name: Development | Install Runy Packages 
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ ruby_devel_packages }}"
+    become: true
+
+  - name: Development | Gems | Rails
+    gem:
+      name: rails
+      state: present
+
+  - name: Development | Unpackaged Software | rbenv
+    git:
+      repo: git://github.com/sstephenson/rbenv.git
+      version: v1.1.0
+      dest: "{{ homedir }}/.rbenv"
+      update: no
+      accept_hostkey: yes
+
+  - name: Development | Unpackaged Software | ruby-build
+    git:
+      repo: git://github.com/sstephenson/ruby-build.git
+      version: v20170405
+      dest: "{{ homedir }}/.rbenv/plugins/ruby-build"
+      update: no
+      accept_hostkey: yes
+
+  - name: Packages | python modules
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ python_modules }}"
+    become: true

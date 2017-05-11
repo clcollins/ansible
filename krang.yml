@@ -1,8 +1,13 @@
 ---
   - hosts: krang
+
     roles:
       - common
-      - fedora
-      - krang
-    become: true
-
+      - repos
+      - basic
+      - conky
+      - sshd
+      - containers
+      - development
+      - dwarffortress
+      - wine

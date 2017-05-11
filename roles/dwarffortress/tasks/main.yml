@@ -1,0 +1,31 @@
+---
+  - name: DwarfFortress | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
+  - name: DwarfFortress | Install Packages
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ dwarffortress_packages }}"
+    become: true
+
+  - name: DwarfFortress | Install Dwarf Therapist Deps
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ dwarftherapist_deps_packages }}"
+    become: true
+
+  - name: DwarfFortress | Config Files | DF init.txt
+    copy:
+      src: dwarffortress_init.txt
+      dest: "{{ homedir }}/.dwarffortress/data/init/init.txt"
+
+  # From http://www.bay12forums.com/smf/index.php?topic=158914.0
+  - name: DwarfFortress Config Files | DF tile
+    copy:
+      src: hack_square_64x64.png
+      dest: "{{ homedir }}/.dwarffortress/data/art/hack_square_64x64.png"
+
