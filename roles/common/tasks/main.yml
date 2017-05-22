@@ -1,8 +1,9 @@
 ---
-  - name: Common | Gather | Gather vars 
+  - name: Common | Gather | Gather vars
     include_role:
       name: common
       tasks_from: gather
+    tags: gather
 
   - name: Common | Admin | hostname
     hostname:
@@ -16,6 +17,22 @@
       owner: root
       group: root
       mode: 0775
+    become: true
+
+  - name: Common | Groups | "{{ user_groups }}"
+    group:
+      name: libvirt
+      state: present
+    become: true
+
+  - name: Common | Users | "{{ user }}"
+    user:
+      name: "{{ user }}"
+      group: "{{ user }}"
+      shell: /bin/bash
+      groups: "{{ item }}"
+      append: yes
+    with_items: "{{ user_groups }}"
     become: true
 
   - name: Common | Users | Systemd User Dir
