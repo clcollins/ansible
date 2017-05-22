@@ -49,6 +49,7 @@
 
   python_modules:
     - python3-jinja2
+    - python3-netaddr
 
   ruby_devel_packages:
     - ruby-devel

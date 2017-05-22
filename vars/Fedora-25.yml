@@ -48,7 +48,14 @@
     - redhat-rpm-config
 
   python_modules:
+    - python3-flake8
     - python3-jinja2
+    - python3-cryptography
+
+  virt_packages:
+    - libvirt
+    - qemu-kvm
+    - virt-manager
 
   ruby_devel_packages:
     - ruby-devel
