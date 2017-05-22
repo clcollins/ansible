@@ -13,3 +13,8 @@
     systemd:
       name: systemd-journald
       state: reloaded
+
+  - name: reload sshd
+    systemd:
+      name: sshd
+      state: reload

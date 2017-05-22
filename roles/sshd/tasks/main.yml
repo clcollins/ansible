@@ -32,7 +32,7 @@
       validate: '/usr/sbin/sshd -T -f %s'
     become: true
     notify:
-      - restart sshd
+      - reload sshd
     tags:
       - sshd
       - configs
