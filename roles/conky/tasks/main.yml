@@ -16,7 +16,7 @@
       path: "{{ homedir }}/.config/conky"
       state: directory
       owner: "{{ user }}"
-      group: "{{ user }}" 
+      group: "{{ user }}"
       mode: 0775
 
   - name: Conky | Link dotfile dir
@@ -24,7 +24,7 @@
       src: "{{ homedir }}/.config/conky"
       dest: "{{ homedir }}/.conky"
       owner: "{{ user }}"
-      group: "{{ user }}" 
+      group: "{{ user }}"
       state: link
 
   - name: Conky | Config File
@@ -32,14 +32,14 @@
       src: conky.conf
       dest: "{{ homedir }}/.config/conky/conky.conf"
       owner: "{{ user }}"
-      group: "{{ user }}" 
-    
+      group: "{{ user }}"
+
       #  - name: Conky | Link Config File
       #    file:
-      #      src: "{{ homedir }}/.conky/Conky_Revisited_2/Conky_Square_Vertical/start_conky_General_VERTICAL" 
+      #      src: "{{ homedir }}/.conky/Conky_Revisited_2/Conky_Square_Vertical/start_conky_General_VERTICAL"
       #      dest: "{{ homedir }}/.config/conky/conky.conf"
       #      owner: "{{ user }}"
-      #      group: "{{ user }}" 
+      #      group: "{{ user }}"
       #      state: link
 
   - name: Conky | Systemd Unit File
@@ -47,15 +47,15 @@
       src: conky.service
       dest: "{{ homedir }}/.config/systemd/user/conky.service"
       owner: "{{ user }}"
-      group: "{{ user }}" 
-    
+      group: "{{ user }}"
+
   - name: Conky | Enable Service
     systemd:
       name: conky.service
       user: yes
       no_block: yes
       enabled: yes
-    
+
   - name: Conky | Conky Revisited
     git:
       repo: 'https://github.com/xexpanderx/Conky-Revisited-2.git'
@@ -70,6 +70,6 @@
       src: "{{ homedir }}/.config/conky/Conky-Revisited-2_workaround/Conky_Revisited_2/"
       dest: "{{ homedir }}/.config/conky/Conky_Revisited_2"
       owner: "{{ user }}"
-      group: "{{ user }}" 
+      group: "{{ user }}"
       state: link
 
