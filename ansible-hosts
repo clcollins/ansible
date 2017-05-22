@@ -42,7 +42,7 @@
 
 ## db-[99:101]-node.example.com
 [krang]
-krang ansible_connection=local
+krang
 
 [hastur]
 hastur
