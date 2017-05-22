@@ -5,7 +5,7 @@
 # Not using vars here - broken vars could delete important stuff
 # and I've done that before.  I have the fear.
 
-if [[ -d /home/chris/.ansible/tmp ]]
+if [[ -d /home/chris/.ansible/tmp/ ]]
 then
-  tmpwatch 7d /home/chris/.ansible/tmp
+  tmpwatch 7d /home/chris/.ansible/tmp/
 fi
