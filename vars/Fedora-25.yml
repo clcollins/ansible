@@ -15,6 +15,7 @@
 
   basic_packages:
     - the_silver_searcher
+    - tmpwatch
     - tmux
 
   pidgin_packages:

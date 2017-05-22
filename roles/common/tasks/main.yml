@@ -16,7 +16,16 @@
       dest: /etc/cron.daily/patchmonkey-daily.cron
       owner: root
       group: root
-      mode: 0775
+      mode: 0755
+    become: true
+
+  - name: Common | Ansible | Daily tmpdir cleanup
+    file:
+      src: ansible-daily.cron
+      dest: /etc/cron.daily/ansible-daily.cron
+      owner: root
+      group: root
+      mode: 0755
     become: true
 
   - name: Common | Groups | "{{ user_groups }}"
