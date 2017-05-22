@@ -1,6 +1,8 @@
 ---
 # Basic vars for personalization
 user: chris
+user_groups:
+  - libvirt
 
 homedir: /home/{{ user }}
 projectsdir: "{{ homedir }}/Projects"
