@@ -87,7 +87,7 @@
   - name: Vim Plugins | Vim Markdown
     git:
       repo: 'https://github.com/plasticboy/vim-markdown.git'
-      version: 1.0.0
+      version: 2.0.0
       dest: "{{ homedir }}/.vim/bundle/vim-markdown"
       accept_hostkey: yes
 
@@ -96,4 +96,11 @@
       repo: 'https://github.com/pearofducks/ansible-vim.git'
       version: 1.0
       dest: "{{ homedir }}/.vim/bundle/ansible-vim"
+      accept_hostkey: yes
+
+  - name: Vim Plugins | Python-Flake8
+    git:
+      repo: 'https://github.com/nvie/vim-flake8.git'
+      version: 1.6
+      dest: "{{ homedir }}/.vim/bundle/vim-flake8"
       accept_hostkey: yes
