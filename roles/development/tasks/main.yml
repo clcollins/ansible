@@ -4,7 +4,7 @@
       name: common
       tasks_from: gather
 
-  - name: Development | Install Packages 
+  - name: Development | Install Packages
     package:
       name: "{{ item }}"
       state: present
@@ -30,7 +30,7 @@
       name: lolcommits
       state: present
 
-  - name: Development | Install Runy Packages 
+  - name: Development | Install Runy Packages
     dnf:
       name: "{{ item }}"
       state: present
@@ -63,4 +63,11 @@
       name: "{{ item }}"
       state: present
     with_items: "{{ python_modules }}"
+    become: true
+
+  - name: Packages | virtualization
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ virt_packages }}"
     become: true
