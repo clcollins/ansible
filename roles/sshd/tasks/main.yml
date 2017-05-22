@@ -1,7 +1,39 @@
 ---
+
   - name: SSHD | Install SSHD
     package:
       name: "{{ sshd }}"
       state: present
     become: true
+    tags:
+      - sshd
+      - packages
+
+  - name: SSHD | check-keygen
+    stat:
+      path: /etc/ssh/ssh_host_ed25519_key.pub
+    register: ssh_host_ed25519_key
+
+  - name: SSHD | sshd-keygen (systemd target)
+    systemd:
+      name: sshd-keygen.target
+      state: restarted
+    become: true
+    when: ssh_host_ed25519_key.stat.exists == False
+
+  - name: SSHD | sshd_config
+    template:
+      src: sshd_config.j2
+      dest: /etc/ssh/ssh_config.d/80-sshd_config
+      backup: yes
+      owner: root
+      group: root
+      mode: 0644
+      validate: '/usr/sbin/sshd -T -f %s'
+    become: true
+    notify:
+      - restart sshd
+    tags:
+      - sshd
+      - configs
 

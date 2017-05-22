@@ -1,0 +1,8 @@
+#$Id$
+#{{ ansible_managed }}
+ListenAddress {{ ansible_ssh_host }}
+PermitRootLogin without-password
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM yes
+Subsystem sftp /usr/libexec/sftp-server
