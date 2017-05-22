@@ -37,3 +37,9 @@
       - sshd
       - configs
 
+  - name: SSHD | sshd service on
+    systemd:
+      name: sshd
+      state: started
+    become: true
+
