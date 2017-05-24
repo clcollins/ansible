@@ -47,6 +47,7 @@
   development_packages:
     - '@Development tools'
     - redhat-rpm-config
+    - httpie
     - jq
 
   python_modules:
