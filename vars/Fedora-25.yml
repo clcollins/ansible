@@ -47,6 +47,7 @@
   development_packages:
     - '@Development tools'
     - redhat-rpm-config
+    - jq
 
   python_modules:
     - python3-flake8
