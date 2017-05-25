@@ -20,7 +20,7 @@
     become: true
 
   - name: Common | Ansible | Daily tmpdir cleanup
-    file:
+    copy:
       src: ansible-daily.cron
       dest: /etc/cron.daily/ansible-daily.cron
       owner: root
