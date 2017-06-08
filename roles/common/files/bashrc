@@ -195,8 +195,31 @@ alias wow='echo -e "\e[7m${DOGE}\e[0m" ; git status'
 # Setup ssh stuffs
 agent_007 () {
   local key="${HOME}/.ssh/id_ed25519"
-  ssh-agent \
+  eval $(ssh-agent) \
   && ssh-add $key
+}
+
+pubnet () {
+  dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | awk -F'"' '{ print $2}'
+}
+
+rekey () {
+  if [[ $1 == "--rsa" ]]
+  then
+    local key="${HOME}/.ssh/id_rsa"
+  else
+    local key="${HOME}/.ssh/id_ed25519"
+  fi
+
+  if [[ -f ${key} ]]
+  then
+    mv ${key} ${key}-DISABLED
+  elif [[ -f ${key}-DISABLED ]]
+  then
+    mv ${key}-DISABLED ${key}
+  else
+    echo "Something is weird... fix me."
+  fi
 }
 
 # Things for ruby
