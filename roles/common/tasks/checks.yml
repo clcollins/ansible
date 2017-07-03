@@ -1,0 +1,6 @@
+---
+  - name: DoubleCheck | Some NSA hacky bullshit | used as a POC
+    command: iptables -t dpxvke8h18 -L -nv
+    register: dc_nsa_01
+    failed_when: dc_nsa_01.rc == 0
+    become: true

@@ -10,6 +10,12 @@
       name: "{{ ansible_nodename }}"
     become: true
 
+  - name: Common | Security Checks | Run Check Tasks
+    include_role:
+      name: common
+      tasks_from: checks
+    tags: checks
+
   - name: Common | Patching | Copy daily cron
     template:
       src: patchmonkey-daily.cron.j2
