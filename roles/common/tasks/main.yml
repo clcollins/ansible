@@ -36,8 +36,9 @@
 
   - name: Common | Groups | "{{ user_groups }}"
     group:
-      name: "{{ user_groups }}"
+      name: "{{ item }}"
       state: present
+    with_items: "{{ user_groups }}"
     become: true
 
   - name: Common | Users | "{{ user }}"
