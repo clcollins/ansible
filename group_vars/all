@@ -20,3 +20,8 @@ git_config_user_email: collins.christopher@gmail.com
 git_config_user_signingkey: 65A42BCF322299C4
 
 skip_pidgin: false
+
+internal_networks:
+  - 152.3.0.0/16
+  - 10.0.0.0/8
+  - 127.0.0.1/32
