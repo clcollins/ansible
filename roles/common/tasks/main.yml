@@ -36,7 +36,7 @@
 
   - name: Common | Groups | "{{ user_groups }}"
     group:
-      name: libvirt
+      name: "{{ user_groups }}"
       state: present
     become: true
 
