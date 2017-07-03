@@ -1,4 +1,10 @@
 ---
+  # Gather vars using common gather task
+  - name: firewalld | Gather | Gather vars
+    include_role:
+      name: common
+      tasks_from: gather
+
   - name: firewalld | Ensure Installed
     package:
       name: "{{ firewalld }}"
