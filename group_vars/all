@@ -3,6 +3,7 @@
 user: chris
 user_groups:
   - libvirt
+  - docker
 
 homedir: /home/{{ user }}
 projectsdir: "{{ homedir }}/Projects"
