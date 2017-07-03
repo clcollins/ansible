@@ -2,6 +2,7 @@
   - hosts: krang
 
     roles:
+      - firewalld
       - common
       - repos
       - basic

@@ -44,6 +44,8 @@
 
   sshd: openssh-server
 
+  firewalld: firewalld
+
   development_packages:
     - '@Development tools'
     - redhat-rpm-config

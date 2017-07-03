@@ -1,6 +1,7 @@
 ---
   - hosts: hastur
     roles:
+      - firewalld
       - common
       - repos
       - basic
