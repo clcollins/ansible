@@ -3,18 +3,22 @@
     systemd:
       name: docker
       state: reloaded
+    become: true
 
   - name: reload lvm2-lvmetad
     systemd:
       name: lvm2-lvmetad
       state: reloaded
+    become: true
 
   - name: reload systemd-journald
     systemd:
       name: systemd-journald
       state: reloaded
+    become: true
 
   - name: reload sshd
     systemd:
       name: sshd
       state: reload
+    become: true
