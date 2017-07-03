@@ -10,6 +10,12 @@
       name: "{{ ansible_nodename }}"
     become: true
 
+  - name: Common | Firewall config | Run Firewall tasks
+    include_role:
+      name: common
+      tasks_from: firewall
+    tags: checks
+
   - name: Common | Security Checks | Run Check Tasks
     include_role:
       name: common

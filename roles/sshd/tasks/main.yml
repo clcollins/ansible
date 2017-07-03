@@ -1,6 +1,6 @@
 ---
 
-  - name: SSHD | Install SSHD
+  - name: sshd | Install sshd
     package:
       name: "{{ sshd }}"
       state: present
@@ -9,19 +9,39 @@
       - sshd
       - packages
 
-  - name: SSHD | check-keygen
+  - name: sshd | remove from default
+    firewalld:
+      zone: "{{ item }}"
+      service: ssh
+      permanent: true
+      state: disabled
+    with_items: "{{ public_zones }}"
+    become: true
+    notify: reload firewalld
+
+  - name: sshd | add to internal
+    firewalld:
+      zone: "{{ item }}"
+      service: ssh
+      permanent: true
+      state: enabled
+    with_items: "{{ private_zones }}"
+    become: true
+    notify: reload firewalld
+
+  - name: sshd | check-keygen
     stat:
       path: /etc/ssh/ssh_host_ed25519_key.pub
     register: ssh_host_ed25519_key
 
-  - name: SSHD | sshd-keygen (systemd target)
+  - name: sshd | sshd-keygen (systemd target)
     systemd:
       name: sshd-keygen.target
       state: restarted
     become: true
     when: ssh_host_ed25519_key.stat.exists == False
 
-  - name: SSHD | sshd_config
+  - name: sshd | sshd_config
     template:
       src: sshd_config.j2
       dest: /etc/ssh/ssh_config.d/80-sshd_config
@@ -37,7 +57,7 @@
       - sshd
       - configs
 
-  - name: SSHD | sshd service on
+  - name: sshd | sshd service on
     systemd:
       name: sshd
       state: started

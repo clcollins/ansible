@@ -25,3 +25,16 @@ internal_networks:
   - 152.3.0.0/16
   - 10.0.0.0/8
   - 127.0.0.1/32
+
+public_zones:
+  - FedoraServer
+  - FedoraWorkstation
+  - dmz
+  - external
+  - public
+
+private_zones:
+  - work
+  - home
+  - trusted
+  - internal
