@@ -26,6 +26,7 @@
     - gcc-c++
 
   container_devel_packages:
+    - runc
     - skopeo
     - atomic
     - origin-clients
@@ -36,11 +37,16 @@
     - bats
     - btrfs-progs-devel
     - device-mapper-devel
+    - glib2-devel
     - gpgme-devel
     - libassuan-devel
+    - ostree-devel
     - git
     - bzip2
+    - go-md2man
+    - runc
     - golang-github-cpuguy83-go-md2man
+    - skopeo-containers
 
   sshd: openssh-server
 
