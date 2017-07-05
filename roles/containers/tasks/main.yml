@@ -25,6 +25,15 @@
     with_items: "{{ buildah_deps_packages }}"
     become: true
 
+  - name: Containers | Buildah | Clone Buildah repo (latest)
+    git:
+      repo: 'https://github.com/projectatomic/buildah'
+      version: HEAD
+      dest: "{{ homedir }}/Projects/buildah/src/github.com/projectatomic/buildah"
+      accept_hostkey: yes
+    tags:
+      - skip_ansible_lint
+
   - name: Containers | Config Files | Docker Sysconfig
     copy:
       src: docker_sysconfig
