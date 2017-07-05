@@ -87,9 +87,12 @@
   - name: Vim Plugins | Vim Markdown
     git:
       repo: 'https://github.com/plasticboy/vim-markdown.git'
-      version: 2.0.0
+      #version: 2.0.0
+      version: HEAD
       dest: "{{ homedir }}/.vim/bundle/vim-markdown"
       accept_hostkey: yes
+    tags:
+      - skip_ansible_lint
 
   - name: Vim Plugins | Ansible Vim
     git:
