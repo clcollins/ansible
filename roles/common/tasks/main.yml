@@ -96,7 +96,7 @@
     git_config:
       name: commit.gpgsign
       repo: "{{ homedir }}/.ansible"
-      scope: local
+      scope: global
       value: true
 
       # Semi-sensitive info?  Not to commit to git repo?
