@@ -153,7 +153,7 @@ git () {
                 --abbrev-commit
   elif [[ $@ == "commit" ]]
   then
-    command git "$@ -s Signed-off-by: Chris Collins <collins.christopher@gmail.com>"
+    command git "$@ -s ."
   else
     command git "$@"
   fi
