@@ -30,6 +30,7 @@
     - skopeo
     - atomic
     - origin-clients
+    - source-to-image
 
   buildah_deps_packages:
     - make
