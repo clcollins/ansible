@@ -151,9 +151,6 @@ git () {
                 --graph \
                 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' \
                 --abbrev-commit
-  elif [[ $@ == "commit" ]]
-  then
-    command git "$@ -s ."
   else
     command git "$@"
   fi
