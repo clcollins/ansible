@@ -222,6 +222,24 @@ rekey () {
   fi
 }
 
+# Stuff for buildah
+
+buildah () {
+  if [[ $@ == "cleanall" ]]
+  then
+    echo "Removing all buildah containers and images"
+    sudo buildah images -q \
+                        --noheading \
+                        --notruncate
+    && sudo buildah images -q \
+                           --noheading \
+                           --notruncate \
+                           | xargs sudo buildah rmi -f
+  else
+    command buildah "$@"
+  fi
+}
+
 # Things for ruby
 export PATH="$PATH:$HOME/.rbenv/bin"
 export PATH="$PATH:$HOME/.rbenv/plugins/ruby-build/bin"
