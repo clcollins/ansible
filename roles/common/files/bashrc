@@ -145,6 +145,10 @@ git () {
   then
     echo "lolcommits not found"
     return 1
+  elif [[ $@ == "pish" ]]
+  then
+    echo "I think you've had enough...  Did you mean 'push'?"
+    return 1
   elif [[ $@ == "log" ]]
   then
     command git log \
