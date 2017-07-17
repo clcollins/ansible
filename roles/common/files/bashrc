@@ -230,7 +230,7 @@ buildah () {
     echo "Removing all buildah containers and images"
     sudo buildah images -q \
                         --noheading \
-                        --notruncate
+                        --notruncate \
     && sudo buildah images -q \
                            --noheading \
                            --notruncate \
