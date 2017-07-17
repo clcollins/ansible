@@ -232,13 +232,20 @@ buildah () {
   if [[ $@ == "cleanall" ]]
   then
     echo "Removing all buildah containers and images"
-    sudo buildah images -q \
-                        --noheading \
-                        --notruncate \
-    && sudo buildah images -q \
-                           --noheading \
-                           --notruncate \
-                           | xargs sudo buildah rmi -f
+    if [[ ! -z $(sudo buildah containers) ]]
+    then
+      sudo buildah containers -q \
+                          --noheading \
+                          --notruncate \
+                          | xargs sudo buildah rm
+    fi
+    if [[ ! -z $(sudo buildah images) ]]
+    then
+      sudo buildah images -q \
+                          --noheading \
+                          --notruncate \
+                          | xargs sudo buildah rmi -f
+    fi
   else
     command buildah "$@"
   fi
