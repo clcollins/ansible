@@ -11,12 +11,22 @@
     with_items: "{{ dwarffortress_packages }}"
     become: true
 
-  - name: DwarfFortress | Install Dwarf Therapist Deps
+  - name: DwarfFortress | DwarfTherapist | Install Deps
     package:
       name: "{{ item }}"
       state: present
     with_items: "{{ dwarftherapist_deps_packages }}"
     become: true
+
+  # Because Splintermind hasn't figure out 64bit support yet
+  - name: DwarfFortress | DwarfTherapist | Clone DT repo (latest)
+    git:
+      repo: 'https://github.com/Hello71/Dwarf-Therapist'
+      version: HEAD
+      dest: "{{ homedir }}/Projects/Hello71-DwarfTherapist"
+      accept_hostkey: yes
+    tags:
+      - skip_ansible_lint
 
   - name: DwarfFortress | Config Files | DF init.txt
     copy:
