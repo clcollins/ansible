@@ -5,20 +5,17 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+# Use the time binary
+alias time='command time'
+
 [ -z "$PS1" ] && return
-PROMPT_COMMAND="git-prompt"
+PROMPT_COMMAND="${HOME}/.local/bin/git-prompt"
 PS1="[\u@\h \W] \$ "
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-
-du () {
-  local args="$@"
-
-  du $args | sort -h
-}
 
 # Create passwords
 genpw () {
