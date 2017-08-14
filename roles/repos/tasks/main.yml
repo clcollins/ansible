@@ -31,6 +31,7 @@
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
       enabled: yes
     when: ansible_distribution == "Fedora"
+    become: true
 
   - name: Package Repos | RPMFusion | for mplayer, others
     yum_repository:
@@ -43,6 +44,7 @@
       gpgcheck: yes
       enabled: yes
     when: ansible_distribution == "Fedora"
+    become: true
 
   - name: Package Repos | RPMFusion Updates | for mplayer, others
     yum_repository:
@@ -55,4 +57,5 @@
       gpgcheck: yes
       enabled: yes
     when: ansible_distribution == "Fedora"
+    become: true
 
