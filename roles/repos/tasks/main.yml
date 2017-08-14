@@ -9,6 +9,7 @@
       gpgcheck: yes
       enabled: yes
     when: ansible_distribution == "Fedora"
+    become: true
 
   - name: Package Repos | Use Duke Fedora Updates Mirror
     yum_repository:
@@ -20,6 +21,7 @@
       gpgcheck: yes
       enabled: yes
     when: ansible_distribution == "Fedora"
+    become: true
 
   - name: Package Repos | Fedora DwarfFortress | for FUN!
     yum_repository:
