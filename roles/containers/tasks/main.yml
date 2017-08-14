@@ -39,18 +39,21 @@
       src: docker_sysconfig
       dest: /etc/sysconfig/docker
     notify: reload docker
+    become: true
 
   - name: Containers | Config Files | Docker Storage Setup
     copy:
       src: docker-storage-setup
       dest: /etc/sysconfig/docker-storage-setup
     notify: reload docker
+    become: true
 
   - name: Containers | Config Files | Docker Network Setup
     copy:
       src: docker-network
       dest: /etc/sysconfig/docker-network
     notify: reload docker
+    become: true
 
   - name: Containers | Config Files | .docker Directory
     file:
