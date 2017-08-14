@@ -5,7 +5,6 @@
       - common
       - repos
       - basic
-      - conky
       - sshd
       - containers
       - development
