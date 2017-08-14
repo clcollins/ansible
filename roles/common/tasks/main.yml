@@ -116,7 +116,7 @@
   - name: Bin Dir | Binfiles
     copy:
       src: bin/
-      dest: "{{ homedir }}/bin/"
+      dest: "{{ homedir }}/.local/bin/"
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0755
