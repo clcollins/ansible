@@ -14,6 +14,16 @@
       - firewalld
       - packages
 
+  - name: firewalld | Firewalld Ansible Deps
+    package:
+      name: "{{ item }}"
+      state: present
+    become: true
+    with_items: "{{ firewalld_ansible_packages }}"
+    tags:
+      - firewalld
+      - packages
+
   - name: firewalld | Ensure Enabled
     systemd:
       name: firewalld
