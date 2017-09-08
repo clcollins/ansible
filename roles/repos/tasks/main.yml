@@ -23,13 +23,25 @@
     when: ansible_distribution == "Fedora"
     become: true
 
+  - name: Package Repos | Use Duke EPEL Mirror
+    yum_repository:
+      name: duke-epel
+      description: Duke University EPEL Mirror
+      priority: 10
+      baseurl: http://archive.linux.duke.edu/epel/$releasever/$basearch/
+      gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
+      gpgcheck: yes
+      enabled: yes
+    when: ansible_distribution == "Fedora"
+    become: true
+
   - name: Package Repos | Fedora DwarfFortress | for FUN!
     yum_repository:
       name: dwarffortress
       description: Dwarf Fortress for Fedora $releasever
       baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
-      enabled: yes
+      enabled: no
     when: ansible_distribution == "Fedora"
     become: true
 
@@ -42,7 +54,7 @@
       gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
-      enabled: yes
+      enabled: no
     when: ansible_distribution == "Fedora"
     become: true
 
@@ -55,7 +67,7 @@
       gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
-      enabled: yes
+      enabled: no
     when: ansible_distribution == "Fedora"
     become: true
 
