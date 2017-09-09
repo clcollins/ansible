@@ -20,6 +20,6 @@ autocmd Filetype yaml setlocal ts=2 sw=2 expandtab
 autocmd FileType shell setlocal sw=2 sts=2 expandtab
 autocmd Filetype python setlocal smarttab expandtab tabstop=4
 
-# Disable folding for vim markdown
+" Disable folding for vim markdown
 let g:vim_markdown_folding_disabled = 1
 
