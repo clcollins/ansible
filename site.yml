@@ -1,5 +1,5 @@
 ---
-  - include: krang.yml
-  - include: hastur.yml
-# - include: cthulhu.yml
-# - include: rhogog.yml
+  - import_playbook: krang.yml
+  - import_playbook: hastur.yml
+  - import_playbook: cthulhu.yml
+  - import_playbook: rhogog.yml
