@@ -1,0 +1,112 @@
+---
+  ansible_paskages:
+    - ansible
+
+  ansible_pip_packages:
+    - ansible-lint
+
+  pip_executable: pip2
+
+  conky_packages:
+    - conky
+
+  vim_packages:
+    - vim-enhanced
+
+  basic_packages:
+    - the_silver_searcher
+    - tmpwatch
+    - tmux
+
+  pidgin_packages:
+    - pidgin
+    - pidgin-otr
+
+  gcc_packages:
+    - gcc-c++
+
+  container_devel_packages:
+    - runc
+    - skopeo
+    - atomic
+    - origin-clients
+    - source-to-image
+    - openscap-containers
+    - openscap-utils
+
+  buildah_deps_packages:
+    - make
+    - golang
+    - bats
+    - btrfs-progs-devel
+    - device-mapper-devel
+    - glib2-devel
+    - gpgme-devel
+    - libassuan-devel
+    - ostree-devel
+    - git
+    - bzip2
+    - go-md2man
+    - runc
+    - golang-github-cpuguy83-go-md2man
+    - skopeo-containers
+
+  sshd: openssh-server
+
+  firewalld: firewalld
+
+  firewalld_ansible_packages:
+    - python-firewall
+
+  development_packages:
+    # - '@Development Tools' # Group support will be fixed in F26
+    - redhat-rpm-config
+    - httpie
+    - jq
+
+  python_modules:
+    - python3-flake8
+    - python3-jinja2
+    - python3-cryptography
+
+  virt_packages:
+    - libvirt
+    - qemu-kvm
+    - virt-manager
+
+  ruby_devel_packages:
+    - ruby-devel
+    - rubygems
+    - openssl-devel
+    - mariadb-devel
+    - readline-devel
+    - rubypick
+
+  docker_packages:
+    - docker
+    - docker-compose
+    - python3-docker
+    - python3-dockerfile-parse
+    # - python3-docker-squash # No candidate in FC 26?
+    - python3-dockerpty
+
+  lolcommits_deps_packages:
+    - mplayer
+    - ffmpeg
+    - ImageMagick
+    - ImageMagick-devel
+
+  dwarffortress_packages:
+    - dwarffortress
+    - dwarftherapist
+
+  dwarftherapist_deps_packages:
+    - qt5-qtbase-devel
+    - qt5-qtdeclarative-devel
+    - texlive-latex-bin
+    - texlive-latex
+
+  wine_packages:
+    - wine
+    - wine-devel
+
