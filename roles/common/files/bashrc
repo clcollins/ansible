@@ -21,38 +21,12 @@ PS1="[\u@\h \W] \$ "
 genpw () {
   if [[ "${args}" == "human" ]]
   then
-    pwgen -cny 12
-  elif [[ "${args}" == "mysql" ]]
-  then
-    pwgen -cns 16
+    pwgen -cny 16
   elif [[ "${args}" == "machine" ]]
   then
     pwgen -cnsy 16
   fi
 }
-
-
-hike () {
-  # Run Ansible playbook
-  if [[ -z ${1} ]]
-  then
-    echo "Usage: hike [PLAYBOOK.YML]"
-    return 1
-  fi
-
-  local playbook="${1}.yml"
-  local ans_dir='/home/chris/.ansible'
-
-  pushd ${ans_dir} > /dev/null
-
-  sudo ansible-playbook ${playbook}
-  local retval=${?}
-
-  popd > /dev/null
-
-  return ${retval}
-}
-
 
 runhook () {
   local hook="${1:-}"
@@ -77,32 +51,9 @@ runhook () {
   return ${retval}
 }
 
-
-testbuild () {
-
-  sudo docker-compose run --rm --entrypoint bash test
-
-}
-
-taglast () {
-  local repo='stevedore-repo.oit.duke.edu'
-
-  if [[ -z ${1:-} ]]
-  then
-    echo "No image name specified"
-    return 1
-  else
-    local image="${1}"
-  fi
-
-  sudo docker tag $(sudo docker images -q | head -n 1) ${repo}/${image}
-
-  return $?
-}
-
 cc0 () {
-
-	curl https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt > LICENSE \
+  local cctxt="https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"
+	curl ${cctxt} > LICENSE \
 	&& if git status >> /dev/null 2>&1 
 	   then
 	     git add LICENSE \
@@ -135,6 +86,7 @@ git-rm-secret () {
 LOLCOMMITS_ENABLE="lolcommits --enable --animate 2 --delay 1 --fork --stealth"
 
 git () {
+  local lolcommits_enable="lolcommits --enable --animate 2 --delay 1 --fork --stealth"
   if [[ $@ == "init" ]] && lolcommits --version > /dev/null
   then
     command git init && ${LOLCOMMITS_ENABLE}
@@ -194,7 +146,7 @@ alias very=git
 alias wow='echo -e "\e[7m${DOGE}\e[0m" ; git status'
 
 # Setup ssh stuffs
-agent_007 () {
+bond () {
   local key="${HOME}/.ssh/id_ed25519"
   eval $(ssh-agent) \
   && ssh-add $key
@@ -234,14 +186,14 @@ buildah () {
       sudo buildah containers -q \
                           --noheading \
                           --notruncate \
-                          | xargs sudo buildah rm
+                          | xargs --no-run-if-empty sudo buildah rm
     fi
     if [[ ! -z $(sudo buildah images) ]]
     then
       sudo buildah images -q \
                           --noheading \
                           --notruncate \
-                          | xargs sudo buildah rmi -f
+                          | xargs --no-run-if-empty sudo buildah rmi -f
     fi
   else
     command buildah "$@"
