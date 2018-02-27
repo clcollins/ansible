@@ -28,6 +28,8 @@
   container_devel_packages:
     - runc
     - skopeo
+    - podman
+    - buildah
     - atomic
     - origin-clients
     - source-to-image
@@ -98,7 +100,6 @@
 
   dwarffortress_packages:
     - dwarffortress
-    - dwarftherapist
 
   dwarftherapist_deps_packages:
     - qt5-qtbase-devel

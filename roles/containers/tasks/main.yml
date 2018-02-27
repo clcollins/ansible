@@ -10,6 +10,9 @@
       state: present
     with_items: "{{ container_devel_packages }}"
     become: true
+    tags: 
+      - packages
+      - containers
 
   - name: Containers | Install Docker Packages | For Docker
     package:
@@ -17,6 +20,9 @@
       state: present
     with_items: "{{ docker_packages }}"
     become: true
+    tags:
+      - packages
+      - containers
 
   - name: Containers | Install Buildah dependencies | for Buildah/containers
     dnf:
@@ -24,15 +30,21 @@
       state: present
     with_items: "{{ buildah_deps_packages }}"
     become: true
-
-  - name: Containers | Buildah | Clone Buildah repo (latest)
-    git:
-      repo: 'https://github.com/projectatomic/buildah'
-      version: HEAD
-      dest: "{{ homedir }}/Projects/buildah/src/github.com/projectatomic/buildah"
-      accept_hostkey: yes
     tags:
-      - skip_ansible_lint
+      - packages
+      - containers
+
+#  BUILDAH IN RPMs NOW
+#  - name: Containers | Buildah | Clone Buildah repo (latest)
+#    git:
+#      repo: 'https://github.com/projectatomic/buildah'
+#      version: HEAD
+#      dest: "{{ homedir }}/Projects/buildah/src/github.com/projectatomic/buildah"
+#      accept_hostkey: yes
+#    tags:
+#      - skip_ansible_lint
+#      - build_from_source
+#      - containers
 
   - name: Containers | Config Files | Docker Sysconfig
     copy:
@@ -40,6 +52,9 @@
       dest: /etc/sysconfig/docker
     notify: reload docker
     become: true
+    tags:
+      - configs
+      - containers
 
   - name: Containers | Config Files | Docker Storage Setup
     copy:
@@ -47,6 +62,9 @@
       dest: /etc/sysconfig/docker-storage-setup
     notify: reload docker
     become: true
+    tags:
+      - configs
+      - containers
 
   - name: Containers | Config Files | Docker Network Setup
     copy:
@@ -54,6 +72,9 @@
       dest: /etc/sysconfig/docker-network
     notify: reload docker
     become: true
+    tags:
+      - configs
+      - containers
 
   - name: Containers | Config Files | .docker Directory
     file:
@@ -62,4 +83,7 @@
       mode: 0755
       owner: "{{ user }}"
       group: "{{ user }}"
+    tags:
+      - configs
+      - containers
 

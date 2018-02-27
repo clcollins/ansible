@@ -10,6 +10,9 @@
       state: present
     with_items: "{{ dwarffortress_packages }}"
     become: true
+    tags:
+      - packages
+      - dwarffortress
 
   - name: DwarfFortress | DwarfTherapist | Install Deps
     package:
@@ -17,6 +20,9 @@
       state: present
     with_items: "{{ dwarftherapist_deps_packages }}"
     become: true
+    tags:
+      - packages
+      - dwarffortress
 
   # Because Splintermind hasn't figure out 64bit support yet
   - name: DwarfFortress | DwarfTherapist | Clone DT repo (latest)
@@ -27,15 +33,52 @@
       accept_hostkey: yes
     tags:
       - skip_ansible_lint
+      - build_from_source
+      - dwarffortress
 
   - name: DwarfFortress | Config Files | DF init.txt
     copy:
       src: dwarffortress_init.txt
       dest: "{{ homedir }}/.dwarffortress/data/init/init.txt"
+    tags:
+      - packages
+      - config_files
+
+  # Because Splintermind hasn't figure out 64bit support yet
+  - name: DwarfFortress | DwarfTherapist | Clone DT repo (latest)
+    git:
+      repo: 'https://github.com/Hello71/Dwarf-Therapist'
+      version: HEAD
+      dest: "{{ homedir }}/Projects/Hello71-DwarfTherapist"
+      accept_hostkey: yes
+    tags:
+      - skip_ansible_lint
+      - build_from_source
+      - dwarffortress
+
+  - name: DwarfFortress | Config Files | DF init.txt
+    copy:
+      src: dwarffortress_init.txt
+      dest: "{{ homedir }}/.dwarffortress/data/init/init.txt"
+    tags:
+      - packages
+      - config_files
 
   # From http://www.bay12forums.com/smf/index.php?topic=158914.0
   - name: DwarfFortress Config Files | DF tile
     copy:
       src: hack_square_64x64.png
       dest: "{{ homedir }}/.dwarffortress/data/art/hack_square_64x64.png"
+    tags:
+      - packages
+      - config_files
 
+
+  # From http://www.bay12forums.com/smf/index.php?topic=158914.0
+  - name: DwarfFortress Config Files | DF tile
+    copy:
+      src: hack_square_64x64.png
+      dest: "{{ homedir }}/.dwarffortress/data/art/hack_square_64x64.png"
+    tags:
+      - packages
+      - config_files
