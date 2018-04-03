@@ -31,7 +31,7 @@
       baseurl: http://archive.linux.duke.edu/epel/$releasever/$basearch/
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
       gpgcheck: yes
-      enabled: yes
+      enabled: no
     when: ansible_distribution == "Fedora"
     become: true
 
