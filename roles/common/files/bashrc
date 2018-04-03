@@ -19,12 +19,20 @@ PS1="[\u@\h \W] \$ "
 
 # Create passwords
 genpw () {
+  local args="$@"
   if [[ "${args}" == "human" ]]
   then
-    pwgen -cny 16
-  elif [[ "${args}" == "machine" ]]
+    pwgen --capitalize \
+      --numerals \
+      --symbols 16
+  elif [[ "${args}" == "uuid" ]]
   then
-    pwgen -cnsy 16
+    uuidgen --random
+  else
+    pwgen --capitalize \
+      --numerals \
+      --secure \
+      --symbols 16
   fi
 }
 
@@ -90,6 +98,9 @@ git () {
   if [[ $@ == "init" ]] && lolcommits --version > /dev/null
   then
     command git init && ${LOLCOMMITS_ENABLE}
+  elif [[ $@ == "lolcommits" ]]
+  then
+    command ${LOLCOMMITS_ENABLE}
   elif [[ $@ == "init" ]] && ! lolcommits -v > /dev/null
   then
     echo "lolcommits not found"
@@ -150,6 +161,14 @@ bond () {
   local key="${HOME}/.ssh/id_ed25519"
   eval $(ssh-agent) \
   && ssh-add $key
+}
+
+sshb () {
+  ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking no" $@
+}
+
+scpb () {
+  scp -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking no" $@
 }
 
 pubnet () {
