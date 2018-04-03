@@ -15,6 +15,8 @@ set sw=2
 set softtabstop=2
 set shiftwidth=2
 
+set autochdir
+
 set expandtab
 autocmd Filetype yaml setlocal ts=2 sw=2 expandtab
 autocmd FileType shell setlocal sw=2 sts=2 expandtab
