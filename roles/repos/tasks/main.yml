@@ -28,7 +28,7 @@
       name: duke-epel
       description: Duke University EPEL Mirror
       priority: 10
-      baseurl: http://archive.linux.duke.edu/epel/$releasever/$basearch/
+      baseurl: http://archive.linux.duke.edu/fedora/pub/epel/$releasever/$basearch/
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
       gpgcheck: yes
       enabled: no
