@@ -17,6 +17,9 @@
     - the_silver_searcher
     - tmpwatch
     - tmux
+    - ripgrep
+    - exa
+    - tokei
 
   pidgin_packages:
     - pidgin
