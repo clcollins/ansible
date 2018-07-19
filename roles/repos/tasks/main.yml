@@ -4,7 +4,7 @@
       name: duke-fedora
       description: Duke University Fedora Mirror
       priority: 10
-      baseurl: http://archive.linux.duke.edu/fedora/pub/fedora/linux/releases/$releasever/Everything/$basearch/os/
+      baseurl: https://archive.linux.duke.edu/fedora/pub/fedora/linux/releases/$releasever/Everything/$basearch/os/
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
       gpgcheck: yes
       enabled: yes
@@ -16,7 +16,7 @@
       name: duke-fedora-updates
       description: Duke University Fedora Mirror
       priority: 10
-      baseurl: http://archive.linux.duke.edu/fedora/pub/fedora/linux/updates/$releasever/$basearch/
+      baseurl: https://archive.linux.duke.edu/fedora/pub/fedora/linux/updates/$releasever/Everything/$basearch/
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
       gpgcheck: yes
       enabled: yes
