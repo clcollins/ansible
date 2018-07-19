@@ -10,7 +10,10 @@ alias time='command time'
 
 [ -z "$PS1" ] && return
 PROMPT_COMMAND="${HOME}/.local/bin/git-prompt"
-PS1="[\u@\h \W] \$ "
+KUBE_PS1_BINARY=oc
+KUBE_PS1_SOURCE="${HOME}/.local/share/kube-ps1/kube-ps1.sh"
+source $KUBE_PS1_SOURCE
+PS1="[\u@\h \W $(kube_ps1)]\$ "
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
@@ -173,6 +176,18 @@ scpb () {
 
 pubnet () {
   dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | awk -F'"' '{ print $2}'
+}
+
+sshclean () {
+  local line=${1}
+
+  if [[ -z $line ]]
+  then
+    echo "no line number provided!"
+    return
+  fi
+
+  sed -i -e "${line}d" ${HOME}/.ssh/known_hosts
 }
 
 rekey () {
