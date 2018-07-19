@@ -10,7 +10,7 @@
       state: present
     with_items: "{{ container_devel_packages }}"
     become: true
-    tags: 
+    tags:
       - packages
       - containers
 
