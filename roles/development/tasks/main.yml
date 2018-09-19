@@ -25,17 +25,18 @@
     with_items: "{{ lolcommits_deps_packages }}"
     become: true
 
-  - name: Development | Gems | lolcommits
-    gem:
-      name: lolcommits
-      state: present
-
-  - name: Development | Install Runy Packages
+  # Must come before lolcommits gems
+  - name: Development | Install Ruby Packages
     dnf:
       name: "{{ item }}"
       state: present
     with_items: "{{ ruby_devel_packages }}"
     become: true
+
+  - name: Development | Gems | lolcommits
+    gem:
+      name: lolcommits
+      state: present
 
   - name: Development | Gems | Rails
     gem:
