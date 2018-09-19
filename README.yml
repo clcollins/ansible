@@ -1,0 +1,9 @@
+Ansible for Personal Host MGT
+=============================
+
+```
+dnf update -y \
+  && dnf install -y git \
+  && mkdir ~/Projects \
+  && git clone git@github.com:clcollins/ansible.git
+```
