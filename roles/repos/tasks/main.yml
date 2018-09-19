@@ -52,9 +52,8 @@
       baseurl: http://download1.rpmfusion.org/free/fedora/releases/$releasever/Everything/$basearch/os/
       mirrorlist: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-$releasever&arch=$basearch
       gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
-      #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
-      enabled: no
+      enabled: yes
     when: ansible_distribution == "Fedora"
     become: true
 
