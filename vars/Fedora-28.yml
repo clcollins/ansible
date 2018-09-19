@@ -61,7 +61,7 @@
   firewalld: firewalld
 
   firewalld_ansible_packages:
-    - python-firewall
+    - python3-firewall
 
   development_packages:
     # - '@Development Tools' # Group support will be fixed in F26
