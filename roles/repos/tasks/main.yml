@@ -35,6 +35,7 @@
     when: ansible_distribution == "Fedora"
     become: true
 
+  # Apparently this is in the rpmfusion-nonfree repo, and this guy no longer packages
   - name: Package Repos | Fedora DwarfFortress | for FUN!
     yum_repository:
       name: dwarffortress
@@ -42,6 +43,7 @@
       baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
       gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
       enabled: yes
+      state: absent
     when: ansible_distribution == "Fedora"
     become: true
 
