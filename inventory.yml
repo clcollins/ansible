@@ -55,8 +55,12 @@ krang
 hastur
 cthulhu
 rhogog
+toth
+
+[fedora:vars]
+ansible_python_interpreter=/usr/bin/python3
 
 [fedora-minimal]
-toth
+toth ansible_host=10.237.6.105
 
 
