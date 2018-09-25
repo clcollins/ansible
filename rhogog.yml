@@ -1,7 +1,0 @@
----
-  - hosts: rhogog
-
-    roles:
-      - common
-      - sshd
-        #- rpie

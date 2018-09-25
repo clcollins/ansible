@@ -1,15 +1,5 @@
 ---
-
-  - name: sshd | Install sshd
-    package:
-      name: "{{ sshd }}"
-      state: present
-    become: true
-    tags:
-      - sshd
-      - packages
-
-  - name: sshd | remove from default
+  - name: Remove ssh from default firewalld zone
     firewalld:
       zone: "{{ item }}"
       service: ssh
@@ -19,7 +9,7 @@
     become: true
     notify: reload firewalld
 
-  - name: sshd | add to internal
+  - name: Add ssh to internal zones
     firewalld:
       zone: "{{ item }}"
       service: ssh
@@ -29,19 +19,19 @@
     become: true
     notify: reload firewalld
 
-  - name: sshd | check-keygen
+  - name: Check for host ed25519 key 
     stat:
       path: /etc/ssh/ssh_host_ed25519_key.pub
     register: ssh_host_ed25519_key
 
-  - name: sshd | sshd-keygen (systemd target)
+  - name: Generate ed25519 via systemd target
     systemd:
       name: sshd-keygen.target
       state: restarted
     become: true
     when: ssh_host_ed25519_key.stat.exists == False
 
-  - name: sshd | sshd_config
+  - name: Copy sshd_config
     template:
       src: sshd_config.j2
       dest: /etc/ssh/ssh_config.d/80-sshd_config
@@ -57,9 +47,8 @@
       - sshd
       - configs
 
-  - name: sshd | sshd service on
+  - name: Ensure sshd is running
     systemd:
       name: sshd
       state: started
     become: true
-

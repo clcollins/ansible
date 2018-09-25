@@ -1,57 +1,34 @@
 ---
-  - name: Common | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-    tags: gather
+  - name: Gather OS info
+    include_vars: "{{ item }}"
+    with_first_found:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+      - "{{ ansible_distribution }}.yml"
+      - default.yml
+    tags:
+      - always
 
-  - name: Common | Admin | hostname
+  - name: Set host nodename
     hostname:
       name: "{{ ansible_nodename }}"
     become: true
 
-  - name: Common | Security Checks | Run Check Tasks
-    include_role:
-      name: common
-      tasks_from: checks
-    tags: checks
+  # This isn't really "common" - reevaluate
+  #- name: Common | Groups | "{{ user_groups }}"
+  #  group:
+  #    name: "{{ item }}"
+  #    state: present
+  #  with_items: "{{ user_groups }}"
+  #  become: true
 
-  - name: Common | Patching | Copy daily cron
-    template:
-      src: patchmonkey-daily.cron.j2
-      dest: /etc/cron.daily/patchmonkey-daily.cron
-      owner: root
-      group: root
-      mode: 0755
-    become: true
-
-  - name: Common | Ansible | Daily tmpdir cleanup
-    copy:
-      src: ansible-daily.cron
-      dest: /etc/cron.daily/ansible-daily.cron
-      owner: root
-      group: root
-      mode: 0755
-    become: true
-
-  - name: Common | Groups | "{{ user_groups }}"
-    group:
-      name: "{{ item }}"
-      state: present
-    with_items: "{{ user_groups }}"
-    become: true
-
-  - name: Common | Users | "{{ user }}"
+  - name: Add user "{{ user }}"
     user:
       name: "{{ user }}"
       group: "{{ user }}"
       shell: /bin/bash
-      groups: "{{ item }}"
-      append: yes
-    with_items: "{{ user_groups }}"
     become: true
 
-  - name: Common | Users | Systemd User Dir
+  - name: Create systemd userdir
     file:
       path: "{{ homedir }}/.config/systemd/user"
       state: directory
@@ -60,7 +37,7 @@
       mode: 0755
     when: ansible_service_mgr == "systemd"
 
-  - name: Common | Users | bashrc
+  - name: Create .bashrc
     copy:
       src: bashrc
       dest: "{{ homedir }}/.bashrc"
@@ -68,7 +45,7 @@
       group: "{{ user }}"
       mode: 0644
 
-  - name: Common | Users | bash profile
+  - name: Create .bash_profile
     copy:
       src: bash_profile
       dest: "{{ homedir }}/.bash_profile"
@@ -76,7 +53,7 @@
       group: "{{ user }}"
       mode: 0644
 
-  - name: Common | Users | toprc
+  - name: Create .toprc
     copy:
       src: toprc
       dest: "{{ homedir }}/.toprc"
@@ -84,7 +61,7 @@
       group: "{{ user }}"
       mode: 0644
 
-  - name: Common | Users | git config
+  - name: Create .giconfig
     template:
       src: git_config.j2
       dest: "{{ homedir }}/.gitconfig"
@@ -92,28 +69,19 @@
       group: "{{ user }}"
       mode: 0644
 
-  - name: Common | Users | setup git signing
+  - name: Enable git commit signing
     git_config:
       name: commit.gpgsign
       repo: "{{ homedir }}/.ansible"
       scope: global
       value: true
 
-      # Semi-sensitive info?  Not to commit to git repo?
-      #  - name: Common | Users | SSH config
-      #    copy:
-      #      src: ssh_config
-      #      dest: "{{ homedir }}/.ssh/config"
-      #      owner: "{{ user }}"
-      #      group: "{{ user }}"
-      #      mode: 0644
-
-  - name: Common | Access | Authorized Keys
+  - name: Copy authorized keys
     authorized_key:
       user: "{{ user }}"
       key: "{{ auth_key_url }}"
 
-  - name: Bin Dir | Binfiles
+  - name: Install user binfiles
     copy:
       src: bin/
       dest: "{{ homedir }}/.local/bin/"

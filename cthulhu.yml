@@ -1,8 +1,0 @@
----
-  - hosts: cthulhu
-
-    roles:
-      - common
-      - repos
-      - basic
-      - sshd

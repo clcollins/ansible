@@ -1,5 +1,22 @@
 ---
-  - import_playbook: krang.yml
-  - import_playbook: hastur.yml
-  - import_playbook: cthulhu.yml
-  - import_playbook: rhogog.yml
+- hosts:
+    - all
+  roles:
+    - common
+    - sshd
+
+- hosts: 
+    - krang
+    - hastur
+  roles:
+    - firewalld
+    - repos
+    - basic
+    # - containers
+    - development
+    - dwarffortress
+
+#- hosts:
+#    - rhogog
+#  roles:
+#    - rpie

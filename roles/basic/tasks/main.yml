@@ -1,8 +1,18 @@
 ---
-  - name: Basic | Gather | Gather vars
+  - name: Run security checks
     include_role:
       name: common
-      tasks_from: gather
+      tasks_from: checks
+    tags: checks
+
+  - name: Install patching cron
+    template:
+      src: patchmonkey-daily.cron.j2
+      dest: /etc/cron.daily/patchmonkey-daily.cron
+      owner: root
+      group: root
+      mode: 0755
+    become: true
 
   - name: Basic | Install Packages
     package:

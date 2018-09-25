@@ -48,11 +48,15 @@ cthulhu
 
 [rpies]
 rhogog
+toth
 
 [fedora]
 krang
 hastur
 cthulhu
 rhogog
+
+[fedora-minimal]
+toth
 
 
