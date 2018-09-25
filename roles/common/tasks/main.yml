@@ -27,8 +27,13 @@
     user:
       name: "{{ user }}"
       group: "{{ user }}"
+      groups: "{{ item }}"
       shell: /bin/bash
+      append: yes
     become: true
+    with_items:
+      - "{{ user }}"
+      - wheel
     tags:
       - userConfig
 
