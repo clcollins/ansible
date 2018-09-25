@@ -13,13 +13,11 @@
       name: "{{ ansible_nodename }}"
     become: true
 
-  # This isn't really "common" - reevaluate
-  #- name: Common | Groups | "{{ user_groups }}"
-  #  group:
-  #    name: "{{ item }}"
-  #    state: present
-  #  with_items: "{{ user_groups }}"
-  #  become: true
+  - name: Create group "{{ user }}"
+    group:
+      name: "{{ user }}"
+      state: present
+    become: true
 
   - name: Add user "{{ user }}"
     user:
@@ -60,6 +58,11 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0644
+
+  - name: Ensure git installed
+    package:
+      name: git
+      state: present
 
   - name: Create .giconfig
     template:

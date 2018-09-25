@@ -1,7 +1,8 @@
 ---
 # Basic vars for personalization
 user: chris
-user_groups:
+
+extra_user_groups:
   - libvirt
   - docker
 
