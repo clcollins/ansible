@@ -1,11 +1,5 @@
 ---
-  # Gather vars using common gather task
-  - name: firewalld | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
-  - name: firewalld | Ensure Installed
+  - name: Ensure firewalld installed
     package:
       name: "{{ firewalld }}"
       state: present
@@ -14,7 +8,7 @@
       - firewalld
       - packages
 
-  - name: firewalld | Firewalld Ansible Deps
+  - name: Install firewalld ansible dependencies
     package:
       name: "{{ item }}"
       state: present
@@ -24,15 +18,16 @@
       - firewalld
       - packages
 
-  - name: firewalld | Ensure Enabled
+  - name: Enable firewalld
     systemd:
       name: firewalld
       enabled: yes
       state: started
     become: true
-    notify: reload firewalld
+    tags:
+      - firewalld
 
-  - name: firewalld | Internal Zone Sources
+  - name: Set internal zones
     firewalld:
       source: "{{ item }}"
       zone: internal
@@ -40,11 +35,5 @@
     with_items: "{{ internal_networks }}"
     become: true
     notify: reload firewalld
-
-  - name: firewalld | Fix "Cockpit" in FedoraServer zone
-    lineinfile:
-      path: /usr/lib/firewalld/zones/FedoraServer.xml
-      regexp: '\s\s<service name="cockpit"/>'
-      state: absent
-    become: true
-    notify: reload firewalld
+    tags:
+      - firewalld
