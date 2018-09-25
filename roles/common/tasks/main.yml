@@ -12,12 +12,16 @@
     hostname:
       name: "{{ ansible_nodename }}"
     become: true
+    tags:
+      - hostConfig
 
   - name: Create group "{{ user }}"
     group:
       name: "{{ user }}"
       state: present
     become: true
+    tags:
+      - userConfig
 
   - name: Add user "{{ user }}"
     user:
@@ -25,6 +29,8 @@
       group: "{{ user }}"
       shell: /bin/bash
     become: true
+    tags:
+      - userConfig
 
   - name: Create systemd userdir
     file:
@@ -34,6 +40,8 @@
       group: "{{ user }}"
       mode: 0755
     when: ansible_service_mgr == "systemd"
+    tags:
+      - userConfig
 
   - name: Create .bashrc
     copy:
@@ -42,6 +50,9 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0644
+    tags:
+      - userConfig
+      - dotFiles
 
   - name: Create .bash_profile
     copy:
@@ -50,6 +61,9 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0644
+    tags:
+      - userConfig
+      - dotFiles
 
   - name: Create .toprc
     copy:
@@ -58,11 +72,17 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0644
+    tags:
+      - userConfig
+      - dotFiles
 
   - name: Ensure git installed
     package:
       name: git
       state: present
+    tags:
+      - userConfig
+      - packages
 
   - name: Create .giconfig
     template:
@@ -71,6 +91,9 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0644
+    tags:
+      - userConfig
+      - dotFiles
 
   - name: Enable git commit signing
     git_config:
@@ -78,11 +101,17 @@
       repo: "{{ homedir }}/.ansible"
       scope: global
       value: true
+    tags:
+      - userConfig
+      - gitConfig
 
   - name: Copy authorized keys
     authorized_key:
       user: "{{ user }}"
       key: "{{ auth_key_url }}"
+    tags:
+      - userConfig
+      - ssh
 
   - name: Install user binfiles
     copy:
@@ -91,3 +120,6 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0755
+    tags:
+      - userConfig
+      - binFiles
