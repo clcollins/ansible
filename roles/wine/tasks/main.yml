@@ -1,9 +1,4 @@
 ---
-  - name: Wine | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: Wine | Install Packages
     package:
       name: "{{ item }}"

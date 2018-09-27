@@ -1,0 +1,22 @@
+---
+  fedora_python3_packages:
+  - python3-devel
+    
+  pip_packages:
+  - name: boto
+    why: AWS ec2.py inventory file requires boto & uses python2
+
+  pip3_packages:
+  - name: https://gitlab.oit.duke.edu:devil-ops/clockworks-cli
+    extra_args: --user
+    why: Duke Clockworks integration 
+  - name: boto
+    extra_args: --user
+    why: AWS integration
+  - name: hvac
+    extra_args: --user
+    why: Needed for Duke Vault integration
+
+
+
+

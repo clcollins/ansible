@@ -1,9 +1,4 @@
 ---
-  - name: Containers | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: Containers | Install Packages | For container development
     package:
       name: "{{ item }}"

@@ -1,12 +1,17 @@
 ---
+  - name: Debug
+    debug:
+      msg: "{{ ansible_distribution }}"
+    tags:
+      - debug
   - name: Fix bug with cockpit and firewalld in Fedora (bugzilla 1171114)
     lineinfile:
       path: /usr/lib/firewalld/zones/FedoraServer.xml
       line: '  <service name="cockpit"/>'
       state: absent
     when:
-      - ansible_distribution_major_version < 29
-      - ansible_distribution is Fedora
+      - ansible_distribution_major_version|int < 29
+      - ansible_distribution == "Fedora"
     tags:
       - bugfix
 

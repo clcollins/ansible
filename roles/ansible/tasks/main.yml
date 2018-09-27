@@ -1,9 +1,4 @@
 ---
-  - name: Ansible | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: Ansible | Install
     package:
       name: "{{ item }}"

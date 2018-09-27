@@ -1,9 +1,4 @@
 ---
-  - name: Development | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: Development | Install Packages
     package:
       name: "{{ item }}"

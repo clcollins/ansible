@@ -1,9 +1,4 @@
 ---
-  - name: DwarfFortress | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: DwarfFortress | Install Packages
     package:
       name: "{{ item }}"
@@ -27,9 +22,9 @@
   # Because Splintermind hasn't figure out 64bit support yet
   - name: DwarfFortress | DwarfTherapist | Clone DT repo (latest)
     git:
-      repo: 'https://github.com/Hello71/Dwarf-Therapist'
+      repo: https://github.com/Dwarf-Therapist/Dwarf-Therapist
       version: HEAD
-      dest: "{{ homedir }}/Projects/Hello71-DwarfTherapist"
+      dest: "{{ homedir }}/Projects/Dwarf-Therapist"
       accept_hostkey: yes
     tags:
       - skip_ansible_lint
@@ -43,6 +38,7 @@
     tags:
       - packages
       - config_files
+      - dwarffortress
 
   # Because Splintermind hasn't figure out 64bit support yet
   - name: DwarfFortress | DwarfTherapist | Clone DT repo (latest)
@@ -63,6 +59,7 @@
     tags:
       - packages
       - config_files
+      - dwarffortress
 
   # From http://www.bay12forums.com/smf/index.php?topic=158914.0
   - name: DwarfFortress Config Files | DF tile
@@ -72,7 +69,7 @@
     tags:
       - packages
       - config_files
-
+      - dwarffortress
 
   # From http://www.bay12forums.com/smf/index.php?topic=158914.0
   - name: DwarfFortress Config Files | DF tile
@@ -82,3 +79,4 @@
     tags:
       - packages
       - config_files
+      - dwarffortress

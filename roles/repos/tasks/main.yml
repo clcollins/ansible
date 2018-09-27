@@ -8,6 +8,10 @@
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
       gpgcheck: yes
       enabled: yes
+    tags:
+      - repos
+      - duke-repos
+      - duke-fedora-repo
     when: ansible_distribution == "Fedora"
     become: true
 
@@ -20,6 +24,10 @@
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
       gpgcheck: yes
       enabled: yes
+    tags:
+      - repos
+      - duke-repos
+      - duke-fedora-updates-repo
     when: ansible_distribution == "Fedora"
     become: true
 
@@ -31,21 +39,28 @@
       baseurl: http://archive.linux.duke.edu/fedora/pub/epel/$releasever/$basearch/
       gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
       gpgcheck: yes
-      enabled: no
+      enabled: yes
+    tags:
+      - repos
+      - duke-repos
+      - duke-fedora-epel-repo
     when: ansible_distribution == "Fedora"
     become: true
 
-  # Apparently this is in the rpmfusion-nonfree repo, and this guy no longer packages
-  - name: Package Repos | Fedora DwarfFortress | for FUN!
-    yum_repository:
-      name: dwarffortress
-      description: Dwarf Fortress for Fedora $releasever
-      baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
-      gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
-      enabled: yes
-      state: absent
-    when: ansible_distribution == "Fedora"
-    become: true
+# Apparently this is in the rpmfusion-nonfree repo, and this guy no longer packages
+# STATE ABSENT
+#  - name: Package Repos | Fedora DwarfFortress | for FUN!
+#    yum_repository:
+#      state: absent
+#      name: dwarffortress
+#      description: Dwarf Fortress for Fedora $releasever
+#      baseurl: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/$releasever/$basearch/
+#      gpgkey: https://www.acm.jhu.edu/~bjr/fedora/dwarffortress/df_gpg_key
+#      enabled: yes
+#    tags:
+#      - repos
+#    when: ansible_distribution == "Fedora"
+#    become: true
 
   - name: Package Repos | RPMFusion | for mplayer, others
     yum_repository:
@@ -56,6 +71,11 @@
       gpgkey: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
       enabled: yes
+    tags:
+      - repos
+      - rpmfusion-repos
+      - rpmfusion-free-repos
+      - rpmfusion-free-repo
     when: ansible_distribution == "Fedora"
     become: true
 
@@ -69,6 +89,45 @@
       #gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
       gpgcheck: yes
       enabled: no
+    tags:
+      - repos
+      - rpmfusion-repos
+      - rpmfusion-free-repos
+      - rpmfusion-free-updates-repo
     when: ansible_distribution == "Fedora"
     become: true
 
+  - name: Package Repos | RPMFusion Nonfree
+    yum_repository:
+      name: rpmfusion-nonfree
+      description: RPM Fusion for Fedora $releasever - Nonfree
+      metalink: https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-$releasever&arch=$basearch
+      enabled: 1
+      metadata_expire: 14d
+      gpgcheck: 1
+      repo_gpgcheck: 0
+      gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+    tags:
+      - repos
+      - rpmfusion-repos
+      - rpmfusion-nonfree-repos
+      - rpmfusion-nonfree-repo
+    when: ansible_distribution == "Fedora"
+    become: true
+
+  - name: Package Repos | RPMFusion Nonfree Updates
+    yum_repository:
+      name: rpmfusion-nonfree-updates
+      description: RPM Fusion for Fedora $releasever - Nonfree - Updates
+      metalink: https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+      enabled: 1
+      gpgcheck: 1
+      repo_gpgcheck: 0
+      gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+    tags:
+      - repos
+      - rpmfusion-repos
+      - rpmfusion-nonfree-repos
+      - rpmfusion-nonfree-updates-repo
+    when: ansible_distribution == "Fedora"
+    become: true

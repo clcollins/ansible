@@ -1,0 +1,21 @@
+---
+  user_local_dir: "/home/{{ user }}/.local"
+  user_local_share_dir: "{{ user_local_dir }}/share"
+  user_local_bin_dir: "{{ user_local_dir }}/bin"
+
+  docker_machine_driver_kvm_url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/
+  docker_machine_driver_kvm_version: 0.7.0
+  docker_machine_driver_kvm_bin: docker-machine-driver-kvm
+  docker_machine_driver_kvm_checksum: sha256:c4ff3eeb5b232aad41942feb8fb46aaaf8d54239408e2f6549468c997a845a31
+
+  minishift_virtualization_dependencies:
+    - libvirt
+    - qemu-kvm
+
+  minishift_releases_url: https://github.com/minishift/minishift/releases/download/
+  minishift_version: 1.24.0
+  minishift_checksum: sha256:0a09f5684d901511f937182e8fd8a49b357ce2cd17811a949bf2d175583508b5
+  minishift_base: "minishift-{{ minishift_version }}-linux-amd64"
+  minishift_package: "{{ minishift_base }}.tgz"
+  minishift_install_dir: "{{ user_local_share_dir }}/{{ minishift_base }}"
+

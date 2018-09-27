@@ -1,0 +1,98 @@
+---
+- name: Download docker-machine-kvm driver
+  get_url:
+    url: "{{ docker_machine_driver_kvm_url }}/v{{ docker_machine_driver_kvm_version }}/docker-machine-driver-kvm"
+    dest: "{{ user_local_share_dir }}/{{ docker_machine_driver_kvm_bin }}"
+    checksum: "{{ docker_machine_driver_kvm_checksum }}"
+  tags:
+    - minishift
+    - virtualization
+    - docker-machine-driver-kvm
+
+- name: Make docker-machine-kvm driver executable
+  file:
+    path: "{{ user_local_share_dir }}/{{ docker_machine_driver_kvm_bin }}"
+    mode: 0755
+  tags:
+    - minishift
+    - docker-machine-driver-kvm
+
+- name: Link docker-machine-kvm driver
+  file:
+    src: "{{ user_local_share_dir }}/{{ docker_machine_driver_kvm_bin }}"
+    dest: "/usr/local/bin/docker-machine-driver-kvm"
+    state: link
+  become: True
+  tags:
+    - minishift
+    - virtualization
+    - docker-machine-driver-kvm
+
+- name: Install minishift virtualization dependencies
+  package:
+    name: "{{ item }}"
+  with_items: "{{ minishift_virtualization_dependencies }}"
+  become: True
+  tags:
+    - minishift
+    - virtualization
+    - packages
+
+- name: Add user to libvirt group
+  user:
+    name: "{{ user }}"
+    groups: libvirt
+    append: yes
+  become: True
+  tags:
+    - minishift
+    - virtualization
+    - userConfig
+
+- name: Enable & Start libvirtd
+  systemd:
+    name: libvirtd
+    state: started
+    enabled: yes
+  become: True
+  tags:
+    - minishift
+    - virtualization
+
+- name: "Check if minishift v{{ minishift_version }} is installed"
+  stat:
+    path: "{{ minishift_install_dir }}"
+  register: minishift_install
+  tags:
+    - minishift
+    - minishift_install
+
+- name: Download minishift
+  get_url:
+    url: "{{ minishift_releases_url }}/v{{ minishift_version }}/{{ minishift_package }}"
+    dest: "/tmp/{{ minishift_package }}"
+    checksum: "{{ minishift_checksum }}"
+  when:
+    - not minishift_install.stat.exists
+  tags:
+    - minishift
+    - minishift_install
+
+- name: Extract minishift
+  unarchive:
+    src: "/tmp/{{ minishift_package }}"
+    dest: "{{ user_local_share_dir }}"
+    creates: "{{ minishift_install_dir }}"
+    remote_src: yes
+  tags:
+    - minishift
+    - minishift_install
+
+- name: Link minishift binary
+  file:
+    src: "{{ minishift_install_dir }}/minishift"
+    dest: "{{ user_local_bin_dir }}/minishift"
+    state: link
+  tags:
+    - minishift
+    - minishift_install

@@ -1,9 +1,4 @@
 ---
-  - name: Common | Gather | Gather vars
-    include_role:
-      name: common
-      tasks_from: gather
-
   - name: Conky | Install
     package:
       name: "{{ item }}"

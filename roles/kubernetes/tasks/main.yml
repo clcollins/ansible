@@ -1,0 +1,10 @@
+---
+  - name: Install Kuberntes client packages
+    package:
+      name: "{{ item }}"
+    with_items:
+      - kubernetes-client
+      - origin-clients
+    become: True
+    tags:
+      - k8s
