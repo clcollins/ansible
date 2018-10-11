@@ -117,10 +117,23 @@
       - userConfig
       - gitConfig
 
+
   - name: Copy authorized keys
     authorized_key:
       user: "{{ user }}"
       key: "{{ auth_key_url }}"
+    when: ansible_version.full is version('2.3.0', '>=')
+    tags:
+      - userConfig
+      - ssh
+
+  # Debian Ansible ships with an authkeys bug that fails to unpack
+  # values
+  - name: Copy authorized keys
+    get_url:
+      url: "{{ auth_key_url }}"
+      dest: "/home/{{ user }}/.ssh/authorized_keys"
+    when: ansible_version.full is version('2.3.0', '>')
     tags:
       - userConfig
       - ssh
