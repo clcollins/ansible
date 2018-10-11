@@ -28,8 +28,6 @@ internal_networks:
   - 127.0.0.1/32
 
 public_zones:
-  - FedoraServer
-  - FedoraWorkstation
   - dmz
   - external
   - public
