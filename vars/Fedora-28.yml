@@ -5,6 +5,8 @@
   ansible_pip_packages:
     - ansible-lint
 
+  distro_sudoers_group: wheel
+
   pip_executable: pip2
 
   conky_packages:

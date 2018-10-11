@@ -33,7 +33,7 @@
     become: true
     with_items:
       - "{{ user }}"
-      - wheel
+      - "{{ distro_sudoers_group }}"
     tags:
       - userConfig
 
