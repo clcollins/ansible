@@ -49,6 +49,10 @@ cthulhu
 [rpies]
 rhogog
 toth
+yig
+
+[raspbian]
+yig ansible_user=root
 
 [fedora]
 krang
@@ -61,6 +65,6 @@ toth
 ansible_python_interpreter=/usr/bin/python3
 
 [fedora-minimal]
-toth ansible_host=10.237.6.105
+toth ansible_user=root
 
 

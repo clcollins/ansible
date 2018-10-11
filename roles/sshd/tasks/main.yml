@@ -4,6 +4,7 @@
       msg: "{{ ansible_distribution }}"
     tags:
       - debug
+
   - name: Fix bug with cockpit and firewalld in Fedora (bugzilla 1171114)
     lineinfile:
       path: /usr/lib/firewalld/zones/FedoraServer.xml

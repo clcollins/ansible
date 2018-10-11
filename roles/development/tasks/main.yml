@@ -67,3 +67,13 @@
       state: present
     with_items: "{{ virt_packages }}"
     become: true
+
+  # REF: https://github.com/atom/atom/issues/13451#issuecomment-336491389
+  - name: Fix Atom SCL incompatibility
+    copy:
+      src: atom.desktop
+      dest: /usr/share/applications/atom.desktop
+    when: ansible_distribution == "Fedora"
+    tags:
+      - userConfig
+
