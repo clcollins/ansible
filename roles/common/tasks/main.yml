@@ -91,6 +91,7 @@
     package:
       name: git
       state: present
+    become: true
     tags:
       - userConfig
       - packages
