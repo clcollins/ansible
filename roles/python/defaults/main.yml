@@ -16,6 +16,9 @@
   - name: hvac
     extra_args: --user
     why: Needed for Duke Vault integration
+  - name: ansible-lint
+    extra_args: --user
+    why: Linter for Ansible
 
 
 

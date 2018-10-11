@@ -42,7 +42,7 @@
       - sshd
       - firewalld
 
-  - name: Check for host ed25519 key 
+  - name: Check for host ed25519 key
     stat:
       path: /etc/ssh/ssh_host_ed25519_key.pub
     register: ssh_host_ed25519_key
