@@ -17,8 +17,3 @@
     # - containers
     - development
     - dwarffortress
-
-- hosts:
-    - yig
-  roles:
-    - rpie
