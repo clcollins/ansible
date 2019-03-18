@@ -54,7 +54,7 @@
       name: sshd-keygen.target
       state: restarted
     become: true
-    when: ssh_host_ed25519_key.stat.exists == False
+    when: not ssh_host_ed25519_key.stat.exists
     tags:
       - sshd
 

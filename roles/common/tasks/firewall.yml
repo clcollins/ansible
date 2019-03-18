@@ -1,6 +1,6 @@
 ---
   - name: Common | firewalld | Ensure Installed and Enabled
-    systemd: 
+    systemd:
       name: firewalld
       enabled: yes
       state: started
