@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Copy the current CC0 text and write to a LICENSE file
+
+cc0() {
+  local cctxt="https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"
+  curl ${cctxt} > LICENSE \
+    && if git status >> /dev/null 2>&1
+       then
+         git add LICENSE \
+           && git commit --amend --no-edit \
+           && git push -f
+       fi
+}
+
+cc0()

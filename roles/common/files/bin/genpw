@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Generate passwords
+
+genpw () {
+  local args="$@"
+  if [[ "${args}" == "human" ]]
+  then
+    pwgen --capitalize \
+      --numerals \
+      --symbols 16
+  elif [[ "${args}" == "uuid" ]]
+  then
+    uuidgen --random
+  else
+    pwgen --capitalize \
+      --numerals \
+      --secure \
+      --symbols 16
+  fi
+}
+
+genpw()
