@@ -6,10 +6,6 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
+export GOPATH=$HOME/.go
+PATH=$PATH:$HOME/.local/bin:$HOME/bin:$GOPATH/bin
 
-PATH=$PATH:$HOME/.local/bin:$HOME/bin
-
-export PATH
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
