@@ -1,9 +1,5 @@
 ---
-# Variables applied to all hosts
-system_management_packages:
-  - ansible
-  - git
-  - restic
+# file: roles/dwarffortress/vars/main.yml
 
 # DF packages in RPMFusion NonFree
 dwarffortress_packages:
