@@ -1,0 +1,39 @@
+---
+all:
+  hosts:
+    marvin:
+      ansible_connection: local
+      hostname: marvin
+    zaphod:
+      ansible_connection: local
+      hostname: zaphod
+    pie_3_placeholder_0:
+    pie_3_placeholder_1:
+    pie_3_com_placeholder_0:
+    pie_4_placeholder_0:
+  children:
+    raspberry_pies:
+      children:
+        pie_3s:
+        pie_com_3s: 
+        pie_4s:
+    pie_3s:
+      hosts:
+        pie_3_placeholder_0:
+        pie_3_placeholder_1:
+    pie_com_3s:
+      hosts:
+        pie_com_3_placeholder_0:
+    pie_4s:
+      hosts:
+        pie_4_placeholder_0:
+    laptops:
+      hosts: 
+        marvin:
+    desktops:
+      hosts:
+        zaphod:
+    work:
+      hosts:
+        zaphod:
+

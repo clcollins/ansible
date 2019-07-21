@@ -1,0 +1,7 @@
+---
+# file: work.yml
+- hosts: work
+  roles:
+    - common
+    - package-repositories
+    - work

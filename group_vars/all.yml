@@ -1,0 +1,6 @@
+---
+# file: group_vars/all.yml
+
+packages_common:
+  - git
+  - ansible

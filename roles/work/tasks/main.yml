@@ -1,0 +1,20 @@
+---
+# file: roles/work/tasks/main.yml
+
+- name: Create project dir
+  file:
+    path: "{{ ansible_env['HOME'] }}/Projects"
+    state: directory
+  tags:
+    - git_repos
+    - work
+
+- name: Clone repositores
+  git:
+    repo: "{{ item.git_url }}"
+    dest: "{{ ansible_env['HOME'] }}/Projects/{{ item.dest_dir }}"
+    update: no
+  with_items: "{{ work_repositories }}"
+  tags:
+    - git_repos
+    - work

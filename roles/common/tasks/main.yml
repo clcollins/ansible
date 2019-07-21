@@ -1,0 +1,26 @@
+---
+# file: common/tasks/main.yml
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+  tags:
+    - administration
+
+- name: Copy authorized_keys
+  authorized_key:
+    user: "{{ ansible_env['USER'] }}"
+    state: present
+    key: https://github.com/clcollins.keys
+  tags:
+    - ssh
+
+- name: Install common packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages_common }}"
+  become: true
+  tags:
+    - packages
+
