@@ -1,0 +1,17 @@
+---
+# file: roles/gui-environment/tasks/main.yml
+
+- name: Add RPM Fusion Repos
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    metalink: "{{ item.metalink }}"
+    enabled: "{{ item.enabled }}"
+    metadata_expire: "{{ item.metadata_expire }}"
+    type: "{{ item.type }}"
+    gpgcheck: "{{ item.gpgcheck }}"
+    repo_gpgcheck: "{{ item.repo_gpgcheck }}"
+    gpgkey: "{{ item.gpgkey }}"
+  with_items: "{{ yum_repositories['rpmfusion'] }}"
+     
+# Clone and build Gnome Pomodoro timer: https://github.com/codito/gnome-pomodoro.git

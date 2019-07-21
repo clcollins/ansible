@@ -1,15 +1,7 @@
 ---
-# This is the base playbook for all hosts
+# file: site.yml
+- hosts: work
+  import_playbook: work.yml
 
-- name: apply common configuration to all nodes
-  hosts: all
-
-  roles:
-    - common 
-
-- name: setup game configuration
-  hosts: gaming
-
-  roles:
-    - dwarffortress
-
+- hosts: zaphod
+  import_playbook: home.yml
