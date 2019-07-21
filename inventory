@@ -1,0 +1,16 @@
+all:
+  hosts:
+    zaphod:
+      ansible_connection: local
+      ansible_hostname: 192.168.2.63
+    marvin:
+      ansible_hostname: 192.168.2.64
+  children:
+    work:
+      hosts:
+        - marvin
+    gaming:
+      hosts:
+        - zaphod
+  
+

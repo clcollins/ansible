@@ -1,0 +1,15 @@
+---
+# This is the base playbook for all hosts
+
+- name: apply common configuration to all nodes
+  hosts: all
+
+  roles:
+    - common 
+
+- name: setup game configuration
+  hosts: gaming
+
+  roles:
+    - dwarffortress
+

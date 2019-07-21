@@ -1,0 +1,7 @@
+---
+- name: install management packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ system_management_packages }}"
+  become: True

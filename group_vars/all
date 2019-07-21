@@ -1,0 +1,11 @@
+---
+# Variables applied to all hosts
+system_management_packages:
+  - ansible
+  - git
+  - restic
+
+# DF packages in RPMFusion NonFree
+dwarffortress_packages:
+  - dwarffortress
+  - dwarftherapist
