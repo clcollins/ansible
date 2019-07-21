@@ -1,0 +1,7 @@
+---
+# file: roles/common/vars/main.yml
+
+system_management_packages:
+  - ansible
+  - git
+  - restic
