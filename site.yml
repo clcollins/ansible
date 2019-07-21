@@ -1,7 +1,4 @@
 ---
 # file: site.yml
-- hosts: work
-  import_playbook: work.yml
-
-- hosts: zaphod
-  import_playbook: home.yml
+import_playbook: work.yml
+import_playbook: home.yml

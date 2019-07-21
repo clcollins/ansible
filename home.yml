@@ -1,0 +1,6 @@
+---
+# file: work.yml
+- hosts: zaphod
+  roles:
+    - common
+    - package-repositories
