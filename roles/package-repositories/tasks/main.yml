@@ -7,11 +7,12 @@
     description: "{{ item.description }}"
     metalink: "{{ item.metalink }}"
     enabled: "{{ item.enabled }}"
-    metadata_expire: "{{ item.metadata_expire }}"
-    type: "{{ item.type }}"
+    metadata_expire: "{{ item.metadata_expire | default('14d') }}"
+    # type: "{{ item.type }}" # Type is unsupported by the module
     gpgcheck: "{{ item.gpgcheck }}"
     repo_gpgcheck: "{{ item.repo_gpgcheck }}"
     gpgkey: "{{ item.gpgkey }}"
-  with_items: "{{ yum_repositories['rpmfusion'] }}"
+  with_items: 
+    - "{{ rpmfusion_repos }}"
      
 # Clone and build Gnome Pomodoro timer: https://github.com/codito/gnome-pomodoro.git
