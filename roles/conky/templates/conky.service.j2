@@ -4,7 +4,7 @@ Documentation=man:conky(1)
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/conky -d -c %h/.config/conky/conky.conf
+ExecStart=/usr/bin/conky -d -c %h/.config/conky/{{ conky_config_file }}
 
 [Install]
 WantedBy=default.target

@@ -5,6 +5,8 @@
       state: present
     with_items: "{{ conky_packages }}"
     become: True
+    tags:
+      - conky
 
   - name: setup conky config directory
     file:
@@ -13,6 +15,8 @@
       owner: "{{ ansible_env['USER'] }}"
       group: "{{ ansible_env['USER'] }}"
       mode: 0775
+    tags:
+      - conky
 
   - name: copy conky dotfiles
     file:
@@ -21,6 +25,8 @@
       owner: "{{ ansible_env['USER'] }}"
       group: "{{ ansible_env['USER'] }}"
       state: link
+    tags:
+      - conky
 
   - name: copy conky config file
     copy:
@@ -28,6 +34,8 @@
       dest: "{{ ansible_env['HOME'] }}/.config/conky/conky.conf"
       owner: "{{ ansible_env['USER'] }}"
       group: "{{ ansible_env['USER'] }}"
+    tags:
+      - conky
 
   - name: clone Conky Revisited 2 repo
     git:
@@ -35,6 +43,8 @@
       dest: "{{ ansible_env['HOME'] }}/Projects/Conky-themes"
       version: master
       depth: 1
+    tags:
+      - conky
 
   # Gotta make this dumb symlink because the above keeps a subdir
   # in the repo
@@ -45,26 +55,45 @@
       owner: "{{ ansible_env['USER'] }}"
       group: "{{ ansible_env['USER'] }}"
       state: link
-
-# - name: enable the Conky Revisited Square config
-#   file:
-#     src: "{{ ansible_env['HOME'] }}/Projects/Conkey-themes/Conky_Revisited_2/Conky_Square_Vertical/start_conky_General_VERTICAL"
-#     dest: "{{ ansible_env['HOME'] }}/.config/conky/conky.conf"
-#     owner: "{{ ansible_env['USER'] }}"
-#     group: "{{ ansible_env['USER'] }}"
-#     state: link
+    tags:
+      - conky
 
   - name: install conky systemd unit file
-    copy:
-      src: conky.service
+    template:
+      src: conky.service.j2
       dest: "{{ ansible_env['HOME'] }}/.config/systemd/user/conky.service"
       owner: "{{ ansible_env['USER'] }}"
       group: "{{ ansible_env['USER'] }}"
+    register: conky_systemd_unit_file
+    tags:
+      - conky
+
+  - name: reload systemd if unit file changed
+    systemd:
+      daemon-reload: true
+      scope: user
+    when: conky_systemd_unit_file is changed
+    tags:
+      - conky
+
+  - name:  restart conky servicea if unit file changed
+    systemd:
+      name: conky.service
+      scope: user
+      no_block: yes
+      enabled: yes
+      state: restarted
+    when: conky_systemd_unit_file is changed
+    tags:
+      - conky
 
   - name:  enable conky service
     systemd:
       name: conky.service
-      user: yes
+      scope: user
       no_block: yes
       enabled: yes
+      state: started
+    tags:
+      - conky
 
