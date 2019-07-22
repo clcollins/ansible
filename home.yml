@@ -4,3 +4,6 @@
   roles:
     - common
     - package-repositories
+    - steam
+    - dwarffortress
+    - conky
