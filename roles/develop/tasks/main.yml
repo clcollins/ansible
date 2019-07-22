@@ -1,0 +1,10 @@
+---
+# file: roles/develop/tasks/main.yml
+
+- import_tasks: atom.yml
+
+
+# install build deps?  configure, make, etc?
+
+# make ~/Projects
+# clone standard projects

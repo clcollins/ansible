@@ -1,0 +1,25 @@
+---
+# file: roles/develop/tasks/atom.yml
+
+- name: import repo GPG key
+  rpm_key:
+    state: present
+    key:  https://packagecloud.io/AtomEditor/atom/gpgkey
+  become: True
+
+- name: setup Atom repository
+  yum_repository:
+    name: atom-editor
+    description: Atom Editor repository
+    baseurl: https://packagecloud.io/AtomEditor/atom/el/7/$basearch
+    enabled: 1
+    gpgcheck: 0
+    repo_gpgcheck: 1
+    gpgkey: https://packagecloud.io/AtomEditor/atom/gpgkey
+  become: True
+
+- name: install Atom
+  package:
+    name: atom
+    state: present
+  become: True

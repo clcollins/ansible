@@ -3,5 +3,7 @@
 - hosts: work
   roles:
     - common
-    - package-repositories
+#    - package-repositories
+    - kube-tools
+    - develop
     - work

@@ -1,0 +1,22 @@
+# .bashrc
+
+[ -z "$PS1" ] && return
+
+if [ -f /etc/bashrc ]
+then
+	source /etc/bashrc
+fi
+
+alias osudo="oc --as=system:admin $@"
+
+# Use the time binary
+alias time='command time'
+
+if [[ -f ${HOME}/.local/bin/git-prompt ]]
+then
+  PROMPT_COMMAND="${HOME}/.local/bin/git-prompt"
+fi
+
+KUBE_PS1_BINARY=oc
+source "${HOME}/.local/share/kube-ps1/kube-ps1.sh"
+PS1='[\u@\h \W $(kube_ps1)]\$ '

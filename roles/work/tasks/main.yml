@@ -1,6 +1,9 @@
 ---
 # file: roles/work/tasks/main.yml
 
+- include_vars: ssh_config.yml
+- include_tasks: ssh_config.yml
+
 - name: Create project dir
   file:
     path: "{{ ansible_env['HOME'] }}/Projects"
