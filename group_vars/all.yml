@@ -4,3 +4,7 @@
 packages_common:
   - git
   - ansible
+
+# workaround for j2 templating error
+# with ansible vars and '.'s
+homedir: /home/chris

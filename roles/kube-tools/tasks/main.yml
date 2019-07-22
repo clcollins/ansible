@@ -1,0 +1,14 @@
+---
+# file: roles/kube_tools/tasks/main.yml
+
+- name: install Kube PS1
+  git:
+    repo: "{{ kube_ps1 }}"  
+    dest: "{{ homedir }}/.local/share/kube-ps1/"
+    depth: 1
+    update: no
+
+- name: make kube-ps1.sh executable
+  file:
+    path: "{{ homedir }}/.local/share/kube-ps1/kube-ps1.sh"
+    mode: '0755'

@@ -1,0 +1,8 @@
+{% for item in ssh_config_entries %}
+Host {{ item.host }}
+    Hostname		{{ item.hostname }}
+    ForwardAgent	{{ item.forward_agent }}
+    User		{{ item.user }}
+    SendEnv		{{ item.send_env }}
+
+{% endfor %}
