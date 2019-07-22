@@ -23,3 +23,14 @@
   become: true
   tags:
     - packages
+
+- name: enable Systemd user dir
+  file:
+    path: /home/chris/.config/systemd/user
+    owner: "{{ ansible_env['USER'] }}"
+    group: "{{ ansible_env['USER'] }}"
+    mode: '0755'
+    state: directory
+  tags:
+    - systemd
+
