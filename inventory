@@ -36,5 +36,5 @@ all:
         zaphod:
     work:
       hosts:
-        zaphod:
+        marvin:
 
