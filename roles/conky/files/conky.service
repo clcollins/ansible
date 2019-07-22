@@ -1,0 +1,10 @@
+[Unit]
+Description=Conky system monitor
+Documentation=man:conky(1)
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/conky -d -c %h/.config/conky/conky.conf
+
+[Install]
+WantedBy=default.target

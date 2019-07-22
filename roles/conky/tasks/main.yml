@@ -1,0 +1,70 @@
+---
+  - name: install conky packages
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ conky_packages }}"
+    become: True
+
+  - name: setup conky config directory
+    file:
+      path: "{{ ansible_env['HOME'] }}/.config/conky"
+      state: directory
+      owner: "{{ ansible_env['USER'] }}"
+      group: "{{ ansible_env['USER'] }}"
+      mode: 0775
+
+  - name: copy conky dotfiles
+    file:
+      src: "{{ ansible_env['HOME'] }}/.config/conky"
+      dest: "{{ ansible_env['HOME'] }}/.conky"
+      owner: "{{ ansible_env['USER'] }}"
+      group: "{{ ansible_env['USER'] }}"
+      state: link
+
+  - name: copy conky config file
+    copy:
+      src: conky.conf
+      dest: "{{ ansible_env['HOME'] }}/.config/conky/conky.conf"
+      owner: "{{ ansible_env['USER'] }}"
+      group: "{{ ansible_env['USER'] }}"
+
+  - name: clone Conky Revisited 2 repo
+    git:
+      repo: "https://github.com/xexpanderx/Conky-themes.git"
+      dest: "{{ ansible_env['HOME'] }}/Projects/Conky-themes"
+      version: master
+      depth: 1
+
+  # Gotta make this dumb symlink because the above keeps a subdir
+  # in the repo
+  - name : fix for Coky Revisited 2 subdir symlink
+    file:
+      src: "{{ ansible_env['HOME'] }}/Projects/Conky-themes/Conky-Revisited-2/Conky_Revisited_2/"
+      dest: "{{ ansible_env['HOME'] }}/.config/conky/Conky_Revisited_2"
+      owner: "{{ ansible_env['USER'] }}"
+      group: "{{ ansible_env['USER'] }}"
+      state: link
+
+# - name: enable the Conky Revisited Square config
+#   file:
+#     src: "{{ ansible_env['HOME'] }}/Projects/Conkey-themes/Conky_Revisited_2/Conky_Square_Vertical/start_conky_General_VERTICAL"
+#     dest: "{{ ansible_env['HOME'] }}/.config/conky/conky.conf"
+#     owner: "{{ ansible_env['USER'] }}"
+#     group: "{{ ansible_env['USER'] }}"
+#     state: link
+
+  - name: install conky systemd unit file
+    copy:
+      src: conky.service
+      dest: "{{ ansible_env['HOME'] }}/.config/systemd/user/conky.service"
+      owner: "{{ ansible_env['USER'] }}"
+      group: "{{ ansible_env['USER'] }}"
+
+  - name:  enable conky service
+    systemd:
+      name: conky.service
+      user: yes
+      no_block: yes
+      enabled: yes
+
