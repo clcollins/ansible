@@ -14,5 +14,6 @@
     gpgkey: "{{ item.gpgkey }}"
   with_items: 
     - "{{ rpmfusion_repos }}"
+  become: True
      
 # Clone and build Gnome Pomodoro timer: https://github.com/codito/gnome-pomodoro.git
