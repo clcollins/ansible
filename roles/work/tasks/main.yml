@@ -4,6 +4,9 @@
 - include_vars: ssh_config.yml
 - include_tasks: ssh_config.yml
 
+- include_vars: yubikey_tools.yml
+- include_tasks: yubikey_tools.yml
+
 - name: Create project dir
   file:
     path: "{{ ansible_env['HOME'] }}/Projects"
