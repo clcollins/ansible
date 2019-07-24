@@ -1,14 +1,28 @@
 ---
 # file: roles/kube_tools/tasks/main.yml
 
+- name: install Kubernetes-related tools packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ kube_tools_packages }}"
+  become: true
+  tags:
+    - kubernetes
+    - packages
+
 - name: install Kube PS1
   git:
     repo: "{{ kube_ps1 }}"  
     dest: "{{ homedir }}/.local/share/kube-ps1/"
     depth: 1
     update: no
+  tags:
+    - kubernetes
 
 - name: make kube-ps1.sh executable
   file:
     path: "{{ homedir }}/.local/share/kube-ps1/kube-ps1.sh"
     mode: '0755'
+  tags:
+    - kubernetes

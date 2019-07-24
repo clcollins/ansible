@@ -2,3 +2,6 @@
 # file: roles/kube_tools/vars/main.yml
 
 kube_ps1: https://github.com/jonmosco/kube-ps1.git
+kube_tools_packages:
+  - podman
+  - buildah
