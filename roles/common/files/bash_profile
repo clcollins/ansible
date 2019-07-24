@@ -7,4 +7,5 @@ fi
 
 # User specific environment and startup programs
 export GOPATH=$HOME/.go
+export GOBIN=$HOME/.local/bin
 PATH=$PATH:$HOME/.local/bin:$HOME/bin:$GOPATH/bin
