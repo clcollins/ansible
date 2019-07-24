@@ -1,6 +1,10 @@
 ---
 # file: roles/common/vars/main.yml
 
+helpful_packages:
+  - jq
+  - the_silver_searcher # ie: ag
+
 system_management_packages:
   - ansible
   - git

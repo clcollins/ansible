@@ -59,11 +59,13 @@
     - userConfig
     - binFiles
 
-- name: install management packages
+- name: install common packages
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ system_management_packages }}"
+  with_items:
+    - "{{ system_management_packages }}"
+    - "{{ helpful_packages }}"
   become: true
   tags:
     - packages
