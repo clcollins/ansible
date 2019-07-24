@@ -4,6 +4,7 @@
 helpful_packages:
   - jq
   - the_silver_searcher # ie: ag
+  - tmux
 
 system_management_packages:
   - ansible
