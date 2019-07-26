@@ -3,9 +3,11 @@
 
 minishift_release_version: 1.34.1
 minishift_tarball: /tmp/minishift.tgz
-minishift_kvm_dependencies:
+minishift_kvm_package_dependencies:
   - libvirt
   - qemu
+minishift_kvm_package_helpers:
+  - virt-manager
 minishift_kvm_driver_url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-centos7
 minishift_kvm_driver_dest: /usr/local/bin/docker-machine-driver-kvm
 

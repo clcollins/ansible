@@ -5,7 +5,9 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ minishift_kvm_dependencies }}"
+  with_items:
+    - "{{ minishift_kvm_package_dependencies }}"
+    - "{{ minishift_kvm_package_helpers }}"
   become: true
   tags:
     - minishift
