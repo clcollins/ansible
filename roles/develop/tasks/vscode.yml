@@ -1,0 +1,35 @@
+---
+# file: roles/develop/tasks/vscode.yml
+
+- name: import repo GPG key
+  rpm_key:
+    state: present
+    key: https://packages.microsoft.com/keys/microsoft.asc
+  become: true
+  tags:
+    - editors
+    - vscode
+    - yum_repos
+
+- name: setup vscode repository
+  yum_repository:
+    name: code
+    description: Visual Studio Code
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc 
+  become: true
+  tags:
+    - editors
+    - vscode
+    - yum_repos
+
+- name: install vscode
+  package:
+    name: code
+    state: present
+  become: true
+  tags:
+    - editors
+    - vscode

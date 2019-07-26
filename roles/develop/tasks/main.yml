@@ -2,6 +2,8 @@
 # file: roles/develop/tasks/main.yml
 
 - import_tasks: atom.yml
+- import_tasks: vscode.yml
+- import_tasks: glide.yml
 
 
 # install build deps?  configure, make, etc?

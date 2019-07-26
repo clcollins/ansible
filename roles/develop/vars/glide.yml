@@ -1,0 +1,5 @@
+---
+# file: roles/develop/vars/glide.yml
+
+glide_release_version: 0.13.2
+glide_tarball: /tmp/glide.tgz
