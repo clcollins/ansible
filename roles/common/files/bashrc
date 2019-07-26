@@ -7,6 +7,16 @@ then
 	source /etc/bashrc
 fi
 
+# Start tmux if..
+if command -v tmux &> /dev/null \
+  && [ -n "$PS1" ] \
+  && [[ ! "$TERM" =~ screen ]] \
+  && [[ ! "$TERM" =~ tmux ]] \
+  && [ -z "$TMUX" ]
+then
+  exec tmux
+fi
+
 alias osudo="oc --as=system:admin $@"
 
 # Use the time binary
