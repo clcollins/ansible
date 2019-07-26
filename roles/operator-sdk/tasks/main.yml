@@ -1,0 +1,47 @@
+---
+# file: roles/operator-sdk/tasks/main.yml
+
+#- name: install operator-sdk dependencies
+#  package:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - "{{ operator_sdk_package_dependencies }}"
+#  become: true
+#  tags:
+#    - operator_sdk
+
+- name: download Operator-SDK release
+  get_url:
+    url: "https://github.com/operator-framework/operator-sdk/releases/download/{{ operator_sdk_release_version }}/operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu"
+    dest: "/tmp/operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu"
+    mode: '0755'
+  tags:
+    - operator_sdk
+
+- name: download Operator-SDK asc file
+  get_url:
+    url: "https://github.com/operator-framework/operator-sdk/releases/download/{{ operator_sdk_release_version }}/operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu.asc"
+    dest: "/tmp/operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu.asc"
+  tags:
+    - operator_sdk
+
+- name: verify the downloaded binary
+  command: 
+    argv:
+      - gpg
+      - --verify
+      - "operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu.asc"
+    args:
+      chdir: /tmp/
+  register: verification_results
+  tags:
+    - operator_sdk
+
+- name: debug
+  debug:
+    msg: "{{ verification_results }}"
+  tags:
+    - operator_sdk
+
+

@@ -1,0 +1,7 @@
+---
+# file: roles/operator-sdk/vars/main.yml
+
+operator_sdk_package_dependencies:
+  - golang
+
+operator_sdk_release_version: v0.8.2
