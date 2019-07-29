@@ -10,3 +10,38 @@ system_management_packages:
   - ansible
   - git
   - restic
+
+vim_plugins:
+  - name: Dockerfile Vim
+    repo: https://github.com/ekalinin/Dockerfile.vim.git
+    version: master
+    dest: Dockerfile
+  - name: Vim Puppet
+    repo: https://github.com/rodjek/vim-puppet.git
+    version: master
+    dest: vim-puppet
+  - name: Syntastic
+    repo: https://github.com/scrooloose/syntastic.git
+    version: 3.8.0
+    dest: systastic
+  - name: Tabular
+    repo: https://github.com/godlygeek/tabular.git
+    version: 1.0.0
+    dest: tabular
+  - name: Vim Go
+    repo: https://github.com/fatih/vim-go
+    version: v1.12
+    dest: vim-go
+  - name: Vim Markdown
+    repo: https://github.com/plasticboy/vim-markdown.git
+    version: HEAD
+    dest: vim-markdown
+  - name: Ansible Vim
+    repo: https://github.com/pearofducks/ansible-vim.git
+    version: 1.0
+    dest: ansible-vim
+  - name: Python-Flake8
+    repo: https://github.com/nvie/vim-flake8.git
+    version: 1.6
+    dest: vim-flake8
+ 

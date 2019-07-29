@@ -13,6 +13,7 @@
     state: present
     key: https://github.com/clcollins.keys
   tags:
+    - userConfig
     - ssh
 
 - name: Create .bashrc
@@ -25,6 +26,7 @@
   tags:
     - userConfig
     - dotFiles
+    - bash
 
 - name: Create .bash_profile
   copy:
@@ -36,6 +38,7 @@
   tags:
     - userConfig
     - dotFiles
+    - bash
 
 - name: Create .toprc
   copy:
@@ -47,6 +50,7 @@
   tags:
     - userConfig
     - dotFiles`
+    - top
 
 - name: Copy local binfiles
   copy:
@@ -78,5 +82,49 @@
     mode: '0755'
     state: directory
   tags:
+    - userConfig
+    - dotFiles
     - systemd
 
+- name: copy .vimrc file
+  copy:
+    src: vimrc
+    dest: "{{ homedir }}/.vimrc"
+  tags:
+    - userConfig
+    - dotFiles
+    - vim 
+
+- name: Vim config  | create Pathogen dirs
+  file:
+    path: "{{ homedir }}/.vim/{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - bundle
+    - autoload
+  tags:
+    - userConfig
+    - vim
+
+- name: Vim config | install Pathogen
+  get_url:
+    url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+    dest: "{{ homedir }}/.vim/autoload/pathogen.vim"
+    checksum: sha256:b05ef1d37eaf81a93ee07f52e443e0b53ea24eaef752e918763d2eff7758d70e
+  tags:
+    - userConfig
+    - vim
+
+- name: Install Vim plugins
+  git:
+    repo: "{{ item.repo }}"
+    version: "{{ item.version }}"
+    dest: "{{ homedir }}/.vim/bundle/{{ item.dest }}"
+    accept_hostkey: yes
+    depth: 1
+  with_items: "{{ vim_plugins }}"
+  tags:
+    - userConfig
+    - vim
+    
