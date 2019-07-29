@@ -109,9 +109,9 @@
 
 - name: Vim config | install Pathogen
   get_url:
-    url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-    dest: "{{ homedir }}/.vim/autoload/pathogen.vim"
-    checksum: sha256:b05ef1d37eaf81a93ee07f52e443e0b53ea24eaef752e918763d2eff7758d70e
+    url: "{{ pathogen_vim.url }}"
+    dest: "{{ homedir }}/.vim/autoload/{{ pathogen_vim.dest }}"
+    checksum: "{{ pathogen_vim.checksum }}"
   tags:
     - userConfig
     - vim

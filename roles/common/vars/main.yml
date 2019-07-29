@@ -5,11 +5,17 @@ helpful_packages:
   - jq
   - the_silver_searcher # ie: ag
   - tmux
+  - vim-enhanced
 
 system_management_packages:
   - ansible
   - git
   - restic
+
+pathogen_vim:
+  url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+  dest: pathogen-vim
+  checksum: sha256:72a3f5db89ab36a207ea1a613a2afacd072ffd0f75da63fb74f0010f841d44b3
 
 vim_plugins:
   - name: Dockerfile Vim
