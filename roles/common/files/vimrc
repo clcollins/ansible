@@ -1,8 +1,6 @@
-" Pathogen load
 filetype off
 
-call pathogen#infect()
-call pathogen#helptags()
+execute pathogen#infect()
 
 syntax on
 
