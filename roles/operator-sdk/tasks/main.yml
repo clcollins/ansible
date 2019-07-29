@@ -32,8 +32,8 @@
       - gpg
       - --verify
       - "operator-sdk-{{ operator_sdk_release_version }}-x86_64-linux-gnu.asc"
-    args:
-      chdir: /tmp/
+  args:
+    chdir: /tmp/
   register: verification_results
   tags:
     - operator_sdk
