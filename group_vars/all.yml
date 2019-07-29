@@ -1,6 +1,9 @@
 ---
 # file: group_vars/all.yml
 
+# Everything Fedora 30 (so...everything)
+ansible_python_interpreter: /usr/bin/python3
+
 packages_common:
   - git
   - ansible
