@@ -3,7 +3,8 @@
 - hosts: work
   roles:
     - common
-#    - package-repositories
+    - package-repositories
+    - audio-video
     - kube-tools
     - minishift
     - operator-sdk

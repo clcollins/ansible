@@ -1,0 +1,7 @@
+---
+# file: roles/audio-video/vars/main.yml
+
+av_codec_packages:
+  - ffmpeg
+  - gstreamer1-libav
+  - gstreamer1-plugin-openh264

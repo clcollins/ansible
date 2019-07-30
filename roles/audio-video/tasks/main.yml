@@ -1,0 +1,14 @@
+---
+# file: audio-video/tasks/main.yml
+
+- name: install AV codec packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ av_codec_packages }}"
+  become: true
+  tags:
+    - packages
+    - audio_video
+
