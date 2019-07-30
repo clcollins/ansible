@@ -70,6 +70,7 @@
   with_items:
     - "{{ system_management_packages }}"
     - "{{ helpful_packages }}"
+    - "{{ font_packages }}"
   become: true
   tags:
     - packages

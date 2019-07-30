@@ -7,6 +7,13 @@ helpful_packages:
   - tmux
   - vim-enhanced
 
+font_packages:
+  - google-droid-sans-mono-fonts
+  - google-droid-sans-fonts
+  - google-droid-serif-fonts
+  - google-droid-kufi-fonts
+  - google-android-emoji-fonts
+
 system_management_packages:
   - ansible
   - git
