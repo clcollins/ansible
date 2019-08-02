@@ -4,6 +4,7 @@
   roles:
     - common
     - package-repositories
+    - desktop-apps
     - audio-video
     - kube-tools
     - minishift
