@@ -9,14 +9,6 @@
 
 - import_tasks: vscode.yml
 
-- name: install Pomodoro timer extension
-  package:
-    name: "{{ pomodoro_package }}"
-    state: present
-  become: true
-  tags:
-    - packages
-
 # install build deps?  configure, make, etc?
 
 # make ~/Projects

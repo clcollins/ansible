@@ -3,5 +3,3 @@
 
 glide_release_version: v0.13.3
 glide_tarball: /tmp/glide.tgz
-
-pomodoro_package: gnome-shell-extension-pomodoro
