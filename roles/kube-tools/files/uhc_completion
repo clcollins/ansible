@@ -1,0 +1,1277 @@
+# bash completion for uhc                                  -*- shell-script -*-
+
+__uhc_debug()
+{
+    if [[ -n ${BASH_COMP_DEBUG_FILE} ]]; then
+        echo "$*" >> "${BASH_COMP_DEBUG_FILE}"
+    fi
+}
+
+# Homebrew on Macs have version 1.3 of bash-completion which doesn't include
+# _init_completion. This is a very minimal version of that function.
+__uhc_init_completion()
+{
+    COMPREPLY=()
+    _get_comp_words_by_ref "$@" cur prev words cword
+}
+
+__uhc_index_of_word()
+{
+    local w word=$1
+    shift
+    index=0
+    for w in "$@"; do
+        [[ $w = "$word" ]] && return
+        index=$((index+1))
+    done
+    index=-1
+}
+
+__uhc_contains_word()
+{
+    local w word=$1; shift
+    for w in "$@"; do
+        [[ $w = "$word" ]] && return
+    done
+    return 1
+}
+
+__uhc_handle_reply()
+{
+    __uhc_debug "${FUNCNAME[0]}"
+    case $cur in
+        -*)
+            if [[ $(type -t compopt) = "builtin" ]]; then
+                compopt -o nospace
+            fi
+            local allflags
+            if [ ${#must_have_one_flag[@]} -ne 0 ]; then
+                allflags=("${must_have_one_flag[@]}")
+            else
+                allflags=("${flags[*]} ${two_word_flags[*]}")
+            fi
+            while IFS='' read -r c; do
+                COMPREPLY+=("$c")
+            done < <(compgen -W "${allflags[*]}" -- "$cur")
+            if [[ $(type -t compopt) = "builtin" ]]; then
+                [[ "${COMPREPLY[0]}" == *= ]] || compopt +o nospace
+            fi
+
+            # complete after --flag=abc
+            if [[ $cur == *=* ]]; then
+                if [[ $(type -t compopt) = "builtin" ]]; then
+                    compopt +o nospace
+                fi
+
+                local index flag
+                flag="${cur%=*}"
+                __uhc_index_of_word "${flag}" "${flags_with_completion[@]}"
+                COMPREPLY=()
+                if [[ ${index} -ge 0 ]]; then
+                    PREFIX=""
+                    cur="${cur#*=}"
+                    ${flags_completion[${index}]}
+                    if [ -n "${ZSH_VERSION}" ]; then
+                        # zsh completion needs --flag= prefix
+                        eval "COMPREPLY=( \"\${COMPREPLY[@]/#/${flag}=}\" )"
+                    fi
+                fi
+            fi
+            return 0;
+            ;;
+    esac
+
+    # check if we are handling a flag with special work handling
+    local index
+    __uhc_index_of_word "${prev}" "${flags_with_completion[@]}"
+    if [[ ${index} -ge 0 ]]; then
+        ${flags_completion[${index}]}
+        return
+    fi
+
+    # we are parsing a flag and don't have a special handler, no completion
+    if [[ ${cur} != "${words[cword]}" ]]; then
+        return
+    fi
+
+    local completions
+    completions=("${commands[@]}")
+    if [[ ${#must_have_one_noun[@]} -ne 0 ]]; then
+        completions=("${must_have_one_noun[@]}")
+    fi
+    if [[ ${#must_have_one_flag[@]} -ne 0 ]]; then
+        completions+=("${must_have_one_flag[@]}")
+    fi
+    while IFS='' read -r c; do
+        COMPREPLY+=("$c")
+    done < <(compgen -W "${completions[*]}" -- "$cur")
+
+    if [[ ${#COMPREPLY[@]} -eq 0 && ${#noun_aliases[@]} -gt 0 && ${#must_have_one_noun[@]} -ne 0 ]]; then
+        while IFS='' read -r c; do
+            COMPREPLY+=("$c")
+        done < <(compgen -W "${noun_aliases[*]}" -- "$cur")
+    fi
+
+    if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
+		if declare -F __uhc_custom_func >/dev/null; then
+			# try command name qualified custom func
+			__uhc_custom_func
+		else
+			# otherwise fall back to unqualified for compatibility
+			declare -F __custom_func >/dev/null && __custom_func
+		fi
+    fi
+
+    # available in bash-completion >= 2, not always present on macOS
+    if declare -F __ltrim_colon_completions >/dev/null; then
+        __ltrim_colon_completions "$cur"
+    fi
+
+    # If there is only 1 completion and it is a flag with an = it will be completed
+    # but we don't want a space after the =
+    if [[ "${#COMPREPLY[@]}" -eq "1" ]] && [[ $(type -t compopt) = "builtin" ]] && [[ "${COMPREPLY[0]}" == --*= ]]; then
+       compopt -o nospace
+    fi
+}
+
+# The arguments should be in the form "ext1|ext2|extn"
+__uhc_handle_filename_extension_flag()
+{
+    local ext="$1"
+    _filedir "@(${ext})"
+}
+
+__uhc_handle_subdirs_in_dir_flag()
+{
+    local dir="$1"
+    pushd "${dir}" >/dev/null 2>&1 && _filedir -d && popd >/dev/null 2>&1 || return
+}
+
+__uhc_handle_flag()
+{
+    __uhc_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
+
+    # if a command required a flag, and we found it, unset must_have_one_flag()
+    local flagname=${words[c]}
+    local flagvalue
+    # if the word contained an =
+    if [[ ${words[c]} == *"="* ]]; then
+        flagvalue=${flagname#*=} # take in as flagvalue after the =
+        flagname=${flagname%=*} # strip everything after the =
+        flagname="${flagname}=" # but put the = back
+    fi
+    __uhc_debug "${FUNCNAME[0]}: looking for ${flagname}"
+    if __uhc_contains_word "${flagname}" "${must_have_one_flag[@]}"; then
+        must_have_one_flag=()
+    fi
+
+    # if you set a flag which only applies to this command, don't show subcommands
+    if __uhc_contains_word "${flagname}" "${local_nonpersistent_flags[@]}"; then
+      commands=()
+    fi
+
+    # keep flag value with flagname as flaghash
+    # flaghash variable is an associative array which is only supported in bash > 3.
+    if [[ -z "${BASH_VERSION}" || "${BASH_VERSINFO[0]}" -gt 3 ]]; then
+        if [ -n "${flagvalue}" ] ; then
+            flaghash[${flagname}]=${flagvalue}
+        elif [ -n "${words[ $((c+1)) ]}" ] ; then
+            flaghash[${flagname}]=${words[ $((c+1)) ]}
+        else
+            flaghash[${flagname}]="true" # pad "true" for bool flag
+        fi
+    fi
+
+    # skip the argument to a two word flag
+    if [[ ${words[c]} != *"="* ]] && __uhc_contains_word "${words[c]}" "${two_word_flags[@]}"; then
+			  __uhc_debug "${FUNCNAME[0]}: found a flag ${words[c]}, skip the next argument"
+        c=$((c+1))
+        # if we are looking for a flags value, don't show commands
+        if [[ $c -eq $cword ]]; then
+            commands=()
+        fi
+    fi
+
+    c=$((c+1))
+
+}
+
+__uhc_handle_noun()
+{
+    __uhc_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
+
+    if __uhc_contains_word "${words[c]}" "${must_have_one_noun[@]}"; then
+        must_have_one_noun=()
+    elif __uhc_contains_word "${words[c]}" "${noun_aliases[@]}"; then
+        must_have_one_noun=()
+    fi
+
+    nouns+=("${words[c]}")
+    c=$((c+1))
+}
+
+__uhc_handle_command()
+{
+    __uhc_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
+
+    local next_command
+    if [[ -n ${last_command} ]]; then
+        next_command="_${last_command}_${words[c]//:/__}"
+    else
+        if [[ $c -eq 0 ]]; then
+            next_command="_uhc_root_command"
+        else
+            next_command="_${words[c]//:/__}"
+        fi
+    fi
+    c=$((c+1))
+    __uhc_debug "${FUNCNAME[0]}: looking for ${next_command}"
+    declare -F "$next_command" >/dev/null && $next_command
+}
+
+__uhc_handle_word()
+{
+    if [[ $c -ge $cword ]]; then
+        __uhc_handle_reply
+        return
+    fi
+    __uhc_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
+    if [[ "${words[c]}" == -* ]]; then
+        __uhc_handle_flag
+    elif __uhc_contains_word "${words[c]}" "${commands[@]}"; then
+        __uhc_handle_command
+    elif [[ $c -eq 0 ]]; then
+        __uhc_handle_command
+    elif __uhc_contains_word "${words[c]}" "${command_aliases[@]}"; then
+        # aliashash variable is an associative array which is only supported in bash > 3.
+        if [[ -z "${BASH_VERSION}" || "${BASH_VERSINFO[0]}" -gt 3 ]]; then
+            words[c]=${aliashash[${words[c]}]}
+            __uhc_handle_command
+        else
+            __uhc_handle_noun
+        fi
+    else
+        __uhc_handle_noun
+    fi
+    __uhc_handle_word
+}
+
+_uhc_account_orgs()
+{
+    last_command="uhc_account_orgs"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--columns=")
+    two_word_flags+=("--columns")
+    local_nonpersistent_flags+=("--columns=")
+    flags+=("--padding=")
+    two_word_flags+=("--padding")
+    local_nonpersistent_flags+=("--padding=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_account_quota()
+{
+    last_command="uhc_account_quota"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--json")
+    local_nonpersistent_flags+=("--json")
+    flags+=("--org=")
+    two_word_flags+=("--org")
+    local_nonpersistent_flags+=("--org=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_account_roles()
+{
+    last_command="uhc_account_roles"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_account_status()
+{
+    last_command="uhc_account_status"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_account_users()
+{
+    last_command="uhc_account_users"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--org=")
+    two_word_flags+=("--org")
+    local_nonpersistent_flags+=("--org=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_account()
+{
+    last_command="uhc_account"
+
+    command_aliases=()
+
+    commands=()
+    commands+=("orgs")
+    commands+=("quota")
+    commands+=("roles")
+    commands+=("status")
+    commands+=("users")
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_cluster_describe()
+{
+    last_command="uhc_cluster_describe"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--json")
+    local_nonpersistent_flags+=("--json")
+    flags+=("--output")
+    local_nonpersistent_flags+=("--output")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_cluster_list()
+{
+    last_command="uhc_cluster_list"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--columns=")
+    two_word_flags+=("--columns")
+    local_nonpersistent_flags+=("--columns=")
+    flags+=("--header=")
+    two_word_flags+=("--header")
+    local_nonpersistent_flags+=("--header=")
+    flags+=("--managed")
+    local_nonpersistent_flags+=("--managed")
+    flags+=("--padding=")
+    two_word_flags+=("--padding")
+    local_nonpersistent_flags+=("--padding=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--step")
+    local_nonpersistent_flags+=("--step")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_cluster_login()
+{
+    last_command="uhc_cluster_login"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--username=")
+    two_word_flags+=("--username")
+    two_word_flags+=("-u")
+    local_nonpersistent_flags+=("--username=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_cluster_status()
+{
+    last_command="uhc_cluster_status"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_cluster()
+{
+    last_command="uhc_cluster"
+
+    command_aliases=()
+
+    commands=()
+    commands+=("describe")
+    commands+=("list")
+    commands+=("login")
+    commands+=("status")
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_completion()
+{
+    last_command="uhc_completion"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--help")
+    flags+=("-h")
+    local_nonpersistent_flags+=("--help")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_config_get()
+{
+    last_command="uhc_config_get"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_config_set()
+{
+    last_command="uhc_config_set"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_config()
+{
+    last_command="uhc_config"
+
+    command_aliases=()
+
+    commands=()
+    commands+=("get")
+    commands+=("set")
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_delete()
+{
+    last_command="uhc_delete"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--header=")
+    two_word_flags+=("--header")
+    local_nonpersistent_flags+=("--header=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_get()
+{
+    last_command="uhc_get"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--header=")
+    two_word_flags+=("--header")
+    local_nonpersistent_flags+=("--header=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--single")
+    local_nonpersistent_flags+=("--single")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_login()
+{
+    last_command="uhc_login"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--client-id=")
+    two_word_flags+=("--client-id")
+    local_nonpersistent_flags+=("--client-id=")
+    flags+=("--client-secret=")
+    two_word_flags+=("--client-secret")
+    local_nonpersistent_flags+=("--client-secret=")
+    flags+=("--insecure")
+    local_nonpersistent_flags+=("--insecure")
+    flags+=("--password=")
+    two_word_flags+=("--password")
+    local_nonpersistent_flags+=("--password=")
+    flags+=("--persistent")
+    local_nonpersistent_flags+=("--persistent")
+    flags+=("--scope=")
+    two_word_flags+=("--scope")
+    local_nonpersistent_flags+=("--scope=")
+    flags+=("--token=")
+    two_word_flags+=("--token")
+    local_nonpersistent_flags+=("--token=")
+    flags+=("--token-url=")
+    two_word_flags+=("--token-url")
+    local_nonpersistent_flags+=("--token-url=")
+    flags+=("--url=")
+    two_word_flags+=("--url")
+    local_nonpersistent_flags+=("--url=")
+    flags+=("--user=")
+    two_word_flags+=("--user")
+    local_nonpersistent_flags+=("--user=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_logout()
+{
+    last_command="uhc_logout"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_patch()
+{
+    last_command="uhc_patch"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--body=")
+    two_word_flags+=("--body")
+    local_nonpersistent_flags+=("--body=")
+    flags+=("--header=")
+    two_word_flags+=("--header")
+    local_nonpersistent_flags+=("--header=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_post()
+{
+    last_command="uhc_post"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--body=")
+    two_word_flags+=("--body")
+    local_nonpersistent_flags+=("--body=")
+    flags+=("--header=")
+    two_word_flags+=("--header")
+    local_nonpersistent_flags+=("--header=")
+    flags+=("--parameter=")
+    two_word_flags+=("--parameter")
+    local_nonpersistent_flags+=("--parameter=")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_token()
+{
+    last_command="uhc_token"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--header")
+    local_nonpersistent_flags+=("--header")
+    flags+=("--payload")
+    local_nonpersistent_flags+=("--payload")
+    flags+=("--refresh")
+    local_nonpersistent_flags+=("--refresh")
+    flags+=("--signature")
+    local_nonpersistent_flags+=("--signature")
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_version()
+{
+    last_command="uhc_version"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_whoami()
+{
+    last_command="uhc_whoami"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_uhc_root_command()
+{
+    last_command="uhc"
+
+    command_aliases=()
+
+    commands=()
+    commands+=("account")
+    commands+=("cluster")
+    commands+=("completion")
+    commands+=("config")
+    commands+=("delete")
+    commands+=("get")
+    commands+=("login")
+    commands+=("logout")
+    commands+=("patch")
+    commands+=("post")
+    commands+=("token")
+    commands+=("version")
+    commands+=("whoami")
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--alsologtostderr")
+    flags+=("--debug")
+    flags+=("--log_backtrace_at=")
+    two_word_flags+=("--log_backtrace_at")
+    flags+=("--log_dir=")
+    two_word_flags+=("--log_dir")
+    flags+=("--logtostderr")
+    flags+=("--stderrthreshold=")
+    two_word_flags+=("--stderrthreshold")
+    flags+=("--v=")
+    two_word_flags+=("--v")
+    two_word_flags+=("-v")
+    flags+=("--vmodule=")
+    two_word_flags+=("--vmodule")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+__start_uhc()
+{
+    local cur prev words cword
+    declare -A flaghash 2>/dev/null || :
+    declare -A aliashash 2>/dev/null || :
+    if declare -F _init_completion >/dev/null 2>&1; then
+        _init_completion -s || return
+    else
+        __uhc_init_completion -n "=" || return
+    fi
+
+    local c=0
+    local flags=()
+    local two_word_flags=()
+    local local_nonpersistent_flags=()
+    local flags_with_completion=()
+    local flags_completion=()
+    local commands=("uhc")
+    local must_have_one_flag=()
+    local must_have_one_noun=()
+    local last_command
+    local nouns=()
+
+    __uhc_handle_word
+}
+
+if [[ $(type -t compopt) = "builtin" ]]; then
+    complete -o default -F __start_uhc uhc
+else
+    complete -o default -o nospace -F __start_uhc uhc
+fi
+
+# ex: ts=4 sw=4 et filetype=sh

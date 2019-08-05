@@ -26,3 +26,13 @@
     mode: '0755'
   tags:
     - kubernetes
+
+- name: Add completion scripts
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/bash_completion.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
