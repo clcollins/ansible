@@ -33,3 +33,16 @@
   tags:
     - editors
     - vscode
+
+- name: increase user watches for VSCode file change watching
+  copy:
+    src: 01-sysctl-vscode.conf
+    dest: /etc/sysctl.d/01-sysctl-vscode.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: reload sysctl
+  tags:
+    - vscode
+    - sysctl
