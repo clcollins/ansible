@@ -2,6 +2,7 @@
 # file: roles/common/vars/main.yml
 
 helpful_packages:
+  - httpie
   - jq
   - the_silver_searcher # ie: ag
   - tmux
