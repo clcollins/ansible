@@ -52,6 +52,18 @@
     - dotFiles`
     - top
 
+- name: Create .tmux.conf
+  copy:
+    src: tmux.conf
+    dest: "{{ homedir }}/.tmux.conf"
+    owner: "{{ ansible_env['USER'] }}"
+    group: "{{ ansible_env['USER'] }}"
+    mode: 0644
+  tags:
+    - userConfig
+    - dotFiles`
+    - tmux
+
 - name: Copy local binfiles
   copy:
     src: bin/
