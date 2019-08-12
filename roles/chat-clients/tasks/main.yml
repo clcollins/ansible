@@ -1,0 +1,42 @@
+---
+# file: roles/chat-clients/tasks/main.yml
+
+- name: import skack repo GPG key
+  rpm_key:
+    state: present
+    key: https://packagecloud.io/gpg.key
+  become: true
+  tags:
+    - chat_clients
+    - slack
+    - yum_repos
+
+- name: setup slack repository
+  yum_repository:
+    name: slack
+    description: Slack
+    baseurl: https://packagecloud.io/slacktechnologies/slack/fedora/21/x86_64
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://packagecloud.io/gpg.key
+    sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+    sslverify: yes
+  become: true
+  tags:
+    - chat_clients
+    - slack
+    - yum_repos
+
+- name: install chat clients
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - slack
+    - discord
+  tags:
+    - chat_clients
+    - slack
+    - discord
+
