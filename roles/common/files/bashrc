@@ -8,14 +8,15 @@ then
 fi
 
 # Start tmux if..
-if command -v tmux &> /dev/null \
-  && [ -n "$PS1" ] \
-  && [[ ! "$TERM" =~ screen ]] \
-  && [[ ! "$TERM" =~ tmux ]] \
-  && [ -z "$TMUX" ]
-then
-  exec tmux
-fi
+# Disabled for now - not sure I like the auto-startup
+# if command -v tmux &> /dev/null \
+#   && [ -n "$PS1" ] \
+#   && [[ ! "$TERM" =~ screen ]] \
+#   && [[ ! "$TERM" =~ tmux ]] \
+#   && [ -z "$TMUX" ]
+# then
+#   exec tmux
+# fi
 
 alias osudo="oc --as=system:admin $@"
 
