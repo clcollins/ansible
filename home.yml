@@ -4,6 +4,7 @@
   roles:
     - common
     - package-repositories
+    - chat-clients
     - steam
     - dwarffortress
     - conky
