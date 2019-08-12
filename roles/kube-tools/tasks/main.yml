@@ -34,5 +34,9 @@
     owner: root
     group: root
     mode: 0644
+  with_items:
+    - kubectl_completion
+    - oc_completion
+    - uhc_completion
   become: true
 
