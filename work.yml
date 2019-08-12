@@ -4,7 +4,9 @@
 - hosts: work
   roles:
     - common
+    - conky
     - package-repositories
+    - chat-clients
     - desktop-apps
     - audio-video
     - kube-tools
