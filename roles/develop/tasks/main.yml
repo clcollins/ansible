@@ -9,6 +9,17 @@
 
 - import_tasks: vscode.yml
 
+- name: install gvm dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ gvm_package_dependencies }}"
+  become: true
+  tags:
+    - golang
+    - gvm
+
 # install build deps?  configure, make, etc?
 
 # make ~/Projects

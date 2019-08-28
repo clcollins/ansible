@@ -3,3 +3,11 @@
 
 glide_release_version: v0.13.3
 glide_tarball: /tmp/glide.tgz
+
+gvm_package_dependencies:
+  - curl
+  - git
+  - make
+  - bison
+  - gcc
+  - glibc-devel
