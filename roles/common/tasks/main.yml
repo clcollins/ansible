@@ -141,3 +141,16 @@
     - userConfig
     - vim
     
+- name: Add completion scripts
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/bash_completion.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - hub_completion
+  become: true
+  tags:
+    - completion
+

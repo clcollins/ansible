@@ -5,6 +5,9 @@ if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
 
+# Alias hub (github.com/github.hub) around git
+eval "$(hub alias -s)"
+
 # User specific environment and startup programs
 export GOPATH=$HOME/.go
 export GOBIN=$HOME/.local/bin
