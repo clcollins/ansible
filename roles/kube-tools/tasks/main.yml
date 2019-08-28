@@ -37,6 +37,6 @@
   with_items:
     - kubectl_completion
     - oc_completion
-    - uhc_completion
+    - ocm_completion
   become: true
 
