@@ -4,6 +4,9 @@
 glide_release_version: v0.13.3
 glide_tarball: /tmp/glide.tgz
 
+python_development_tools:
+  - pipenv
+
 gvm_package_dependencies:
   - curl
   - git

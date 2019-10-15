@@ -20,6 +20,16 @@
     - golang
     - gvm
 
+- name: install python development tools
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ python_development_tools }}"
+  become: true
+  tags:
+    - python
+
 # install build deps?  configure, make, etc?
 
 # make ~/Projects
