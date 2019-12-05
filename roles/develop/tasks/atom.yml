@@ -1,9 +1,11 @@
 ---
 # file: roles/develop/tasks/atom.yml
 
+# Atom replaced by Visual Studio Code
+
 - name: import repo GPG key
   rpm_key:
-    state: present
+    state: absent
     key:  https://packagecloud.io/AtomEditor/atom/gpgkey
   become: true
   tags:
@@ -13,6 +15,7 @@
 
 - name: setup Atom repository
   yum_repository:
+    state: absent
     name: atom-editor
     description: Atom Editor repository
     baseurl: https://packagecloud.io/AtomEditor/atom/el/7/$basearch
@@ -29,7 +32,7 @@
 - name: install Atom
   package:
     name: atom
-    state: present
+    state: absent
   become: true
   tags:
     - editors
