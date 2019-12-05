@@ -8,7 +8,7 @@ circumstances, unpack a new DF on top of an older one.
 
 Change this to turn sound off.
 
-[SOUND:YES]
+[SOUND:NO]
 
 The sound volume runs from 0 (off) to 255 (full).  You can set the volume from the ESC options menu as well.
 
@@ -20,22 +20,22 @@ Change this to skip the wonderful intro movies.
 
 This lets you set the starting windowed/fullscreen setting.  Can be YES, NO or PROMPT.
 
-[WINDOWED:NO]
+[WINDOWED:YES]
 
 This is the size and font for windowed mode.  Changing to the 800x600 font might make you happier.
 If set below 256x256 it specifies the grid size instead, with a minimum of 80x25.
 
-[WINDOWEDX:80]
-[WINDOWEDY:25]
-[FONT:hack_square_64x64.png]
+[WINDOWEDX:3840]
+[WINDOWEDY:2160]
+[FONT:curses_square_64x64.png]
 
 You may disable window resizing if you wish.
 [RESIZABLE:YES]
 
 Full screen info.  The 0s below mean that the game will choose a resolution for you, but you can set it yourself as well.
 
-[FULLSCREENX:0]
-[FULLSCREENY:0]
+FULLSCREENX:3840]
+[FULLSCREENY:2160
 [FULLFONT:curses_square_64x64.png]
 
 If this is set to NO, tiles will be stretched to fit the screen if there is a resolution mismatch.
