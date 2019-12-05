@@ -1,0 +1,20 @@
+---
+# file: roles/lutris/tasks/main.yml
+
+- name: install lutris
+  package:
+    name: lutris
+    state: present
+  become: true
+  tags:
+    - gaming
+    - lutris
+
+- name: install WoW deps for Lutris
+  package:
+    name: "{{ lutris_world_of_warcraft_deps }}"
+    state: present
+  become: true
+  tags:
+    - gaming
+    - lutris

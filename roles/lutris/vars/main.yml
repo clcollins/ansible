@@ -1,0 +1,11 @@
+---
+# file: roles/lutris/vars/main.yml
+
+lutris_world_of_warcraft_deps:
+  - gnutls
+  - gnutls-devel
+  - openldap
+  - openldap-devel
+  - libgpg-error
+  - sqlite2.i686
+  - sqlite2.x86_64
