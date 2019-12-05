@@ -1,10 +1,16 @@
+#!/usr/bin/env ansible-playbook
 ---
 # file: work.yml
 - hosts: zaphod
   roles:
     - common
+    - conky
     - package-repositories
     - chat-clients
     - steam
+    - lutris
     - dwarffortress
-    - conky
+    - desktop-apps
+    - audio-video
+    - kube-tools
+    - minishift
