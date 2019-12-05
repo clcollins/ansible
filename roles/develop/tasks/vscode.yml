@@ -13,6 +13,7 @@
 
 - name: setup vscode repository
   yum_repository:
+    state: present
     name: code
     description: Visual Studio Code
     baseurl: https://packages.microsoft.com/yumrepos/vscode
