@@ -30,6 +30,16 @@
   tags:
     - python
 
+- name: install helper tools
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - hub
+  become: true
+  tags:
+    - hub
+
 # install build deps?  configure, make, etc?
 
 # make ~/Projects
