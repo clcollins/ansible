@@ -4,6 +4,7 @@
 - hosts: zaphod
   roles:
     - common
+    - sshd
     - conky
     - package-repositories
     - chat-clients

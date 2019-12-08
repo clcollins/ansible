@@ -1,0 +1,32 @@
+---
+# file: roles/sshd/tasks/main.yml
+
+  - name: Ensure SSH daemon is installed
+    package:
+      name: openssh-server
+      state: present
+    become: true
+    tags:
+      - sshd
+  
+  - name: Copy sshd_config
+    copy:
+      src: sshd_config
+      dest: /etc/ssh/sshd_config
+      owner: root
+      group: root
+      mode: 0600
+    become: true
+    tags:
+      - sshd
+  
+  - name:  Enable sshd service
+    systemd:
+      name: sshd.service
+      scope: system
+      enabled: yes
+      state: started
+    become: true
+    tags:
+      - sshd
+  
