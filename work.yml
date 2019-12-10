@@ -4,6 +4,7 @@
 - hosts: work
   roles:
     - common
+    - motd
     - conky
     - package-repositories
     - chat-clients
