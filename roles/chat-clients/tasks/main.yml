@@ -17,8 +17,9 @@
     description: Slack
     baseurl: https://packagecloud.io/slacktechnologies/slack/fedora/21/x86_64
     enabled: yes
-    gpgcheck: yes
-    gpgkey: https://packagecloud.io/gpg.key
+    gpgcheck: no
+    repo_gpgcheck: yes
+    gpgkey: https://packagecloud.io/slacktechnologies/slack/gpgkey
     sslcacert: /etc/pki/tls/certs/ca-bundle.crt
     sslverify: yes
   become: true
