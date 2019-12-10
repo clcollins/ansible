@@ -4,14 +4,20 @@ all:
     marvin:
       ansible_host: 192.168.2.64
       hostname: marvin
+      motd: "Here I am, brain the size of a planet, and they tell me to handle your SSH session..."
     zaphod:
       ansible_host: 192.168.2.63
       ansible_connection: local
       hostname: zaphod
+      motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     pie_3_placeholder_0:
+      motd: "Cherry, baby!"
     pie_3_placeholder_1:
+      motd: "Strawberry, baby!"
     pie_3_com_placeholder_0:
+      motd: "Blueberry, baby!"
     pie_4_placeholder_0:
+      motd: "Peach, baby!"
   children:
     raspberry_pies:
       children:

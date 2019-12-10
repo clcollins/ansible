@@ -1,0 +1,14 @@
+---
+# file: roles/motd/tasks/main.yml
+
+- name: Copy motd template
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  tags:
+    - motd
+
