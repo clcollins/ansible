@@ -5,6 +5,7 @@
   roles:
     - common
     - sshd
+    - motd
     - conky
     - package-repositories
     - chat-clients
