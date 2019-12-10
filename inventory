@@ -10,30 +10,21 @@ all:
       ansible_connection: local
       hostname: zaphod
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
-    pie_3_placeholder_0:
-      motd: "Cherry, baby!"
-    pie_3_placeholder_1:
-      motd: "Strawberry, baby!"
-    pie_3_com_placeholder_0:
+    blueberry:
+      ansible_host: 192.168.2.67
+      hostname: blueberry
       motd: "Blueberry, baby!"
-    pie_4_placeholder_0:
-      motd: "Peach, baby!"
   children:
-    raspberry_pies:
+    raspberry_pis:
       children:
-        pie_3s:
-        pie_com_3s: 
-        pie_4s:
-    pie_3s:
+        pi_3s:
+        pi_com_3s:
+        pi_4s:
+    pi_3s:
       hosts:
-        pie_3_placeholder_0:
-        pie_3_placeholder_1:
-    pie_com_3s:
+        blueberry:
+    pi_4s:
       hosts:
-        pie_com_3_placeholder_0:
-    pie_4s:
-      hosts:
-        pie_4_placeholder_0:
     laptops:
       hosts: 
         marvin:
