@@ -1,0 +1,5 @@
+---
+# file: rpi.yml
+- hosts: raspberry_pis
+  roles:
+    - base
