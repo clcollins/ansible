@@ -3,6 +3,7 @@
 # file: work.yml
 - hosts: work
   roles:
+    - base
     - common
     - motd
     - conky
