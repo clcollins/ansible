@@ -1,8 +1,9 @@
 #!/usr/bin/env ansible-playbook
 ---
-# file: work.yml
+# file: home.yml
 - hosts: zaphod
   roles:
+    - base
     - common
     - sshd
     - motd
