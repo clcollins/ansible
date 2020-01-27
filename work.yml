@@ -7,6 +7,7 @@
     - common
     - motd
     - conky
+    - dwarffortress
     - package-repositories
     - chat-clients
     - desktop-apps

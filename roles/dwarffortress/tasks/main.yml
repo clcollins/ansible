@@ -21,18 +21,12 @@
   # From http://www.bay12forums.com/smf/index.php?topic=158914.0
   - name: DwarfFortress Config Files | DF tile
     copy:
-      src: hack_square_64x64.png
-      dest: "{{ ansible_env.HOME }}/.dwarffortress/data/art/hack_square_64x64.png"
-    tags:
-      - packages
-      - config_files
-      - dwarffortress
-
-  # DF package creates an "art" dir in the art dir...wtf
-  - name: DwarfFortress Config Files | DF tile
-    copy:
-      src: hack_square_64x64.png
-      dest: "{{ ansible_env.HOME }}/.dwarffortress/data/art/art/hack_square_64x64.png"
+      src: "{{ item }}"
+      dest: "{{ ansible_env.HOME }}/.dwarffortress/data/art/{{ item }}"
+    with_items:
+      - hack_square_64x64.png
+      - curses_square_64x64.png
+      - curses_square_32x32.png
     tags:
       - packages
       - config_files
