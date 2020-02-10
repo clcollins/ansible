@@ -1,12 +1,6 @@
 ---
 # file: common/tasks/main.yml
 
-- name: Set hostname
-  hostname:
-    name: "{{ hostname }}"
-  tags:
-    - administration
-
 - name: Create .bashrc
   copy:
     src: bashrc

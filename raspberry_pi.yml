@@ -1,5 +1,7 @@
+#!/usr/bin/env ansible-playbook
 ---
 # file: rpi.yml
 - hosts: raspberry_pis
   roles:
     - base
+    - sshd

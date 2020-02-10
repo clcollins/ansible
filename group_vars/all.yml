@@ -1,6 +1,19 @@
 ---
 # file: group_vars/all.yml
 
+user_groups:
+  - wheel
+  - chris
+
+users:
+  - name: chris
+    comment: "Chris Collins"
+    group: chris
+    groups: wheel
+    append: yes
+    home: /home/chris
+    shell: /bin/bash
+
 # Everything Fedora 30 (so...everything)
 ansible_python_interpreter: /usr/bin/python3
 

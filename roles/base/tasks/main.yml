@@ -1,11 +1,57 @@
 # file: base/tasks/main.yml
 
+- name: System Info
+  debug:
+    msg: "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}"
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+  tags:
+    - administration
+  when: hostname is defined
+  become: True
+
+- name: Ensure groups exist
+  group:
+    name: "{{ item }}"
+    state: present
+  tags:
+    - groupConfig
+  with_items: "{{ user_groups }}"
+  become: True
+
+- name: Ensure users exist
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    group: "{{ item.group }}"
+    home: "{{ item.home }}"
+    shell: "{{ item.shell }}"
+  tags:
+    - userConfig
+  with_items: "{{ users }}"
+  become: True
+
 - name: Copy authorized_keys
   authorized_key:
-    user: "{{ ansible_env['USER'] }}"
+    user: "{{ item.name }}"
     state: present
     key: https://github.com/clcollins.keys
+    manage_dir: yes
   tags:
     - userConfig
     - ssh
+  with_items: "{{ users }}"
+  become: True
+
+- name: Make sudoers
+  template:
+    src: 010_sudoers-nopasswd.j2
+    dest: /etc/sudoers.d/010_sudoers-nopasswd
+    owner: root
+    group: root
+    mode: '0600'
+    validate: /usr/sbin/visudo -cf %s
+  become: True
 

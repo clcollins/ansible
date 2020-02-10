@@ -1,14 +1,23 @@
 ---
 # file: roles/sshd/tasks/main.yml
+  - name: gather os specific variables
+    include_vars: "{{ item }}"
+    with_first_found:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+      - "{{ ansible_distribution }}.yml"
+      - defaults.yml
+    tags:
+      - sshd
+      - vars
 
   - name: Ensure SSH daemon is installed
     package:
-      name: openssh-server
+      name: "{{ sshd_package_name }}"
       state: present
     become: true
     tags:
       - sshd
-  
+
   - name: Copy sshd_config
     copy:
       src: sshd_config
@@ -19,10 +28,10 @@
     become: true
     tags:
       - sshd
-  
+
   - name:  Enable sshd service
     systemd:
-      name: sshd.service
+      name: "{{ sshd_service_name }}"
       scope: system
       enabled: yes
       state: started

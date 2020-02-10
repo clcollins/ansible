@@ -11,9 +11,28 @@ all:
       hostname: zaphod
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     blueberry:
-      ansible_host: 192.168.2.67
+      ansible_host: 192.168.2.110
       hostname: blueberry
       motd: "Blueberry, baby!"
+    peach:
+      ansible_host: 192.168.2.109
+      hostname: peach
+      motd: "I'm Waiting for my Mario to save me."
+    huckleberry:
+      ansible_host: 192.168.2.112
+      # ansible_user: pi
+      hostname: huckleberry
+      motd: "I'm your huckleberry."
+    elderberry:
+      ansible_host: 192.168.2.114
+      # ansible_user: pi
+      hostname: elderberry
+      motd: "...And your mother smelt of elderberries!"
+    gooseberry:
+      ansible_host: 192.168.2.116
+      # ansible_user: pi
+      hostname: gooseberry
+      motd: "Gooseberries should be mainstream berries!"
   children:
     raspberry_pis:
       children:
@@ -23,8 +42,12 @@ all:
     pi_3s:
       hosts:
         blueberry:
+        peach:
     pi_4s:
       hosts:
+        huckleberry:
+        elderberry:
+        gooseberry:
     laptops:
       hosts: 
         marvin:
