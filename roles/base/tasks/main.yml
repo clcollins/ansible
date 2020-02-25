@@ -54,6 +54,8 @@
   when: hostvars[item].ansible_host is defined
   with_items: "{{ groups.all }}"
   become: True
+  tags:
+    - etc_hosts
 
 - name: Add own hostname for localhost
   lineinfile:
@@ -64,6 +66,8 @@
   with_items:
     - 127.0.1.1
   become: True
+  tags:
+    - etc_hosts
 
 - name: Remove default RPi hostname from /etc/hosts
   lineinfile:
@@ -71,3 +75,5 @@
     regexp: '^127.0.1.1.*raspberrypi$'
     state: absent
   become: True
+  tags:
+    - etc_hosts
