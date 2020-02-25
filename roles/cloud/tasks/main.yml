@@ -1,0 +1,17 @@
+# file: cloud/tasks/main.yml
+
+- name: Make sudoers
+  copy:
+    src: 010-wheel-nopasswd
+    dest: /etc/sudoers.d/010-wheel-nopasswd
+    owner: root
+    group: root
+    mode: '0660'
+  become: True
+
+- name: Remove Legacy sudoers
+  file:
+    path: /etc/sudoers.d/010_sudoers-nopasswd
+    state: absent
+  become: True
+
