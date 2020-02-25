@@ -45,13 +45,29 @@
   with_items: "{{ users }}"
   become: True
 
-- name: Make sudoers
-  template:
-    src: 010_sudoers-nopasswd.j2
-    dest: /etc/sudoers.d/010_sudoers-nopasswd
-    owner: root
-    group: root
-    mode: '0600'
-    validate: /usr/sbin/visudo -cf %s
+- name: Add IP address of all hosts to all hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.all }}"
   become: True
 
+- name: Add own hostname for localhost
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ hostname }}$'
+    line: "{{ item }} {{ hostname }}"
+    state: present
+  with_items:
+    - 127.0.1.1
+  become: True
+
+- name: Remove default RPi hostname from /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127.0.1.1.*raspberrypi$'
+    state: absent
+  become: True

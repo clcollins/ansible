@@ -34,6 +34,13 @@ all:
       hostname: gooseberry
       motd: "Gooseberries should be mainstream berries!"
   children:
+    cloud:
+      children:
+        blueberry:
+        peach:
+        huckleberry:
+        elderberry:
+        gooseberry:
     raspberry_pis:
       children:
         pi_3s:
