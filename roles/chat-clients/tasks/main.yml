@@ -1,16 +1,6 @@
 ---
 # file: roles/chat-clients/tasks/main.yml
 
-- name: import skack repo GPG key
-  rpm_key:
-    state: present
-    key: https://packagecloud.io/gpg.key
-  become: true
-  tags:
-    - chat_clients
-    - slack
-    - yum_repos
-
 - name: setup slack repository
   yum_repository:
     name: slack
@@ -19,7 +9,7 @@
     enabled: yes
     gpgcheck: no
     repo_gpgcheck: yes
-    gpgkey: https://packagecloud.io/slacktechnologies/slack/gpgkey
+    gpgkey: https://slack.com/gpg/slack_pubkey_2019.gpg
     sslcacert: /etc/pki/tls/certs/ca-bundle.crt
     sslverify: yes
   become: true
