@@ -1,0 +1,6 @@
+#!/usr/bin/env ansible-playbook
+---
+# file: update.yml
+- hosts: all
+  roles:
+    - update
