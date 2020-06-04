@@ -2,59 +2,64 @@
 all:
   hosts:
     marvin:
-      ansible_host: 192.168.2.64
       hostname: marvin
-      motd: "Here I am, brain the size of a planet, and they tell me to handle your SSH session..."
+      motd: "Here I am, brain the size of a planet, and they tell me to handle an ironic motd..."
+      ansible_connection: local 
     zaphod:
-      ansible_host: 192.168.2.63
-      ansible_connection: local
       hostname: zaphod
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     blueberry:
-      ansible_host: 192.168.2.110
       hostname: blueberry
       motd: "Blueberry, baby!"
     peach:
-      ansible_host: 192.168.2.109
       hostname: peach
       motd: "I'm Waiting for my Mario to save me."
     huckleberry:
-      ansible_host: 192.168.2.112
-      # ansible_user: pi
       hostname: huckleberry
       motd: "I'm your huckleberry."
     elderberry:
-      ansible_host: 192.168.2.114
-      # ansible_user: pi
       hostname: elderberry
       motd: "...And your mother smelt of elderberries!"
     gooseberry:
-      ansible_host: 192.168.2.116
-      # ansible_user: pi
       hostname: gooseberry
       motd: "Gooseberries should be mainstream berries!"
+    lingonberry:
+      hostname: lingonberry
+      motd: "I'm so European, I could be spread on a waffle."
+  vars:
   children:
+    local_dns:
+      hosts:
+        peach:
+        blueberry:
+    cluster:
+      hosts:
+        elderberry:
+        gooseberry:
+        huckleberry:
     cloud:
-      children:
+      hosts:
         blueberry:
         peach:
         huckleberry:
         elderberry:
         gooseberry:
-    raspberry_pis:
+        lingonberry:
+    raspberryPis:
       children:
-        pi_3s:
-        pi_com_3s:
-        pi_4s:
-    pi_3s:
+        pi3s:
+        picom_3s:
+        pi4s:
+    pi3s:
       hosts:
         blueberry:
         peach:
-    pi_4s:
+    pi4s:
       hosts:
         huckleberry:
         elderberry:
         gooseberry:
+        lingonberry:
     laptops:
       hosts: 
         marvin:
@@ -64,4 +69,3 @@ all:
     work:
       hosts:
         marvin:
-
