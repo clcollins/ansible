@@ -26,6 +26,8 @@
     name: "{{ item.name }}"
     comment: "{{ item.comment }}"
     group: "{{ item.group }}"
+    groups: "{{ item.groups }}"
+    append: "{{ item.append }}"
     home: "{{ item.home }}"
     shell: "{{ item.shell }}"
   tags:
