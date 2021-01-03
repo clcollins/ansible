@@ -26,6 +26,9 @@ all:
     lingonberry:
       hostname: lingonberry
       motd: "I'm so European, I could be spread on a waffle."
+    inky:
+      hostname: inky
+      motd: "You call that an ink defense?"
   vars:
   children:
     local_dns:
@@ -47,9 +50,13 @@ all:
         lingonberry:
     raspberryPis:
       children:
+        pi0ws:
         pi3s:
         picom_3s:
         pi4s:
+    pi0ws:
+      hosts:
+        inky:
     pi3s:
       hosts:
         blueberry:
