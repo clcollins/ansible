@@ -70,6 +70,7 @@
   become: True
   tags:
     - etc_hosts
+    - kubernetes
 
 - name: Remove default RPi hostname from /etc/hosts
   lineinfile:
