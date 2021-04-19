@@ -17,9 +17,11 @@ users:
 # Everything Fedora 30 (so...everything)
 ansible_python_interpreter: /usr/bin/python3
 
-packages_common:
-  - git
+system_management_packages:
   - ansible
+  - git
+  - restic
+  - tmux
 
 # workaround for j2 templating error
 # with ansible vars and '.'s
