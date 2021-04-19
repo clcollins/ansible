@@ -1,0 +1,37 @@
+---
+crio_sysctl_configs:
+  - name: net.bridge.bridge-nf-call-iptables
+    value: 1
+  - name: net.ipv4.ip_forward
+    value: 1
+  - name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+
+kernel_modules:
+  - overlay
+  - br_netfilter
+
+crio_repos:
+  - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /
+    key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key
+  - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.21/xUbuntu_20.04/ /
+    key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.21/xUbuntu_20.04/Release.key
+
+kube_repos:
+  - name: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+general_packages:
+  - apt-transport-https
+  - ca-certificates
+
+crio_packages:
+  - cri-o
+  - cri-o-runc
+  - cri-tools
+
+kube_packages:
+  - kubelet
+  - kubeadm
+  - kubectl
+ 

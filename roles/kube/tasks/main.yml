@@ -1,0 +1,149 @@
+---
+- name: install common packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ system_management_packages }}"
+    - "{{ general_packages }}"
+  become: true
+  tags:
+    - packages
+
+- name: load kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ kernel_modules }}"
+  become: true
+  tags:
+    - kernel_modules
+    - cri-o
+
+- name: enable modules
+  lineinfile:
+    path: /etc/modules-load.d/modules.conf
+    line: "{{ item }}"
+  with_items:
+    - "{{ kernel_modules }}"
+  become: true
+  tags:
+    - kernel_modules
+    - cri-o
+
+- name: CRI-O sysctl entries
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - "{{ crio_sysctl_configs }}"
+  become: true
+  tags:
+    - sysctl_entires
+    - cri-o
+
+- name: add repo keys 
+  apt_key:
+    url: "{{ item.key }}"
+    state: present
+  with_items:
+    - "{{ crio_repos }}"
+    - "{{ kube_repos }}"
+  become: true
+  tags:
+    - apt_repos
+    - cri-o
+    - kubernetes
+
+- name: add repos
+  apt_repository:
+    repo: "{{ item.name }}"
+    state: present
+  with_items:
+    - "{{ crio_repos }}"
+    - "{{ kube_repos }}"
+  become: true
+  tags:
+    - apt_repos 
+    - cri-o
+    - kubernetes
+
+- name: add packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ crio_packages }}"
+    - "{{ kube_packages }}"
+  become: true
+  tags:
+    - packages
+    - cri-o
+    - kubernetes
+
+- name: hold Kube and Crio packages
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items:
+    - "{{ crio_packages }}"
+    - "{{ kube_packages }}"
+  become: true
+  tags:
+    - packages
+    - cri-o
+    - kubernetes
+
+- name: enable service cri-o and ensure it is not masked
+  systemd:
+    name: cri-o
+    state: started
+    enabled: yes
+    masked: no
+  become: true
+  tags:
+    - systemd
+    - cri-o
+
+- name: ensure systemd cgroups driver
+  copy:
+    src: 10-kubeadm.conf
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  become: true
+  tags:
+    - kubernetes
+    - systemd
+  register: kubelet_service
+
+- name: debug
+  debug:
+    msg: "{{kubelet_service.changed}}"
+  tags:
+    - systemd
+
+- name: reload and restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted
+    enabled: yes
+    masked: no
+  become: true
+  tags:
+    - systemd
+    - cri-o
+  when: kubelet_service.changed|bool
+
+- name: add control plane hostname to hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{ item }} {{ control_plane_dns_name }}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.kubePrimary }}"
+  become: True
+  tags:
+    - etc_hosts
+ 

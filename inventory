@@ -15,9 +15,11 @@ all:
       hostname: peach
       motd: "I'm Waiting for my Mario to save me."
     huckleberry:
+      ansible_host: 192.168.1.47
       hostname: huckleberry
       motd: "I'm your huckleberry."
     elderberry:
+      ansible_host: 192.168.1.46
       hostname: elderberry
       motd: "...And your mother smelt of elderberries!"
     gooseberry:
@@ -26,46 +28,50 @@ all:
     lingonberry:
       hostname: lingonberry
       motd: "I'm so European, I could be spread on a waffle."
+    bilberry:
+      ansible_host: 192.168.1.45
+      hostname: bilberry
+      motd: "That's Guillaume Fontaine de la Tour d'Haute Rive to you, pal."
+    inky:
+      hostname: inky
+      motd: "You call that an ink defense?"
   vars:
   children:
     local_dns:
       hosts:
         peach:
         blueberry:
-    cluster:
+    kube:
+      children:
+        kubePrimary:
+        kubeCompute:
+    kubePrimary:
       hosts:
+        bilberry:
         elderberry:
-        gooseberry:
         huckleberry:
-    cloud:
+    kubeCompute:
       hosts:
-        blueberry:
-        peach:
-        huckleberry:
-        elderberry:
-        gooseberry:
-        lingonberry:
     raspberryPis:
       children:
+        pi0ws:
         pi3s:
         picom_3s:
         pi4s:
+    pi0ws:
+      hosts:
+        inky:
     pi3s:
       hosts:
         blueberry:
         peach:
     pi4s:
       hosts:
-        huckleberry:
+        bilberry:
         elderberry:
+        huckleberry:
         gooseberry:
         lingonberry:
-    laptops:
-      hosts: 
-        marvin:
-    desktops:
-      hosts:
-        zaphod:
     work:
       hosts:
         marvin:
