@@ -9,6 +9,7 @@
     - motd
     - conky
     - package-repositories
+    - flatpak
     - chat-clients
     - steam
     - lutris
