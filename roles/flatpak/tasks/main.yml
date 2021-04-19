@@ -1,0 +1,68 @@
+# file: roles/tasks/flatpak/tasks/main.yml
+
+- name: Add flatpak remote repositories
+  flatpak_remote:
+    name: "{{ item.name }}"
+    flatpakrepo_url: "{{ item.url }}"
+    state: present
+    method: user
+  tags:
+    - repositories
+    - flatpak-repositories
+    - flatpak
+  with_items:
+    - "{{ flatpak_remote_repositories }}"
+
+- name: Add flatpak packages
+  flatpak:
+    name:   "{{ item.name }}"
+    state:  "{{ item.state }}"
+    method: "{{ item.method }}"
+    remote: "{{ item.remote }}"
+  tags:
+    - flatpak
+    - packages
+  with_items:
+    - "{{ flatpak_apps }}"
+  when: item['method'] == "user"
+
+
+- name: Add system flatpak packages
+  flatpak:
+    name:   "{{ item.name }}"
+    state:  "{{ item.state }}"
+    method: "{{ item.method }}"
+    remote: "{{ item.remote }}"
+  tags:
+    - flatpak
+    - packages
+  with_items:
+    - "{{ flatpak_apps }}"
+  become: True
+  when: item['method'] == "system"
+
+- name: Remove user flatpak packages if installed in the system
+  flatpak:
+    name:  "{{ item.name }}"
+    state: absent
+    method: user
+  tags:
+    - flatpak
+    - packages
+  with_items:
+    - "{{ flatpak_apps }}"
+  when: item['method'] == "system"
+  
+- name: Remove system flatpak packages if installed for the user
+  flatpak:
+    name:  "{{ item.name }}"
+    state: absent
+    method: system
+  tags:
+    - flatpak
+    - packages
+  with_items:
+    - "{{ flatpak_apps }}"
+  when: item['method'] == "user"
+  become: True
+  
