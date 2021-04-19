@@ -1,0 +1,6 @@
+# file: roles/local_dns/handlers/restart_dns.yml
+---
+- name: restart_dns
+  command:
+    cmd: /usr/local/bin/pihole restartdns reload
+  become: True

@@ -1,0 +1,37 @@
+# file: roles/local_dns/dns.yml
+
+records:
+  - ip: 192.168.2.63
+    names: 
+      - zaphod
+  - ip: 192.168.2.64  
+    names:
+      - marvin
+  - ip: 192.168.2.109 
+    names:
+      - peach
+  - ip: 192.168.2.110 
+    names:
+      - blueberry
+  - ip: 192.168.2.112 
+    names:
+      - huckleberry
+  - ip: 192.168.2.114
+    names:
+      - elderberry
+  - ip: 192.168.2.116
+    names:
+      - gooseberry
+  - ip: 192.168.2.123
+    names:
+      - lingonberry
+  - ip: 192.168.2.125
+    names:
+      - alpha
+  - ip: 192.168.2.128
+    names:
+      - twittergraph
+
+local_domain: collins.is
+    
+
