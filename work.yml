@@ -9,6 +9,7 @@
     - conky
     - dwarffortress
     - package-repositories
+    - flatpak
     - chat-clients
     - desktop-apps
     - audio-video
