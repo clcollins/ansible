@@ -35,6 +35,18 @@ all:
     inky:
       hostname: inky
       motd: "You call that an ink defense?"
+    cumulo:
+      ansible_host: 192.168.1.119
+      hostname: cumulo
+      motd: "Globosam botrum portassent"
+    # cirro:
+    #   #ansible_host: 192.168.1.119
+    #   hostname: cirro
+    #   motd: "Plumeis eminentibus"
+    # strato:
+    #   #ansible_host: 192.168.1.119
+    #   hostname: strato
+    #   motd: "Lintenum maximus"
   vars:
   children:
     local_dns:
@@ -61,6 +73,7 @@ all:
     pi0ws:
       hosts:
         inky:
+        cumulo:
     pi3s:
       hosts:
         blueberry:
