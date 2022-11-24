@@ -11,24 +11,62 @@ kernel_modules:
   - overlay
   - br_netfilter
 
+crio_service:
+  Fedora: crio
+  Ubuntu: cri-o
+
+kubelet_service:
+  Fedora: kubelet
+  Ubuntu: kubelet
+
 crio_repos:
-  - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /
-    key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key
-  - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.21/xUbuntu_20.04/ /
-    key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.21/xUbuntu_20.04/Release.key
+  Fedora:
+    - name: cri-o
+      destination: /etc/dnf/modules.d/cri-o.module
+      content: |
+        [cri-o]
+        name=cri-o
+        stream=1.22
+        profiles=
+        state=enabled
+  Ubuntu:
+    - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /
+      key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key
+    - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.21/xUbuntu_20.04/ /
+      key: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.21/xUbuntu_20.04/Release.key
 
 kube_repos:
-  - name: deb https://apt.kubernetes.io/ kubernetes-xenial main
-    key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  Fedora:
+    - name: kubernetes
+      destination: /etc/yum.repos.d/kubernetes.repo
+      content: |
+        [kubernetes]
+        name=Kubernetes
+        baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
+        enabled=1
+        gpgcheck=1
+        repo_gpgcheck=1
+        gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+        exclude=kubelet kubeadm kubectl
+  Ubuntu:
+    - name: deb https://apt.kubernetes.io/ kubernetes-xenial main
+      key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 general_packages:
-  - apt-transport-https
-  - ca-certificates
+  Fedora:
+  Ubuntu:
+    - apt-transport-https
+    - ca-certificates
 
 crio_packages:
-  - cri-o
-  - cri-o-runc
-  - cri-tools
+  Fedora:
+    - cri-o
+    - runc
+    - cri-tools
+  Ubuntu:
+    - cri-o
+    - cri-o-runc
+    - cri-tools
 
 kube_packages:
   - kubelet

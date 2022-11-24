@@ -3,11 +3,9 @@
 # file: kube.yml
 - hosts: kubePrimary
   roles:
-    - base
     - kube
     # - primary
 - hosts: kubeCompute
   roles:
-    - base
     - kube
     # - compute

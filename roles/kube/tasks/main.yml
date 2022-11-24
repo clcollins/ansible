@@ -1,11 +1,9 @@
 ---
-- name: install common packages
+- name: install common packages 
   package:
-    name: "{{ item }}"
+    name: 
+      - "{{ general_packages[ansible_distribution] }}"
     state: present
-  with_items:
-    - "{{ system_management_packages }}"
-    - "{{ general_packages }}"
   become: true
   tags:
     - packages
@@ -21,10 +19,12 @@
     - kernel_modules
     - cri-o
 
-- name: enable modules
-  lineinfile:
-    path: /etc/modules-load.d/modules.conf
-    line: "{{ item }}"
+- name: enable persistent kernel modules
+  copy:
+    dest: "/etc/modules-load.d/{{ item }}"
+    content: |
+      # Load {{ item }} at boot time
+      {{ item }}
   with_items:
     - "{{ kernel_modules }}"
   become: true
@@ -44,61 +44,114 @@
     - sysctl_entires
     - cri-o
 
-- name: add repo keys 
+- name: add repo keys (apt)
   apt_key:
     url: "{{ item.key }}"
     state: present
   with_items:
-    - "{{ crio_repos }}"
-    - "{{ kube_repos }}"
+    - "{{ crio_repos[ansible_distribution] }}"
+    - "{{ kube_repos[ansible_distribution] }}"
   become: true
+  when: 
+    - ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - apt_repos
+    - apt
+    - repos
     - cri-o
     - kubernetes
 
-- name: add repos
+- name: add repos (apt)
   apt_repository:
     repo: "{{ item.name }}"
     state: present
   with_items:
-    - "{{ crio_repos }}"
-    - "{{ kube_repos }}"
+    - "{{ crio_repos[ansible_distribution] }}"
+    - "{{ kube_repos[ansible_distribution] }}"
+  when:
+    - ansible_facts['distribution'] == "Ubuntu"
   become: true
   tags:
-    - apt_repos 
+    - apt
+    - repos 
     - cri-o
     - kubernetes
 
-- name: add packages
-  package:
-    name: "{{ item }}"
-    state: present
+
+- name: add repos (dnf)
+  copy:
+    dest: "{{ item.destination }}"
+    content: "{{ item.content }}"
+  when:
+    - ansible_facts['distribution'] == "Fedora"
   with_items:
-    - "{{ crio_packages }}"
-    - "{{ kube_packages }}"
+    - "{{ crio_repos[ansible_distribution] }}"
+    - "{{ kube_repos[ansible_distribution] }}"
   become: true
+  tags:
+    - dnf
+    - repos
+    - cri-o
+
+- name: add packages (Ubuntu)
+  package:
+    name: 
+      - "{{ crio_packages[ansible_distribution] }}"
+      - "{{ kube_packages }}"
+    state: present
+  become: true
+  when:
+    - ansible_facts['distribution'] == "Ubuntu"
   tags:
     - packages
     - cri-o
     - kubernetes
 
-- name: hold Kube and Crio packages
-  dpkg_selections:
-    name: "{{ item }}"
-    selection: hold
-  with_items:
-    - "{{ crio_packages }}"
-    - "{{ kube_packages }}"
+# Required to utilize the --disableexcludes=kubernetes flag
+# This effectively "holds" kubernetes packages during other 
+# DNF updates
+- name: add cri-o packages (Fedora)
+  dnf:
+    name: "{{ crio_packages[ansible_distribution] }}"
+    state: present
   become: true
+  when:
+    - ansible_facts['distribution'] == "Fedora"
   tags:
+    - packages
+    - cri-o
+    - kubernetes
+
+- name: add kubernetes packages (Fedora)
+  dnf:
+    name: "{{ kube_packages }}"
+    state: present
+    disable_excludes: kubernetes
+  become: true
+  when:
+    - ansible_facts['distribution'] == "Fedora"
+  tags:
+    - packages
+    - cri-o
+    - kubernetes
+
+- name: hold Kube and Crio packages (dpkg)
+  dpkg_selections:
+    name:
+      - "{{ crio_packages }}"
+      - "{{ kube_packages }}"
+    selection: hold
+  become: true
+  when:
+    - ansible_facts['distribution'] == "Ubuntu"
+  tags:
+    - dpkg
     - packages
     - cri-o
     - kubernetes
 
 - name: enable service cri-o and ensure it is not masked
   systemd:
-    name: cri-o
+    name: "{{ crio_service[ansible_distribution] }}"
     state: started
     enabled: yes
     masked: no
@@ -106,6 +159,15 @@
   tags:
     - systemd
     - cri-o
+
+- name: ensure kubelet.service.d exists
+  file:
+    path: /etc/systemd/system/kubelet.service.d
+    state: directory
+  become: true
+  tags:
+    - kubernetes
+    - systemd
 
 - name: ensure systemd cgroups driver
   copy:
@@ -117,15 +179,9 @@
     - systemd
   register: kubelet_service
 
-- name: debug
-  debug:
-    msg: "{{kubelet_service.changed}}"
-  tags:
-    - systemd
-
 - name: reload and restart kubelet
   systemd:
-    name: kubelet
+    name: "{{ kubelet_service[ansible_distribution] }}"
     state: restarted
     enabled: yes
     masked: no
