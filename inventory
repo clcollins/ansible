@@ -32,7 +32,7 @@ all:
   children:
     local_dns:
       hosts:
-        peach:
+        peach.collins.is:
         blueberry.collins.is:
     kube:
       children:
@@ -50,12 +50,11 @@ all:
         pi4s:
     pi0ws:
       hosts:
-        inky:
-        cumulo:
+        cumulo.weatherstation.collins.is:
     pi3s:
       hosts:
-        blueberry.cluster.collins.is:
-        peach:
+        blueberry.collins.is:
+        peach.collins.is:
     pi4s:
       hosts:
        #bilberry.cluster.collins.is:
@@ -65,13 +64,14 @@ all:
         huckleberry.cluster.collins.is:
         boysenberry.cluster.collins.is:
         cranberry.cluster.collins.is:
+    home:
+      hosts:
     work:
       hosts:
-        trillian:
+        trillian.collins.is:
     silverblue:
       hosts:
-        trillian:
+        trillian.collins.is:
     redhat:
       hosts:
-        marvin:
-        trillian:
+        trillian.collins.is:
