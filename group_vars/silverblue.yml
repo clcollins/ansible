@@ -1,0 +1,5 @@
+---
+# files: group_vars/silverblue.yml
+
+config_editor_link: /usr/bin/vim
+config_editor_path: /var/lib/flatpak/exports/bin/org.vim.Vim

@@ -3,18 +3,6 @@
 # file: work.yml
 - hosts: work
   roles:
-    - base
-    - common
-    - motd
-    - conky
-    - dwarffortress
-    - package-repositories
+    - config
     - flatpak
-    - chat-clients
-    - desktop-apps
-    - audio-video
-    - kube-tools
-    - minishift
-    - operator-sdk
-    - develop
-    - work
+    - dev

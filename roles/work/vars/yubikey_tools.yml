@@ -1,7 +1,0 @@
----
-# file: roles/work/vars/yubikey_tools.yml
-
-yubikey_tools_packages:
-  - qrencode
-  - caca-utils
-  - ykpers

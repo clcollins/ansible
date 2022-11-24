@@ -1,0 +1,52 @@
+---
+# file: roles/dev/tasks/repositories.yml
+
+- name: "repositories: Ensure Projects directory"
+  ansible.builtin.file:
+    path: "{{ homedir }}/Projects"
+    state: directory
+  tags:
+    - git_repositories
+    - work
+
+- name: Clone repositories
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ homedir }}/Projects/{{ item.dest }}"
+    accept_newhostkey: yes
+    update: no
+  loop: "{{ work_repositories }}"
+  tags:
+    - git_repositories
+    - work
+
+- name: Add upstream URLs
+  community.general.ini_file:
+    path: "{{ homedir }}/Projects/{{ item.dest }}/.git/config"
+    backup: yes
+    create: no
+    section: remote "upstream"
+    option: url
+    value: "{{item.upstream}}"
+  when: item.upstream is defined
+  loop: "{{work_repositories }}"
+  tags:
+    - git_repositories
+    - work
+   
+- name: Add upstream fetch
+  community.general.ini_file:
+    path: "{{ homedir }}/Projects/{{ item.dest }}/.git/config"
+    backup: yes
+    create: no
+    section: remote "upstream"
+    option: fetch
+    value: "+refs/heads/*:refs/remotes/upstream/*"
+  when: item.upstream is defined
+  loop: "{{work_repositories }}"
+  tags:
+    - git_repositories
+    - work
+   
+
+

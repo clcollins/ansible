@@ -1,12 +1,18 @@
+---
 # file: base/tasks/main.yml
 
 - name: System Info
-  debug:
+  ansible.builtin.debug:
     msg: "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}"
+
+- name: Ansible Facts
+  ansible.builtin.debug:
+    msg: "{{ansible_facts}}"
 
 - name: Set hostname
   hostname:
-    name: "{{ hostname }}"
+    name: "{{ inventory_hostname }}"
+    use: systemd
   tags:
     - administration
   when: hostname is defined
@@ -28,7 +34,6 @@
     group: "{{ item.group }}"
     groups: "{{ item.groups }}"
     append: "{{ item.append }}"
-    home: "{{ item.home }}"
     shell: "{{ item.shell }}"
   tags:
     - userConfig
@@ -62,8 +67,8 @@
 - name: Add own hostname for localhost
   lineinfile:
     dest: /etc/hosts
-    regexp: '.*{{ hostname }}$'
-    line: "{{ item }} {{ hostname }}"
+    regexp: '.*{{ inventory_hostname }}$'
+    line: "{{ item }} {{ inventory_hostname }}"
     state: present
   with_items:
     - 127.0.1.1

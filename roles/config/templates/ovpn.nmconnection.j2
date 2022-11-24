@@ -1,0 +1,33 @@
+[connection]
+id={{ item.key }}
+uuid={{ item.value.connection.uuid }}
+type=vpn
+autoconnect=false
+permissions={{ config_vpn_connections_defaults.connection.permissions }}
+
+[vpn]
+ca={{ config_vpn_connections_defaults.vpn.ca }}
+cipher={{ config_vpn_connections_defaults.vpn.cipher }}
+connection-type={{ config_vpn_connections_defaults.vpn.connection_type }}
+password-flags=2
+port={{ config_vpn_connections_defaults.vpn.port }}
+remote={{ item.value.vpn.remote }}
+reneg-seconds={{ config_vpn_connections_defaults.vpn.reneg_seconds }}
+tunnel-mtu={{ config_vpn_connections_defaults.vpn.tunnel_mtu }}
+username={{ config_vpn_connections_defaults.vpn.username }}
+verify-x509-name={{ config_vpn_connections_defaults.vpn.verify_x509_name }}
+service-type=org.freedesktop.NetworkManager.openvpn
+
+[ipv4]
+dns-search=
+method=auto
+never-default=true
+
+[ipv6]
+addr-gen-mode=stable-privacy
+dns-search=
+method=auto
+never-default=true
+
+[proxy]
+

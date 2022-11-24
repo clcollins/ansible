@@ -1,0 +1,57 @@
+---
+# file: roles/config/defaults/main.yml
+
+# Users
+config_users_enable: true
+config_users:
+  chris:
+    append: yes
+    comment: "Chris Collins"
+    groups:
+      - chris
+      - wheel
+    home: /home/chris
+    shell: /bin/bash
+    authorized_keys: https://github.com/clcollins.keys
+
+# Networking
+config_hostname: localhost
+
+# Editor
+config_editor_enable: true
+config_editor_link: /usr/bin/vim
+
+# Gnome
+config_gnome_enable: false
+# Values for dconf require extra quotes
+config_gnome_gtk_theme: "'Adwaita-dark'"
+gnome_terminal_config:
+  background-transparency-percent: 15
+  bold-is-bright: "true"
+  default-size-columns: 132
+  default-size-rows: 43
+  font: "'Monospace 12'"
+  use-system-font: "false"
+  use-transparent-background: "true"
+
+# Shell
+config_shell_enable: true
+
+# Git
+config_git_enable: true
+config_git_config:
+  - name: init.defaultBranch
+    value: main
+    scope: global
+  - name: core.editor
+    value: vi
+    scope: global
+  - name: fetch.prune
+    value: true
+    scope: global
+  - name: user.name
+    value: "Chris Collins"
+    scope: global
+  - name: user.email
+    value: "collins.christopher@gmail.com"
+    scope: global

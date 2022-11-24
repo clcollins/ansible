@@ -1,8 +1,0 @@
----
-# file: roles/work/tasks/ssh_config.yml
-
-- name: setup ~/.ssh/config for work environment
-  template:
-    src: ssh_config.j2
-    dest: "{{ homedir }}/.ssh/config"
-    mode: '0640'

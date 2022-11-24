@@ -1,0 +1,28 @@
+---
+# file: roles/config/tasks/main.yml
+
+- name: Include users
+  ansible.builtin.include: users.yml
+  when: config_users_enable | bool
+
+- name: Include ssh
+  ansible.builtin.include: ssh.yml
+
+- name: Include networking
+  ansible.builtin.include: networking.yml
+
+  #- name: Include editor config
+  #  ansible.builtin.include: editor.yml
+  #  when: config_editor_enable | bool
+
+- name: Include shell config
+  ansible.builtin.include: shell.yml
+  when: config_shell_enable | bool
+
+- name: Include git config
+  ansible.builtin.include: git.yml
+  when: config_git_enable | bool
+
+- name: Include gnome config
+  ansible.builtin.include: gnome.yml
+  when: config_gnome_enable | bool

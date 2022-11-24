@@ -1,0 +1,23 @@
+---
+# file: roles/flatpak/default/main.yml
+
+flatpak_repositories_enable: False
+flatpak_packages_enable: False
+
+flatpak_remote_repositories:
+  flathub: "https://dl.flathub.org/repo/flathub.flatpakrepo"
+  fedora: "oci+https://registry.fedoraproject.org"
+
+flatpak_packages:
+  - name: com.discordapp.Discord
+    remote: flathub
+  - name: com.slack.Slack
+    remote: flathub
+  - name: org.mozilla.firefox
+    remote: flathub
+  - name: org.freedesktop.Platform.ffmpeg-full//21.08
+    remote: flathub
+
+flatpak_packages_system:
+  - name: org.vim.Vim
+    remote: flathub
