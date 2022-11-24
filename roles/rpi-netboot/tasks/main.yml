@@ -1,0 +1,74 @@
+---
+# file: roles/rpi-netboot/tasks/main.yml
+
+
+
+
+broadcast address 192.168.2.255
+with var mynet_broadcast
+
+create static IP:
+  /etc/systemd/network/10-wlp2s0.netdev
+
+[Match]
+Name=wlp2s0
+
+[Network]
+DHCP=no
+
+
+  /etc/systemd/network/11-wlp2s0.network
+
+[Match]
+Name=wlp2s0
+
+[Network]
+Address=192.168.2.64/24
+DNS=<need to have dns server here>
+
+[Route]
+Gateway=192.168.2.1
+
+
+/etc/systemd/resolved.conf
+[Resolve]
+DNS=<dns server here>
+
+
+reload systemd-networkd
+
+
+template /etc/dnsmasq.conf
+
+port=0
+dhcp-range={{mynet_broadcast}},proxy
+log-dhcp
+enable-tftp
+tftp-root={{tftp_root_dir}}
+pxe-service=0,"Raspberry Pi Boot"
+
+mkdir {{tftp_root_dir}}
+chmod 777?
+
+extract/sync contents of /boot/* to {{tftp_root_dir}}
+
+enable/reload dnsmasq.service
+
+
+mkdir /nfs/client
+foreach: rpi
+
+extract/copy fs to /nfs/client
+
+ensure /nfs/<clinet>etc/ssh/ssh_host_* absent
+foreach: rpi
+
+install nfs server
+export 
+echo "/nfs/client1 *(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
+echo "/tftpboot *(rw,sync,no_subtree_check,no_root_squash)"
+
+enable/reload rpcbind
+enable/reload nfs-server
+
+
