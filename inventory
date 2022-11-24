@@ -1,66 +1,39 @@
 ---
 all:
   hosts:
-    trillian:
+    trillian.collins.is:
       motd: "We have normality, I repeat, we have normality.  Anything you still can't cope with is therefore your own problem."
-      ansible_host: 192.168.1.26
-    marvin:
-      motd: "Here I am, brain the size of a planet, and they tell me to handle an ironic motd..."
-      ansible_connection: local
-    zaphod:
+    zaphod.collins.is:
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
-    blueberry:
-      hostname: blueberry
+    blueberry.collins.is:
       motd: "Blueberry, baby!"
-    peach:
-      hostname: peach
+    peach.collins.is:
       motd: "I'm Waiting for my Mario to save me."
-    gooseberry:
-      hostname: gooseberry
+    gooseberry.cluster.collins.is:
       motd: "Gooseberries should be mainstream berries!"
-    lingonberry:
-      hostname: lingonberry
+    lingonberry.cluster.collins.is:
       motd: "I'm so European, I could be spread on a waffle."
-    bilberry:
-      hostname: bilberry
+    bilberry.cluster.collins.is:
       motd: "That's Guillaume Fontaine de la Tour d'Haute Rive to you, pal."
-    elderberry:
-      ansible_host: 192.168.2.22
-      hostname: elderberry
+    elderberry.cluster.collins.is:
       motd: "...And your mother smelt of elderberries!"
-    huckleberry:
-      ansible_host: 192.168.2.23
-      hostname: huckleberry
+    huckleberry.cluster.collins.is:
       motd: "I'm your huckleberry."
-    boysenberry:
-      ansible_host: 192.168.2.24
-      hostname: boysenberry
+    boysenberry.cluster.collins.is:
       motd: "You're nicked, Boyo!"
-    cranberry:
-      ansible_host: 192.168.2.25
-      hostname: cranberry
+    cranberry.cluster.collins.is:
       motd: "Now here you go again, you say you want your freedom."
-    inky:
-      hostname: inky
+    inky.collins.is:
       motd: "You call that an ink defense?"
-    cumulo:
+    cumulo.collins.is:
       ansible_host: 192.168.1.119
-      hostname: cumulo
       motd: "Globosam botrum portassent"
-    # cirro:
-    #   #ansible_host: 192.168.1.119
-    #   hostname: cirro
-    #   motd: "Plumeis eminentibus"
-    # strato:
-    #   #ansible_host: 192.168.1.119
-    #   hostname: strato
-    #   motd: "Lintenum maximus"
   vars:
   children:
     local_dns:
       hosts:
         peach:
-        blueberry:
+        blueberry.collins.is:
     kube:
       children:
         kubePrimary:
@@ -81,17 +54,17 @@ all:
         cumulo:
     pi3s:
       hosts:
-        blueberry:
+        blueberry.cluster.collins.is:
         peach:
     pi4s:
       hosts:
-        bilberry:
-        gooseberry:
-        lingonberry:
-        elderberry:
-        huckleberry:
-	boysenberry:
-	cranberry:
+       #bilberry.cluster.collins.is:
+       #gooseberry.cluster.collins.is:
+       #lingonberry.cluster.collins.is:
+        elderberry.cluster.collins.is:
+        huckleberry.cluster.collins.is:
+        boysenberry.cluster.collins.is:
+        cranberry.cluster.collins.is:
     work:
       hosts:
         trillian:
