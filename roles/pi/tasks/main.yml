@@ -3,7 +3,7 @@
 - name: Download rpidentify.sh
   get_url:
     url: "{{ rpidentify.url }}"
-    dest: /usr/bin/rpidentify
+    dest: /usr/local/sbin/rpidentify
     checksum: "{{ rpidentify.sum }}"
     mode: '0555'
   tags:
@@ -21,4 +21,5 @@
   with_items:
     - /home/chris/rpidentify.sh
     - /usr/bin/rpidentify.sh
+    - /usr/bin/rpidentify
   become: True

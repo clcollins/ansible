@@ -1,12 +1,13 @@
 ---
 all:
   hosts:
+    trillian:
+      motd: "We have normality, I repeat, we have normality.  Anything you still can't cope with is therefore your own problem."
+      ansible_host: 192.168.1.26
     marvin:
-      hostname: marvin
       motd: "Here I am, brain the size of a planet, and they tell me to handle an ironic motd..."
       ansible_connection: local
     zaphod:
-      hostname: zaphod
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     blueberry:
       hostname: blueberry
@@ -14,14 +15,6 @@ all:
     peach:
       hostname: peach
       motd: "I'm Waiting for my Mario to save me."
-    huckleberry:
-      ansible_host: 192.168.1.47
-      hostname: huckleberry
-      motd: "I'm your huckleberry."
-    elderberry:
-      ansible_host: 192.168.1.46
-      hostname: elderberry
-      motd: "...And your mother smelt of elderberries!"
     gooseberry:
       hostname: gooseberry
       motd: "Gooseberries should be mainstream berries!"
@@ -29,9 +22,24 @@ all:
       hostname: lingonberry
       motd: "I'm so European, I could be spread on a waffle."
     bilberry:
-      ansible_host: 192.168.1.45
       hostname: bilberry
       motd: "That's Guillaume Fontaine de la Tour d'Haute Rive to you, pal."
+    elderberry:
+      ansible_host: 192.168.2.22
+      hostname: elderberry
+      motd: "...And your mother smelt of elderberries!"
+    huckleberry:
+      ansible_host: 192.168.2.23
+      hostname: huckleberry
+      motd: "I'm your huckleberry."
+    boysenberry:
+      ansible_host: 192.168.2.24
+      hostname: boysenberry
+      motd: "You're nicked, Boyo!"
+    cranberry:
+      ansible_host: 192.168.2.25
+      hostname: cranberry
+      motd: "Now here you go again, you say you want your freedom."
     inky:
       hostname: inky
       motd: "You call that an ink defense?"
@@ -59,9 +67,6 @@ all:
         kubeCompute:
     kubePrimary:
       hosts:
-        bilberry:
-        elderberry:
-        huckleberry:
     kubeCompute:
       hosts:
     raspberryPis:
@@ -81,10 +86,19 @@ all:
     pi4s:
       hosts:
         bilberry:
-        elderberry:
-        huckleberry:
         gooseberry:
         lingonberry:
+        elderberry:
+        huckleberry:
+	boysenberry:
+	cranberry:
     work:
       hosts:
+        trillian:
+    silverblue:
+      hosts:
+        trillian:
+    redhat:
+      hosts:
         marvin:
+        trillian:

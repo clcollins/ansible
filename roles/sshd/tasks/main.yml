@@ -17,6 +17,8 @@
     become: true
     tags:
       - sshd
+    when:
+      - ansible_facts['pkg_mgr'] != "atomic_container"
 
   - name: Copy sshd_config
     copy:
