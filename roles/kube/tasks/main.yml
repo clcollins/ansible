@@ -53,6 +53,7 @@
   when:
     - resolve_conf.stat.islnk is defined
     - resolve_conf.stat.islnk
+  register: resolve_conf_deleted
   become: true
   tags:
     - networking
@@ -67,8 +68,7 @@
     group: root
     mode: '0644'
   when:
-    - resolve_conf.stat.islnk is defined
-    - resolve_conf.stat.islnk
+    - resolv_conf_disabled is defined
   become: true
   tags:
     - networking
