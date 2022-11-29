@@ -1,11 +1,12 @@
 #!/usr/bin/env ansible-playbook
 ---
 # file: kube.yml
+- hosts: kube
+  roles:
+    - kube
 - hosts: kubePrimary
   roles:
-    - kube
-    # - primary
+    #- primary
 - hosts: kubeCompute
   roles:
-    - kube
     # - compute
