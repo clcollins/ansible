@@ -15,7 +15,7 @@
     use: systemd
   tags:
     - administration
-  when: hostname is defined
+  when: inventory_hostname is defined
   become: True
 
 - name: Ensure groups exist
