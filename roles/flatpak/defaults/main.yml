@@ -17,6 +17,14 @@ flatpak_packages:
     remote: flathub
   - name: org.freedesktop.Platform.ffmpeg-full//21.08
     remote: flathub
+  - name: social.whalebird.WhalebirdDesktop
+    remote: flathub
+  - name: org.videolan.VLC
+    remote: flathub
+  - name: org.gimp.GIMP
+    remote: flathub
+  - name: com.obsproject.Studio
+    name: flathub
 
 flatpak_packages_system:
   - name: org.vim.Vim
