@@ -8,8 +8,12 @@ crio_sysctl_configs:
     value: 1
 
 kernel_modules:
-  - overlay
-  - br_netfilter
+  Fedora:
+    - overlay
+    - br_netfilter
+  Ubuntu:
+    - overlay
+    - br_netfilter
 
 crio_service:
   Fedora: crio
@@ -19,6 +23,12 @@ kubelet_service:
   Fedora: kubelet
   Ubuntu: kubelet
 
+disabled_services:
+  Fedora:
+    - firewalld
+    - systemd-resolved
+  Ubuntu:
+
 crio_repos:
   Fedora:
     - name: cri-o
@@ -26,8 +36,8 @@ crio_repos:
       content: |
         [cri-o]
         name=cri-o
-        stream=1.22
-        profiles=
+        stream=1.24
+        profiles=default
         state=enabled
   Ubuntu:
     - name: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /
@@ -54,22 +64,27 @@ kube_repos:
 
 general_packages:
   Fedora:
+    - iptables-legacy
+    - iproute-tc
   Ubuntu:
     - apt-transport-https
     - ca-certificates
 
 crio_packages:
   Fedora:
-    - cri-o
-    - runc
-    - cri-tools
+    - '@cri-o:1.24/default'
   Ubuntu:
     - cri-o
     - cri-o-runc
     - cri-tools
 
 kube_packages:
-  - kubelet
-  - kubeadm
-  - kubectl
+  Fedora:
+    - kubernetes-kubeadm
+    - kubernetes-node
+    - kubernetes-client
+  Ubuntu:
+    - kubelet
+    - kubeadm
+    - kubectl
  
