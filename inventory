@@ -46,7 +46,7 @@ all:
         cranberry.cluster.collins.is
         huckleberry.cluster.collins.is
         elderberry.cluster.collins.is
-        # cranberry.cluster.collins.is
+        bilberry.cluster.collins.is
     raspberryPis:
       children:
         pi0ws:
