@@ -40,13 +40,13 @@ all:
         kubeCompute:
     kubePrimary:
       hosts:
-        boysenberry.cluster.collins.is
+        boysenberry.cluster.collins.is:
     kubeCompute:
       hosts:
-        cranberry.cluster.collins.is
-        huckleberry.cluster.collins.is
-        elderberry.cluster.collins.is
-        bilberry.cluster.collins.is
+        bilberry.cluster.collins.is:
+        cranberry.cluster.collins.is:
+        elderberry.cluster.collins.is:
+        huckleberry.cluster.collins.is:
     raspberryPis:
       children:
         pi0ws:
@@ -62,13 +62,13 @@ all:
         peach.collins.is:
     pi4s:
       hosts:
-       #bilberry.cluster.collins.is:
-       #gooseberry.cluster.collins.is:
-       #lingonberry.cluster.collins.is:
-        elderberry.cluster.collins.is:
-        huckleberry.cluster.collins.is:
+        bilberry.cluster.collins.is:
         boysenberry.cluster.collins.is:
         cranberry.cluster.collins.is:
+        elderberry.cluster.collins.is:
+        # gooseberry.cluster.collins.is:
+        huckleberry.cluster.collins.is:
+        # lingonberry.cluster.collins.is:
     home:
       hosts:
     work:

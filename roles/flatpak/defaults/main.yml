@@ -24,7 +24,7 @@ flatpak_packages:
   - name: org.gimp.GIMP
     remote: flathub
   - name: com.obsproject.Studio
-    name: flathub
+    remote: flathub
 
 flatpak_packages_system:
   - name: org.vim.Vim
