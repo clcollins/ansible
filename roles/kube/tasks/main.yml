@@ -1,19 +1,99 @@
 ---
+
+# Generic host configuration
+
 - name: install common packages 
   package:
     name: 
-      - "{{ general_packages[ansible_distribution] }}"
+      - "{{ item }}"
     state: present
+  with_items:
+    - "{{ general_packages[ansible_distribution] }}"
   become: true
   tags:
     - packages
+
+- name: set iptables-legacy for iptables integration
+  community.general.alternatives:
+    name: iptables
+    path: /usr/sbin/iptables-legacy
+    link: /usr/sbin/iptables
+  become: true
+  tags:
+    - networking
+    - iptables
+
+- name: disable services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+    masked: yes
+  with_items:
+    - "{{ disabled_services[ansible_distribution] }}"
+  become: true
+  tags:
+    - networking
+    - firewalld
+    - systemd_resolved
+    - systemd
+
+- name: check resolve.conf
+  ansible.builtin.stat:
+    path: /etc/resolv.conf
+  register: resolve_conf
+  tags:
+    - networking
+    - resolve_conf
+
+- name: remove resolve.conf if it is a link
+  ansible.builtin.file:
+    path: /etc/resolve.conf
+    state: absent
+  when:
+    - resolve_conf.stat.islnk is defined
+    - resolve_conf.stat.islnk
+  become: true
+  tags:
+    - networking
+    - resolve_conf
+  notify: Restart NetworkManager
+
+- name: disable resolve.conf
+  ansible.builtin.file:
+    path: /etc/resolve.conf
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+  when:
+    - resolve_conf.stat.islnk is defined
+    - resolve_conf.stat.islnk
+  become: true
+  tags:
+    - networking
+    - resolve_conf
+  notify: Restart NetworkManager
+
+- name: set NetworkManager dns config
+  community.general.ini_file:
+    path: /etc/NetworkManager/NetworkManager.conf
+    section: main
+    option: dns
+    value: default
+  become: true
+  tags:
+    - networking
+    - networkManager
+    - resolve_conf
+  notify: Restart NetworkManager
 
 - name: load kernel modules
   modprobe:
     name: "{{ item }}"
     state: present
   with_items:
-    - "{{ kernel_modules }}"
+    - "{{ kernel_modules[ansible_distribution] }}"
   become: true
   tags:
     - kernel_modules
@@ -26,11 +106,46 @@
       # Load {{ item }} at boot time
       {{ item }}
   with_items:
-    - "{{ kernel_modules }}"
+    - "{{ kernel_modules[ansible_distribution] }}"
   become: true
   tags:
     - kernel_modules
     - cri-o
+
+- name: check zram-generator.conf
+  ansible.builtin.stat:
+    path: /etc/systemd/zram-generator.conf
+  register: zram_generator_conf
+  tags:
+    - swap
+
+- name: disable swap
+  ansible.builtin.file:
+    path: /etc/systemd/zram-generator.conf 
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+  when:
+    - zram_generator_conf.stat.exists is defined
+    - not zram_generator_conf.stat.exists
+  become: true
+  tags:
+    - swap
+
+- name: add control plane hostname to hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{ item }} {{ control_plane_dns_name }}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.kubePrimary }}"
+  become: True
+  tags:
+    - etc_hosts
+ 
+# Container runtime and kubelet configuration
 
 - name: CRI-O sysctl entries
   sysctl:
@@ -42,6 +157,7 @@
   become: true
   tags:
     - sysctl_entires
+    - networking
     - cri-o
 
 - name: add repo keys (apt)
@@ -76,7 +192,6 @@
     - cri-o
     - kubernetes
 
-
 - name: add repos (dnf)
   copy:
     dest: "{{ item.destination }}"
@@ -85,19 +200,20 @@
     - ansible_facts['distribution'] == "Fedora"
   with_items:
     - "{{ crio_repos[ansible_distribution] }}"
-    - "{{ kube_repos[ansible_distribution] }}"
   become: true
   tags:
     - dnf
     - repos
     - cri-o
 
-- name: add packages (Ubuntu)
+- name: add packages (dpkg)
   package:
     name: 
-      - "{{ crio_packages[ansible_distribution] }}"
-      - "{{ kube_packages }}"
+      - "{{ item }}"
     state: present
+  with_items:
+      - "{{ crio_packages[ansible_distribution] }}"
+      - "{{ kube_packages[ansible_distribution] }}"
   become: true
   when:
     - ansible_facts['distribution'] == "Ubuntu"
@@ -106,33 +222,20 @@
     - cri-o
     - kubernetes
 
-# Required to utilize the --disableexcludes=kubernetes flag
-# This effectively "holds" kubernetes packages during other 
-# DNF updates
-- name: add cri-o packages (Fedora)
+- name: add packages (dnf)
   dnf:
-    name: "{{ crio_packages[ansible_distribution] }}"
+    name: 
+      - "{{ item }}"
     state: present
+  with_items:
+      - "{{ crio_packages[ansible_distribution] }}"
+      - "{{ kube_packages[ansible_distribution] }}"
   become: true
   when:
     - ansible_facts['distribution'] == "Fedora"
   tags:
     - packages
     - cri-o
-    - kubernetes
-
-- name: add kubernetes packages (Fedora)
-  dnf:
-    name: "{{ kube_packages }}"
-    state: present
-    disable_excludes: kubernetes
-  become: true
-  when:
-    - ansible_facts['distribution'] == "Fedora"
-  tags:
-    - packages
-    - cri-o
-    - kubernetes
 
 - name: hold Kube and Crio packages (dpkg)
   dpkg_selections:
@@ -169,6 +272,10 @@
     - kubernetes
     - systemd
 
+- name: temporary fail
+  ansible.builtin.fail:
+    msg: STOP HERE
+    
 - name: ensure systemd cgroups driver
   copy:
     src: 10-kubeadm.conf
@@ -191,15 +298,3 @@
     - cri-o
   when: kubelet_service.changed|bool
 
-- name: add control plane hostname to hosts file
-  lineinfile:
-    dest: /etc/hosts
-    regexp: '.*{{ item }}$'
-    line: "{{ hostvars[item].ansible_host }} {{ item }} {{ control_plane_dns_name }}"
-    state: present
-  when: hostvars[item].ansible_host is defined
-  with_items: "{{ groups.kubePrimary }}"
-  become: True
-  tags:
-    - etc_hosts
- 
