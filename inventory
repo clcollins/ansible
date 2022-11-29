@@ -43,6 +43,10 @@ all:
         boysenberry.cluster.collins.is
     kubeCompute:
       hosts:
+        cranberry.cluster.collins.is
+        huckleberry.cluster.collins.is
+        elderberry.cluster.collins.is
+        # cranberry.cluster.collins.is
     raspberryPis:
       children:
         pi0ws:
