@@ -40,6 +40,7 @@ all:
         kubeCompute:
     kubePrimary:
       hosts:
+        boysenberry.cluster.collins.is
     kubeCompute:
       hosts:
     raspberryPis:
