@@ -1,8 +1,8 @@
 ---
 all:
   hosts:
-    trillian.collins.is:
-      motd: "We have normality, I repeat, we have normality.  Anything you still can't cope with is therefore your own problem."
+    chcollin-thinkpadx1carbongen9.collins.is:
+      motd: "Work is the curse of the drinking classes."
     zaphod.collins.is:
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     blueberry.collins.is:
@@ -73,10 +73,9 @@ all:
       hosts:
     work:
       hosts:
-        trillian.collins.is:
+         chcollin-thinkpadx1carbongen9.collins.is:
     silverblue:
       hosts:
-        trillian.collins.is:
     redhat:
       hosts:
-        trillian.collins.is:
+        chcollin-thinkpadx1carbongen9.collins.is:

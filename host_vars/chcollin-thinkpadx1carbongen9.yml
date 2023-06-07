@@ -1,0 +1,15 @@
+---
+# file: host_vars/chcollin-thinkpadx1carbongen9.yml
+
+config_user_enable: False
+config_users_overrides:
+  chris:
+    home: /home/chcollin
+
+config_hostname: chcollin-thinkpadx1carbongen9
+config_vpn_enable: True
+
+config_gnome_enable: True
+
+flatpak_repositories_enable: True
+flatpak_packages_enable: True
