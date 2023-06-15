@@ -2,7 +2,8 @@
 all:
   hosts:
     chcollin-thinkpadx1carbongen9.collins.is:
-      motd: "Work is the curse of the drinking classes."
+      ansible_host: 192.168.1.161
+      ansible_user: chcollin
     zaphod.collins.is:
       motd: "I am so amazingly cool you could keep a side of meat in me for a month. I am so hip I have difficulty seeing over my pelvis."
     blueberry.collins.is:

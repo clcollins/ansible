@@ -1,6 +1,10 @@
 ---
 # file: roles/config/tasks/main.yml
 
+- name: Double-check
+  ansible.builtin.debug:
+    msg: Config_users {{ config_users }} Homedir {{ homedir}} Hostname {{ config_hostname }} 
+
 - name: Include users
   ansible.builtin.include: users.yml
   when: config_users_enable | bool

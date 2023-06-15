@@ -5,14 +5,16 @@ user_groups:
   - wheel
   - chris
 
-users:
-  - name: chris
-    comment: "Chris Collins"
-    group: chris
-    groups: wheel
+config_users:
+  chris:
     append: yes
+    comment: "Chris Collins"
+    groups:
+      - chris
+      - wheel
     home: /home/chris
     shell: /bin/bash
+    authorized_keys: https://github.com/clcollins.keys
 
 # Everything Fedora 30 (so...everything)
 ansible_python_interpreter: /usr/bin/python3
