@@ -29,3 +29,8 @@ flatpak_packages:
 flatpak_packages_system:
   - name: org.vim.Vim
     remote: flathub
+
+flatpak_rpms_redundant:
+  - firefox
+  - google-chrome
+

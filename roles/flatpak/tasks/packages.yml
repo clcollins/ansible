@@ -47,3 +47,15 @@
     - packages
   when:
     - flatpak_packages_enable | bool
+
+- name: 'flatpak: Remove redundant rpms'
+  ansible.builtin.package:
+    name: "{{ item.name }}"
+    state: absent
+  loop: "{{ flatpak_rpms_redundant }}"
+  tags:
+    - flatpak
+    - packages
+  when:
+    - flatpak_packages_enable | bool
+
