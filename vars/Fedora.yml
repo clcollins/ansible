@@ -1,4 +1,0 @@
----
-
-sshd_package_name: openssh-server
-sshd_service_name: sshd.service

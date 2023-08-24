@@ -1,5 +1,0 @@
----
-# file: roles/dev/defaults/main.yml
-
-dev_repositories_enable: yes
-dev_repositories:

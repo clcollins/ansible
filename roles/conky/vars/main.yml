@@ -1,6 +1,0 @@
----
-# file: roles/conky/vars/main.yml
-
-conky_packages: conky
-#conky_config_file: Conky_Revisited_2/Conky_Circle_Horizontal/start_conky_General_HORIZONTAL_circle
-conky_config_file: Conky_Revisited_2/Conky_Circle_Vertical/start_conky_General_VERTICAL_circle

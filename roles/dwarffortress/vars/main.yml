@@ -1,7 +1,0 @@
----
-# file: roles/dwarffortress/vars/main.yml
-
-# DF packages in RPMFusion NonFree
-dwarffortress_packages:
-  - dwarffortress
-  - dwarftherapist

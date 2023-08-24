@@ -1,6 +1,0 @@
----
-# file: roles/desktop-apps/vars/main.yml
-
-desktop_apps:
-  - calibre
-  - gnome-shell-extension-pomodoro

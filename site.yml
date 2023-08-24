@@ -1,6 +1,0 @@
----
-# file: site.yml
-- import_playbook: work.yml
-- import_playbook: home.yml
-- import_playbook: raspberry_pi.yml
-- import_playbook: kube.yml

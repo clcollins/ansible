@@ -1,8 +1,0 @@
----
-# file: roles/config/handlers/main.yml
-
-- name: Restart NetworkManager
-  ansible.builtin.systemd:
-    name: NetworkManager.service
-    state: restarted
-  become: yes

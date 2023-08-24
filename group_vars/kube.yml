@@ -1,3 +1,0 @@
----
-control_plane_dns_name: api.kube.collins.is
-control_plane_port: 443

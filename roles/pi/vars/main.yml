@@ -1,5 +1,0 @@
-# file: roles/pi/main.yml
-
-rpidentify:
-  url: "https://gist.githubusercontent.com/clcollins/a79670ed298f097e11b492009dad3043/raw/0b233814ecf6308433b2b8241f323bcac289692a/rpidentify.sh"
-  sum: "sha256:85f5a4ead7ce0d4cf76e77e8f211cbbe39fd4eff11e310bc893d3db359be0f45"
