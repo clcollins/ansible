@@ -12,11 +12,11 @@
   when: ansible_facts['distribution'] == "Fedora"
   become: true
   tags: config.editor
-  
+
 - name: Add vim as default editor
   ansible.builtin.package:
     name: vim-default-editor
-  state: present
+    state: present
   when: ansible_facts['distribution'] == "Fedora"
   become: true
   tags: config.editor
