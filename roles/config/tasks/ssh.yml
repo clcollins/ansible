@@ -1,0 +1,58 @@
+---
+# file: roles/config/tasks/ssh.yml
+
+- name: "ssh: Copy authorized_keys"
+  authorized_key:
+    user: "{{ item.key }}"
+    state: present
+    key: "{{ item.value.authorized_keys }}"
+    manage_dir: yes
+  loop: "{{ query('dict', config_users) }}"
+  when: item.value.authorized_keys is defined
+  tags:
+    - config.ssh
+  become_user: "{{ item.key }}"
+
+- name: "ssh: SSH config"
+  ansible.builtin.copy:
+    dest: "{{ item.value }}/.ssh/config"
+    content: |
+      # This file is managed by Ansible
+      Include ~/.ssh/ssh.d/*
+  loop: "{{ user_homedirs | dict2items }}"
+  tags:
+    - config.ssh
+  become_user: "{{ item.key }}"
+
+- name: "ssh: SSH include dir"
+  ansible.builtin.file:
+    path: "{{ item.value }}/.ssh/ssh.d"
+    state: directory
+    mode: "0700"
+  loop: "{{ user_homedirs | dict2items }}"
+  tags:
+    - config.ssh
+  become_user: "{{ item.key }}"
+
+- name: "ssh: ForwardAgent config"
+  ansible.builtin.copy:
+    dest: "{{ item.value }}/.ssh/ssh.d/10-forward_agent.conf"
+    content: |
+      # This file is managed by Ansible
+      Host {{ home_network | default(config_default_home_network) }}
+        ForwardAgent yes
+  loop: "{{ user_homedirs | dict2items }}"
+  tags:
+    - config.ssh
+  become_user: "{{ item.key }}"
+
+- name: "ssh: allow agent forwarding"
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/10-allow_agent_forwarding.conf
+    content: |
+      # This file is managed by Ansible
+      AllowAgentForwarding yes
+  become: yes
+  tags:
+    - config.ssh
+

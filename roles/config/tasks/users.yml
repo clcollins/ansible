@@ -1,0 +1,42 @@
+---
+# file: roles/config/tasks/users.yml
+
+# Build a list of all user groups to create
+# Use "query" to return a list even if there's only one user
+- name: Concatenate user groups 
+  ansible.builtin.set_fact:
+    user_groups: "{{ user_groups|default([]) + item.value.groups }}"
+  loop: "{{ query('ansible.builtin.dict', config_users) }}"
+  when:
+    - (item.value.groups is defined)
+
+# Create all the user groups, using unique to flatten duplicates
+# Note: Cannot pass a list directly to ansible.builtin.group
+- name: Ensure user groups exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+  loop: "{{ user_groups | unique }}"
+  tags:
+    - config.group
+  become: true
+
+# Register user_info for use by other modules later, will be a list of the results[] for each user
+- name: Ensure users exist
+  ansible.builtin.user:
+    name: "{{ item.key }}"
+    comment: "{{ item.value.comment | default('') }}"
+    group: "{{ item.value.groups[0] }}"
+    groups: "{{ item.value.groups[1:] }}"
+    append: "{{ item.value.append|default(true) }}"
+    shell: "{{ item.value.shell | default(config_default_shell) }}"
+  loop: "{{ query('dict', config_users) }}"
+  register: "user_info"
+  tags:
+    - config.users
+  become: true
+
+- name: Register user homedirs in user_homedirs
+  ansible.builtin.set_fact:
+    user_homedirs: "{{ user_homedirs | default({}) | combine({item.name: item.home}) }}"
+  loop: "{{ user_info.results }}"
+

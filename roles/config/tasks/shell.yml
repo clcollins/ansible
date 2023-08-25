@@ -1,0 +1,27 @@
+---
+# file: roles/config/tasks/shell.yml
+
+- name: "shell: Setup bashrc.d directory"
+  ansible.builtin.copy:
+    src: bashrc.d/
+    dest: "{{ item.value }}/.bashrc.d/"
+    mode: 0755
+  loop: "{{ user_homedirs | dict2items }}"
+  tags:
+    - config.shell
+  become_user: "{{ item.key }}"
+
+# - name: "shell: Copy .bashrc files"
+#   ansible.posix.synchronize:
+#     src: files/bashrc.d/
+#     dest: "{{ item.value }}/.bashrc.d/"
+#     archive: no
+#     checksum: yes
+#     compress: yes
+#     delete: yes
+#     recursive: yes
+#     verify_host: yes
+#   loop: "{{ user_homedirs | dict2items }}"
+#   tags:
+#     - config.shell
+#   become_user: "{{ item.key }}"

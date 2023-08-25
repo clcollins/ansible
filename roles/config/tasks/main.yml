@@ -1,0 +1,42 @@
+---
+# file: roles/config/tasks/main.yml
+
+- name: "Install playbook dependency packages"
+  ansible.builtin.package:
+    name: "{{ playbook_dependency_packages | default(config_default_playbook_dependency_packages) }}"
+    state: present
+  tags: init
+  become: true
+
+# Merge any override data from group or host vars
+- name: "config: Merge variables"
+  ansible.builtin.set_fact:
+    config_users: "{{ config_users | combine(config_users_overrides, recursive=True) }}"
+  when: config_users_overrides | default()
+  tags: init
+
+- ansible.builtin.include_tasks:
+    file: users.yml
+  tags: config.users
+  when: config_users_enable| bool
+
+- ansible.builtin.include_tasks:
+    file: ssh.yml
+  tags: config.ssh
+  when: config_ssh_enable | bool
+
+- ansible.builtin.include_tasks:
+    file: networking.yml
+  tags: config.networking
+  when: config_networking_enable | bool
+
+- ansible.builtin.include_tasks:
+    file: gnome.yml
+  tags: config.gnome
+  when: config_gnome_enable | bool
+
+- ansible.builtin.include_tasks:
+    file: shell.yml
+  tags: config.shell
+  when: config_shell_enable | bool
+

@@ -1,0 +1,40 @@
+---
+# file: roles/config/defaults/main.yml
+
+config_default_playbook_dependency_packages:
+  - python3-psutil
+
+# Users
+config_users_enable: true
+config_default_shell: /bin/bash
+
+config_users:
+  chris:
+    comment: "Chris Collins"
+    groups:
+      - chris
+      - wheel
+    authorized_keys: https://github.com/clcollins.keys
+  
+# SSH
+config_ssh_enable: true
+
+# Networking
+config_networking_enable: true
+config_default_home_network: 192.168.1.*
+
+# Gnome
+config_gnome_enable: true
+# Values for dconf require extra quotes
+config_gnome_gtk_theme: "'Adwaita-dark'"
+config_gnome_terminal_config:
+  background-transparency-percent: 15
+  bold-is-bright: "true"
+  default-size-columns: 132
+  default-size-rows: 43
+  font: "'Monospace 12'"
+  use-system-font: "false"
+  use-transparent-background: "true"
+
+# Shell (bashrc.d)
+config_shell_enable: true

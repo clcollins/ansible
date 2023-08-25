@@ -1,0 +1,10 @@
+---
+# file: roles/config/tasks/networking.yml
+
+- name: "config: Set hostname"
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+    use: systemd
+  tags:
+    - config.networking
+  become: yes
