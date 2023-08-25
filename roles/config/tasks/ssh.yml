@@ -18,6 +18,7 @@
     dest: "{{ item.value }}/.ssh/config"
     content: |
       # This file is managed by Ansible
+      # Do not make local modifications directly
       Include ~/.ssh/ssh.d/*
   loop: "{{ user_homedirs | dict2items }}"
   tags:

@@ -36,5 +36,9 @@ config_gnome_terminal_config:
   use-system-font: "false"
   use-transparent-background: "true"
 
+
+# ~/.local/bin
+config_local_bin_enable: true
+
 # Shell (bashrc.d)
 config_shell_enable: true

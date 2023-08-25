@@ -1,0 +1,37 @@
+---
+# file: roles/tasks/flatpak/tasks/repositories.yml
+
+- name: "flatpak: Merge repository variables"
+  set_fact:
+    flatpak_remote_repositories: "{{ flatpak_remote_repositories | combine(flatpak_repositories_extra, recursive=True) }}"
+  tags:
+    - repositories
+    - flatpak
+  when:
+    - flatpak_repositories_extra | default()
+    - flatpak_repositories_enable | bool
+
+- name: "flatpak: Add remote system repositories"
+  ansible.builtin.flatpak_remote:
+    name: "{{ item.key }}"
+    flatpakrepo_url: "{{ item.value }}"
+    method: system
+  loop: "{{ query('dict', flatpak_remote_repositories) }}"
+  become: false
+  tags:
+    - repositories
+    - flatpak
+  when:
+    - flatpak_repositories_enable | bool
+
+- name: "flatpak: Add remote user repositories"
+  ansible.builtin.flatpak_remote:
+    name: "{{ item.key }}"
+    flatpakrepo_url: "{{ item.value }}"
+    method: user
+  loop: "{{ query('dict', flatpak_remote_repositories) }}"
+  tags:
+    - repositories
+    - flatpak
+  when:
+    - flatpak_repositories_enable | bool

@@ -1,3 +1,6 @@
+# This file is managed by Ansible
+# Do not make local modifications directly
+
 #!/usr/bin/env sh
 # GVM Config
 

@@ -1,0 +1,62 @@
+---
+# file: role/flatpak/tasks/packages.yml
+
+- name: "flatpak: Merge system package variables"
+  ansible.builtin.set_fact:
+    flatpak_packages_system: "{{ flatpak_packages_system | combine(flatpak_packages_system_extra, recursive=True) }}"
+  when:
+    - flatpak_packages_system_extra | default()
+    - flatpak_packages_enable | bool
+  tags:
+    - flatpak
+    - packages
+
+- name: "flatpak: Add flatpak system packages"
+  ansible.builtin.flatpak:
+    name:   "{{ item.name }}"
+    remote: "{{ item.remote }}"
+    method: system
+    state:  present
+  loop: "{{ flatpak_packages_system }}"
+  tags:
+    - flatpak
+    - packages
+  become: true
+  when:
+    - flatpak_packages_enable | bool
+
+- name: "flatpak: Merge package variables"
+  ansible.builtin.set_fact:
+    flatpak_packages: "{{ flatpak_packages | combine(flatpak_packages_extra, recursive=True) }}"
+  when:
+    - flatpak_packages_extra | default()
+    - flatpak_packages_enable | bool
+  tags:
+    - flatpak
+    - packages
+
+- name: "flatpak: Add flatpak packages"
+  ansible.builtin.flatpak:
+    name:   "{{ item.name }}"
+    remote: "{{ item.remote }}"
+    method: user
+    state:  present
+  loop: "{{ flatpak_packages }}"
+  tags:
+    - flatpak
+    - packages
+  when:
+    - flatpak_packages_enable | bool
+
+- name: 'flatpak: Remove redundant rpms'
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ flatpak_rpms_redundant }}"
+  become: true
+  tags:
+    - flatpak
+    - packages
+  when:
+    - flatpak_packages_enable | bool
+

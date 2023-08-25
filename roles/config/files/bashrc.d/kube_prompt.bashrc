@@ -1,3 +1,6 @@
+# This file is managed by Ansible
+# Do not make local modifications directly
+
 #!/usr/bin/env bash
 
 KUBE_PS1_BINARY=oc

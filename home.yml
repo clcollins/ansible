@@ -4,3 +4,4 @@
 - hosts: home
   roles:
     - config
+    - flatpak
