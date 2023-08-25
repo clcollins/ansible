@@ -31,6 +31,11 @@
   when: config_networking_enable | bool
 
 - ansible.builtin.include_tasks:
+    file: editor.yml
+  tags: config.editor
+  when: config_editor_enable | bool
+
+- ansible.builtin.include_tasks:
     file: gnome.yml
   tags: config.gnome
   when: config_gnome_enable | bool

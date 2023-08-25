@@ -36,6 +36,9 @@ config_gnome_terminal_config:
   use-system-font: "false"
   use-transparent-background: "true"
 
+# Editor
+config_editor_enable: true
+
 
 # ~/.local/bin
 config_local_bin_enable: true
