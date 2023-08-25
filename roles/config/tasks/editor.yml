@@ -10,6 +10,7 @@
     name: nano-default-editor
     state: absent
   when: ansible_facts['distribution'] == "Fedora"
+  become: true
   tags: config.editor
   
 - name: Add vim as default editor
@@ -17,4 +18,5 @@
     name: vim-default-editor
   state: present
   when: ansible_facts['distribution'] == "Fedora"
+  become: true
   tags: config.editor
