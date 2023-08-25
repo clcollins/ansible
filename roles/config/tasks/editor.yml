@@ -1,10 +1,6 @@
 ---
 # file: roles/config/tasks/editor.yml
 
-- debug:
-    msg: "{{ ansible_facts }}"
-  tags: config.editor
-
 - name: Remove nano as default editor
   ansible.builtin.package:
     name: nano-default-editor
