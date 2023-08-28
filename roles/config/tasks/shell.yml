@@ -11,4 +11,5 @@
   loop: "{{ user_homedirs | dict2items }}"
   tags:
     - config.shell
+  when: user_homedir is defined
   become_user: "{{ item.key }}"

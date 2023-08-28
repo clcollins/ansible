@@ -2,3 +2,8 @@
 home:
   hosts:
     zaphod:
+work:
+  hosts:
+    chcollin-thinkpadx1carbongen9:
+      ansible_host: 192.168.1.161
+      ansible_user: chcollin

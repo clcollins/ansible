@@ -1,0 +1,7 @@
+#!/usr/bin/env ansible-playbook
+---
+# file: work.yml
+- hosts: work
+  roles:
+    - config
+    - flatpak
