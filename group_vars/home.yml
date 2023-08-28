@@ -1,0 +1,11 @@
+---
+# file: group_vars/home.yml
+
+flatpak_packages_extra:
+  - name: org.videolan.VLC
+    remote: flathub
+  - name: com.obsproject.Studio
+    remote: flathub
+  - name: com.valvesoftware.Steam
+    remote: flathub
+
