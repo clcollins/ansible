@@ -1,0 +1,7 @@
+---
+
+# file: group_vars/work.yml
+
+config_users_enable: false
+config_ssh_enable: false
+
