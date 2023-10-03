@@ -19,10 +19,12 @@ flatpak_packages:
     remote: flathub
 
 flatpak_packages_system:
+  - name: org.freedesktop.Platform.ffmpeg-full//23.08
+    remote: flathub
   - name: org.vim.Vim
     remote: flathub
 
 flatpak_rpms_redundant:
   - firefox
   - google-chrome
-
+  - org.freedesktop.Platform.ffmpeg-full//21.08
