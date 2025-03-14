@@ -1,0 +1,103 @@
+---
+
+# file: roles/kubernetes/tasks/main.yml
+
+## Prepare
+- name: disable unused services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+    masked: yes
+  with_items:
+    - "{{ disabled_services[ansible_distribution] }}"
+  become: true
+  tags:
+    - prepare
+    - systemd
+
+- name: remove unused packages
+  ansible.builtin.package:
+    name:
+      - "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ disabled_packages[ansible_distribution] }}"
+  become: true
+  tags:
+    - prepare
+    - packages
+
+- name: load kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ kernel_modules[ansible_distribution] }}"
+  become: true
+  tags:
+    - prepare
+    - kernel_modules
+
+- name: enable persistent kernel modules
+  copy:
+    dest: "/etc/modules-load.d/{{ item }}"
+    content: |
+      # Load {{ item }} at boot time
+      {{ item }}
+  with_items:
+    - "{{ kernel_modules[ansible_distribution] }}"
+  become: true
+  tags:
+    - prepare
+    - kernel_modules
+    
+- name: CRI-O sysctl entries
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - "{{ sysctl_configs }}"
+  become: true
+  tags:
+    - prepare
+    - sysctl
+
+## Install
+- name: install common packages
+  ansible.builtin.package:
+    name:
+      - "{{ item }}"
+    state: present
+  with_items:
+    - "{{ kubernetes_packages[ansible_distribution] }}"
+  become: true
+  tags:
+    - install
+    - packages
+
+- name: enable services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    masked: no
+  with_items:
+    - "{{ enabled_services[ansible_distribution] }}"
+  become: true
+  tags:
+    - install
+    - systemd
+
+- name: add firewalld rules
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    state: enabled
+    permanent: true
+  with_items:
+    - "{{ firewalld_ports[kubeRole] }}"
+  become: true
+  tags:
+    - install
+    - firewalld

@@ -1,0 +1,54 @@
+---
+
+# file: roles/kubernetes/vars/main.yml
+
+kubernetes_packages:
+  Fedora:
+    - kubernetes1.32
+    - kubernetes1.32-kubeadm
+    - kubernetes1.32-systemd
+    - cri-o1.32
+    - containernetworking-plugins
+    - iptables-nft
+    - iproute-tc
+
+enabled_services:
+  Fedora:
+    - crio
+    - firewalld 
+    - kubelet # kubelet will crashloop until kubeadm init is completed
+
+disabled_packages:
+  Fedora:
+    - kubernetes1.31
+    - zram-generator-defaults
+
+disabled_services:
+  Fedora:
+    - systemd-zram-setup@zram0.service 
+    - swap.target
+    - dev-zram0.swap
+
+kernel_modules:
+  Fedora:
+    - overlay
+    - br_netfilter
+
+sysctl_configs:
+  - name: net.bridge.bridge-nf-call-iptables
+    value: 1
+  - name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+  - name: net.ipv4.ip_forward
+    value: 1
+
+firewalld_ports:
+  ControlPlane:
+    - 6443/tcp
+    - 2379-2380/tcp
+    - 10250/tcp
+    - 10257/tcp
+    - 10259/tcp
+  Compute:
+    - 10250/tcp
+    - 30000-32767/tcp
