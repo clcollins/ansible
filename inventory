@@ -7,3 +7,24 @@ work:
     chcollin-thinkpadx1carbongen9:
       ansible_host: 192.168.1.161
       ansible_user: chcollin
+    chcollin-thinkpadx1carbongen12:
+      ansible_host: 192.168.1.117
+      ansible_user: chcollin
+kubernetes:
+  children:
+    kubeControlPlane:
+    kubeCompute:
+kubeControlPlane:
+  hosts:
+    bilberry.cluster.collins.is:
+    cranberry.cluster.collins.is:
+    elderberry.cluster.collins.is:
+  vars:
+    kubeRole: ControlPlane
+kubeCompute:
+  hosts:
+    boysenberry.cluster.collins.is:
+    gojiberry.cluster.collins.is:
+    huckleberry.cluster.collins.is:
+  vars:
+    kubeRole: Compute
