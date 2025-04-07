@@ -41,6 +41,11 @@
   when: config_gnome_enable | bool
 
 - ansible.builtin.include_tasks:
+    file: gnome-terminal.yml
+  tags: config.gnome-terminal
+  when: config_gnome_terminal_enable | bool
+
+- ansible.builtin.include_tasks:
     file: localbin.yml
   tags: config.localbin
   when: config_local_bin_enable | bool

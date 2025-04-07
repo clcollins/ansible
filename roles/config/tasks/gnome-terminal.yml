@@ -1,0 +1,25 @@
+---
+# file: roles/config/tasks/gnome-terminal.yml
+
+- name: "Retrieve default gnome-terminal profile UUID"
+  community.general.dconf:
+    key: /org/gnome/terminal/legacy/list[0]
+    state: read
+  register: gnome_terminal_default_uuid
+  tags:
+    - config.gnome-terminal
+
+- name: debug
+  debug:
+    msg: "{{ config_gnome_terminal_config }}"
+  tags:
+    - config.gnome-terminal
+
+- name: "Set gnome-terminal settings"
+  community.general.dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/{{ item.key }}"
+    value: "{{ item.value }}"
+  loop: "{{ query('dict', config_gnome_terminal_config) }}"
+  tags:
+    - config.gnome-terminal
+
