@@ -1,0 +1,9 @@
+---
+# file: roles/config/tasks/timezone.yml
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ config_timezone }}"
+  when: config_timezone_enable | bool
+  tags: config.timezone
+  become: true

@@ -69,3 +69,6 @@ config_git_config:
     value: collins.christopher@gmail.com
     scope: global
     
+# Timezone
+config_timezone_enable: true
+config_timezone: Pacific/Honolulu

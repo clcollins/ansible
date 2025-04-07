@@ -60,3 +60,8 @@
   tags: config.git
   when: config_git_enable | bool
 
+- ansible.builtin.include_tasks:
+    file: timezone.yml
+  tags: config.timezone
+  when: config_timezone_enable | bool
+
