@@ -55,3 +55,8 @@
   tags: config.shell
   when: config_shell_enable | bool
 
+- ansible.builtin.include_tasks:
+    file: git.yml
+  tags: config.git
+  when: config_git_enable | bool
+

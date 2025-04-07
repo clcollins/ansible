@@ -46,3 +46,26 @@ config_local_bin_enable: true
 
 # Shell (bashrc.d)
 config_shell_enable: true
+
+# Git
+config_git_enable: true
+config_git_config:
+  - name: init.defaultBranch
+    value: main
+    scope: global
+  - name: core.editor
+    value: vim
+    scope: global
+  - name: core.excludesFiles
+    value: ~/.config/.git/.gitignore
+    scope: global
+  - name: fetch.prune
+    value: True
+    scope: global
+  - name: user.name
+    value: Christopher Collins
+    scope: global
+  - name: user.email
+    value: collins.christopher@gmail.com
+    scope: global
+    

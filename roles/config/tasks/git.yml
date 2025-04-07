@@ -1,0 +1,12 @@
+---
+
+# file: roles/config/tasks/git.yml
+
+- name: Set Git Config
+  community.general.git_config:
+    scope: "{{ item.scope }}"
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+  with_items: "{{ config_git_config }}"
+  tags:
+    - config.git
