@@ -28,7 +28,7 @@ config_gnome_enable: true
 # Values for dconf require extra quotes
 config_gnome_gtk_theme: "'Adwaita-dark'"
 
-config_gnome_terminal_config_enable: true
+config_gnome_terminal_enable: true
 config_gnome_terminal_config:
   background-transparency-percent: 15
   bold-is-bright: "true"
