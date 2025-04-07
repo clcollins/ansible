@@ -11,6 +11,12 @@
     - flatpak
     - packages
 
+- debug:
+    msg: "{{ flatpak_packages_system | default([]) }}"
+  tags:
+    - flatpak
+    - packages
+
 - name: "flatpak: Add flatpak system packages"
   ansible.builtin.flatpak:
     name:   "{{ item.name }}"
@@ -25,6 +31,14 @@
   when:
     - flatpak_packages_enable | bool
 
+- debug:
+    msg: "{{ flatpak_packages }}"
+
+- debug:
+    msg: "{{ flatpak_packages_extra }}"
+  when:
+    - flatpak_packages_extra | default()
+
 - name: "flatpak: Merge package variables"
   ansible.builtin.set_fact:
     flatpak_packages: "{{ flatpak_packages | combine(flatpak_packages_extra, recursive=True) }}"
@@ -35,13 +49,16 @@
     - flatpak
     - packages
 
+- debug:
+    msg: "{{ flatpak_packages }}"
+
 - name: "flatpak: Add flatpak packages"
   ansible.builtin.flatpak:
     name:   "{{ item.name }}"
     remote: "{{ item.remote }}"
     method: user
     state:  present
-  loop: "{{ flatpak_packages }}"
+  loop: "{{ flatpak_packages_system }}"
   tags:
     - flatpak
     - packages
@@ -53,6 +70,31 @@
     name: "{{ item }}"
     state: absent
   loop: "{{ flatpak_rpms_redundant }}"
+  become: true
+  tags:
+    - flatpak
+    - packages
+  when:
+    - flatpak_packages_enable | bool
+
+- name: 'flatpak: Remove redundant flatpaks'
+  ansible.builtin.flatpak:
+    name:   "{{ item }}"
+    state: absent
+  loop: "{{ flatpak_flatpaks_redundant }}"
+  become: true
+  tags:
+    - flatpak
+    - packages
+  when:
+    - flatpak_packages_enable | bool
+
+- name: 'flatpak: Remove redundant user flatpaks'
+  ansible.builtin.flatpak:
+    name:   "{{ item }}"
+    method: user
+    state: absent
+  loop: "{{ flatpak_flatpaks_redundant }}"
   become: true
   tags:
     - flatpak
