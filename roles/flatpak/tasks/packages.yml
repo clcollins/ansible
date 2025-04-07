@@ -58,7 +58,7 @@
     remote: "{{ item.remote }}"
     method: user
     state:  present
-  loop: "{{ flatpak_packages_system }}"
+  loop: "{{ flatpak_packages }}"
   tags:
     - flatpak
     - packages
